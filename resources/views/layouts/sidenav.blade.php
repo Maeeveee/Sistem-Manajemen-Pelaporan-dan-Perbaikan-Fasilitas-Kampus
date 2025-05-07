@@ -54,8 +54,8 @@
         <span class="nav-link collapsed d-flex justify-content-between align-items-center" data-bs-toggle="collapse"
           data-bs-target="#submenu-laravel" aria-expanded="true">
           <span>
-            <span class="sidebar-icon"><i class="fab fa-laravel me-2" style="color: #fb503b;"></i></span>
-            <span class="sidebar-text" style="color: #fb503b;">Laravel Examples</span>
+            <span class="sidebar-icon"><i class="fas fa-users me-2" style="color: #fb503b;"></i></span>
+            <span class="sidebar-text" style="color: #fb503b;">Kelola Pengguna</span>
           </span>
           <span class="link-arrow"><svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg">
@@ -73,13 +73,13 @@
             </li>
             <li class="nav-item {{ Request::segment(1) == 'users' ? 'active' : '' }}">
               <a href="/users" class="nav-link">
-                <span class="sidebar-text">User management</span>
+                <span class="sidebar-text">Manajemen Pengguna</span>
               </a>
             </li>
           </ul>
         </div>
       </li>
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a href="https://themesberg.com/product/laravel/volt-pro-admin-dashboard-template" target="_blank" class="nav-link d-flex justify-content-between">
           <span>
             <span class="sidebar-icon"><svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
@@ -94,7 +94,7 @@
             <span class="badge badge-sm bg-secondary ms-1">Pro</span>
           </span>
         </a>
-      </li>
+      </li> -->
       <li class="nav-item {{ Request::segment(1) == 'transactions' ? 'active' : '' }}">
         <a href="/transactions" class="nav-link">
           <span class="sidebar-icon"><svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
@@ -107,7 +107,7 @@
           <span class="sidebar-text">Transactions</span>
         </a>
       </li>
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a href="https://themesberg.com/product/laravel/volt-pro-admin-dashboard-template" target="_blank" class="nav-link d-flex justify-content-between">
           <span>
             <span class="sidebar-icon">
@@ -123,8 +123,8 @@
             <span class="badge badge-sm bg-secondary ms-1">Pro</span>
           </span>
         </a>
-        </li>
-      <li class="nav-item">
+        </li> -->
+      <!-- <li class="nav-item">
         <a href="https://themesberg.com/product/laravel/volt-pro-admin-dashboard-template" target="_blank" class="nav-link d-flex justify-content-between">
           <span>
             <span class="sidebar-icon">
@@ -140,7 +140,7 @@
             <span class="badge badge-sm bg-secondary ms-1">Pro</span>
           </span>
         </a>
-        </li>
+        </li> -->
       <li class="nav-item">
         <span
           class="nav-link {{ Request::segment(1) !== 'bootstrap-tables' ? 'collapsed' : '' }} d-flex justify-content-between align-items-center"
@@ -319,7 +319,7 @@
           <span class="sidebar-text">Updivision</span>
         </a>
       </li>
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a href="/upgrade-to-pro"
           class="btn btn-secondary d-flex align-items-center justify-content-center btn-upgrade-pro">
           <span class="sidebar-icon d-inline-flex align-items-center justify-content-center">
@@ -330,7 +330,7 @@
             </svg>
           </span>
           <span>Upgrade to Pro</span>
-        </a>
+        </a> -->
       </li>
     </ul>
   </div>

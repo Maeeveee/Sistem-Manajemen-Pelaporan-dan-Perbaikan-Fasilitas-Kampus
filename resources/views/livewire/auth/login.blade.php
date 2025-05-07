@@ -3,8 +3,6 @@
     <!-- Section -->
     <section class="vh-lg-100 mt-5 mt-lg-0 bg-soft d-flex align-items-center">
         <div class="container">
-            {{-- <p class="text-center"><a href="{{ route('dashboard') }}" class="text-gray-700"><i
-                class="fas fa-angle-left me-2"></i> Kembali ke halaman utama</a></p> --}}
             <div wire:ignore.self class="row justify-content-center form-bg-image"
                 data-background-lg="/assets/img/illustrations/signin.svg">
                 <div class="col-12 d-flex align-items-center justify-content-center">
@@ -15,7 +13,7 @@
                         <form wire:submit.prevent="login" action="#" class="mt-4" method="POST">
                             <!-- Form -->
                             <div class="form-group mb-4">
-                                <label for="email">Email Anda</label>
+                                <label for="identifier">NIM / NIP</label>
                                 <div class="input-group">
                                     <span class="input-group-text" id="basic-addon1"><svg
                                             class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20"
@@ -25,10 +23,10 @@
                                             </path>
                                             <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
                                         </svg></span>
-                                    <input wire:model="email" type="email" class="form-control"
-                                        placeholder="Masukkan email Anda" id="email" autofocus required>
+                                    <input wire:model="identifier" type="text" class="form-control"
+                                        placeholder="Masukkan NIM/NIP Anda" id="identifier" autofocus required>
                                 </div>
-                                @error('email') <div wire:key="form" class="invalid-feedback"> {{$message}} </div>
+                                @error('identifier') <div wire:key="form" class="invalid-feedback"> {{$message}} </div>
                                 @enderror
                             </div>
                             <!-- End of Form -->

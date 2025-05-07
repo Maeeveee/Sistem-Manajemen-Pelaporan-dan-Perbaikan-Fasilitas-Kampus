@@ -40,11 +40,8 @@ use App\Http\Livewire\Users;
 Route::redirect('/', '/login');
 
 Route::get('/register', Register::class)->name('register');
-
 Route::get('/login', Login::class)->name('login');
-
 Route::get('/forgot-password', ForgotPassword::class)->name('forgot-password');
-
 Route::get('/reset-password/{id}', ResetPassword::class)->name('reset-password')->middleware('signed');
 
 Route::get('/404', Err404::class)->name('404');

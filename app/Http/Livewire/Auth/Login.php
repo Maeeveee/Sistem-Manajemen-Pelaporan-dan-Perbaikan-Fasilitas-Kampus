@@ -4,40 +4,47 @@ namespace App\Http\Livewire\Auth;
 
 use App\Models\User;
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
 
 class Login extends Component
 {
-
-    public $email = '';
+    public $identifier = ''; // Ganti email menjadi identifier
     public $password = '';
     public $remember_me = false;
 
+    // Validasi yang sesuai dengan identifier dan password
     protected $rules = [
-        'email' => 'required|email:rfc,dns',
+        'identifier' => 'required|string', // Validasi untuk NIM/NIP
         'password' => 'required|min:6',
     ];
 
-    //This mounts the default credentials for the admin. Remove this section if you want to make it public.
     public function mount()
     {
-        if (auth()->user()) {
+        // Jika sudah login, arahkan ke halaman dashboard
+        if (auth()->check()) {
             return redirect()->intended('/dashboard');
         }
+
+        // Reset nilai inputan
         $this->fill([
-            'email' => '',
+            'identifier' => '',
             'password' => '',
         ]);
     }
 
     public function login()
     {
+        // Validasi kredensial pengguna
         $credentials = $this->validate();
-        if (auth()->attempt(['email' => $this->email, 'password' => $this->password], $this->remember_me)) {
-            $user = User::where(['email' => $this->email])->first();
+
+        // Mencoba autentikasi dengan identifier (NIM/NIP) dan password
+        if (auth()->attempt(['identifier' => $this->identifier, 'password' => $this->password], $this->remember_me)) {
+            $user = User::where(['identifier' => $this->identifier])->first(); // Cek berdasarkan identifier (NIM/NIP)
             auth()->login($user, $this->remember_me);
-            return redirect()->intended('/dashboard');
+            return redirect()->intended('/dashboard'); // Arahkan ke dashboard
         } else {
-            return $this->addError('email', trans('auth.failed'));
+            // Jika login gagal, tampilkan pesan error
+            return $this->addError('identifier', trans('auth.failed'));
         }
     }
 
