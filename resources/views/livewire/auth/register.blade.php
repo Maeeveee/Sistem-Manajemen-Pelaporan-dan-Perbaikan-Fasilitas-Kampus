@@ -20,6 +20,17 @@
                                     </div>
                                     @error('email') <div class="invalid-feedback"> {{ $message }} </div> @enderror 
                                 </div>
+                                                            <!-- Form untuk Nama -->
+                            <div class="form-group mt-4 mb-4">
+                                <label for="name">Nama Lengkap Anda</label>
+                                <div class="input-group">
+                                    <span class="input-group-text" id="basic-addon1"><svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M18 6a6 6 0 10-12 0 6 6 0 0012 0zM9 8a3 3 0 116 0 3 3 0 01-6 0z"></path></svg></span>
+                                    <input wire:model="name" id="name" type="text" class="form-control" placeholder="Nama Lengkap Anda" required>
+                                </div>
+                                @error('name') <div class="invalid-feedback"> {{ $message }} </div> @enderror 
+                            </div>
+                            <!-- End of Form -->
+
                                 <!-- End of Form -->
                                 <div class="form-group">
                                     <!-- Form -->

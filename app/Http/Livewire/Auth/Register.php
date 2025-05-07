@@ -13,6 +13,7 @@ class Register extends Component
     public $email = '';
     public $password = '';
     public $passwordConfirmation = '';
+    public $name = ''; // Menambahkan properti untuk 'name'
 
     public function mount()
     {
@@ -29,20 +30,24 @@ class Register extends Component
     public function register()
     {
         $this->validate([
-            'email' => 'required',
+            'name' => 'required|string|max:255',  // Validasi untuk kolom 'name'
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|same:passwordConfirmation|min:6',
         ]);
-
+    
+        // Membuat user baru dengan menyertakan 'name'
         $user = User::create([
-            'email' =>$this->email,
+            'name' => $this->name,  // Menambahkan 'name' di sini
+            'email' => $this->email,
             'password' => Hash::make($this->password),
             'remember_token' => Str::random(10),
         ]);
-
+    
         auth()->login($user);
-
+    
         return redirect('/profile');
     }
+    
 
     public function render()
     {
