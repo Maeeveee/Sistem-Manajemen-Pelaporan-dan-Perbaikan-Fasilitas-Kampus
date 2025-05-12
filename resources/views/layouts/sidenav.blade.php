@@ -76,23 +76,38 @@
                 <span class="sidebar-text">Manajemen Pengguna</span>
               </a>
             </li>
-</li>
+            </li>
           </ul>
         </div>
       </li>
-            <li class="nav-item {{ Request::routeIs('kerusakan.fasilitas') ? 'active' : '' }}">
-        <a href="{{ route('kerusakan.fasilitas') }}" class="nav-link">
-          <span class="sidebar-icon">
+      <li class="nav-item {{ Request::routeIs('kerusakan.fasilitas') ? 'active' : '' }}">
+    <a href="{{ route('kerusakan.fasilitas') }}" class="nav-link">
+        <span class="sidebar-icon">
             <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd" d="M4 3a1 1 0 00-1 1v12a1 1 0 001 1h5v-2H5V5h10v10h-4v2h5a1 1 0 001-1V4a1 1 0 00-1-1H4z"
-                    clip-rule="evenodd"/>
-              <path d="M9 7h2v5H9V7zM9 13h2v2H9v-2z"/>
+                <path fill-rule="evenodd"
+                    d="M18 13V6a2 2 0 00-2-2h-2V3a1 1 0 00-2 0v1H8V3a1 1 0 00-2 0v1H4a2 2 0 00-2 2v7h16zm0 2H2a1 1 0 000 2h16a1 1 0 000-2z"
+                    clip-rule="evenodd" />
             </svg>
-          </span>
-          <span class="sidebar-text">Lapor Kerusakan</span>
-        </a>
-      </li>
+        </span>
+        <span class="sidebar-text">Laporan Kerusakan</span>
+    </a>
+</li>
+
+      <li class="nav-item {{ Request::routeIs('manajemen.fasilitas') ? 'active' : '' }}">
+    <a href="{{ route('manajemen.fasilitas') }}" class="nav-link">
+        <span class="sidebar-icon">
+            <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                    d="M10 2a1 1 0 01.894.553l6 12A1 1 0 0116 16H4a1 1 0 01-.894-1.447l6-12A1 1 0 0110 2zm0 4a1 1 0 100 2 1 1 0 000-2zm1 4H9v4h2v-4z"
+                    clip-rule="evenodd" />
+            </svg>
+        </span>
+        <span class="sidebar-text">Manajemen Fasilitas</span>
+    </a>
+</li>
+
       <li class="nav-item">
         <span
           class="nav-link {{ Request::segment(1) !== 'bootstrap-tables' ? 'collapsed' : '' }} d-flex justify-content-between align-items-center"
