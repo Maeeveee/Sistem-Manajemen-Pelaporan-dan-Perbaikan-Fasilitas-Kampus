@@ -2,8 +2,8 @@
 
 
     @if(in_array(request()->route()->getName(), ['dashboard', 'profile', 'profile-example', 'users', 'bootstrap-tables', 'transactions',
-    'buttons',
-    'forms', 'modals', 'notifications', 'typography', 'upgrade-to-pro']))
+'buttons', 'forms', 'modals', 'notifications', 'typography', 'upgrade-to-pro','kerusakan.fasilitas']
+))
 
     {{-- Nav --}}
     @include('layouts.nav')

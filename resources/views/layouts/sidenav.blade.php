@@ -76,19 +76,21 @@
                 <span class="sidebar-text">Manajemen Pengguna</span>
               </a>
             </li>
+</li>
           </ul>
         </div>
       </li>
-      <li class="nav-item {{ Request::segment(1) == 'transactions' ? 'active' : '' }}">
-        <a href="/transactions" class="nav-link">
-          <span class="sidebar-icon"><svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg">
-              <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"></path>
-              <path fill-rule="evenodd"
-                d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z"
-                clip-rule="evenodd"></path>
-            </svg></span>
-          <span class="sidebar-text">Transactions</span>
+            <li class="nav-item {{ Request::routeIs('kerusakan.fasilitas') ? 'active' : '' }}">
+        <a href="{{ route('kerusakan.fasilitas') }}" class="nav-link">
+          <span class="sidebar-icon">
+            <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M4 3a1 1 0 00-1 1v12a1 1 0 001 1h5v-2H5V5h10v10h-4v2h5a1 1 0 001-1V4a1 1 0 00-1-1H4z"
+                    clip-rule="evenodd"/>
+              <path d="M9 7h2v5H9V7zM9 13h2v2H9v-2z"/>
+            </svg>
+          </span>
+          <span class="sidebar-text">Lapor Kerusakan</span>
         </a>
       </li>
       <li class="nav-item">
