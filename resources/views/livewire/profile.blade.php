@@ -227,12 +227,12 @@
                         <div class="card-body pb-5">
                             <img src="../assets/img/team/profile-picture-1.jpg"
                                 class="avatar-xl rounded-circle mx-auto mt-n7 mb-4" alt="Neil Portrait">
-                            <h4 class="h3">
-                                {{  auth()->user()->first_name ? auth()->user()->first_name . ' ' . auth()->user()->last_name : 'User Name'}}
-                            </h4>
-                            <h5 class="fw-normal">Senior Software Engineer</h5>
-                            <p class="text-gray mb-4">New York, USA</p>
-                            <a class="btn btn-sm btn-gray-800 d-inline-flex align-items-center me-2" href="#">
+                                <h4 class="h3">
+                                    {{ auth()->user()->name ?? 'User Name' }}
+                                </h4>
+                            <!-- <h5 class="fw-normal">Senior Software Engineer</h5>
+                            <p class="text-gray mb-4">New York, USA</p> -->
+                            <!-- <a class="btn btn-sm btn-gray-800 d-inline-flex align-items-center me-2" href="#">
                                 <svg class="icon icon-xs me-1" fill="currentColor" viewBox="0 0 20 20"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -241,7 +241,7 @@
                                 </svg>
                                 Connect
                             </a>
-                            <a class="btn btn-sm btn-secondary" href="#">Send Message</a>
+                            <a class="btn btn-sm btn-secondary" href="#">Send Message</a> -->
                         </div>
                     </div>
                 </div>
