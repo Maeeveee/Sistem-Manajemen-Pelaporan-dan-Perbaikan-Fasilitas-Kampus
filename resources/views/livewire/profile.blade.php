@@ -137,38 +137,17 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <div>
-                                <label for="first_name">First Name</label>
+                                <label for="first_name">Nama Lengkap</label>
                                 <input wire:model="user.first_name" class="form-control" id="first_name" type="text"
-                                    placeholder="Enter your first name" required>
+                                    placeholder="{{ auth()->user()->name ?? 'User Name' }}" disabled>
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <div>
-                                <label for="last_name">Last Name</label>
-                                <input wire:model="user.last_name" class="form-control" id="last_name" type="text"
-                                    placeholder="Also your last name">
+                                <label for="first_name">Nomor Induk</label>
+                                <input wire:model="user.first_name" class="form-control" id="first_name" type="text"
+                                    placeholder="{{ auth()->user()->identifier ?? 'Nomor Induk' }}" disabled>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row align-items-center">
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input wire:model="user.email" class="form-control" id="email" type="email"
-                                    placeholder="name@company.com" disabled>
-                            </div>
-                            @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="gender">Gender</label>
-                            <select wire:model="user.gender" class="form-select mb-0" id="gender"
-                                aria-label="Gender select example">
-                                <option selected>Choose...</option>
-                                <option value="Female">Female</option>
-                                <option value="Male">Male</option>
-                                <option value="Other">Other</option>
-                            </select>
-                            @error('user.gender') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
                     </div>
                     <h2 class="h5 my-4">Location</h2>
@@ -223,9 +202,9 @@
                 <div class="col-12 mb-4">
                     <div class="card shadow border-0 text-center p-0">
                         <div wire:ignore.self class="profile-cover rounded-top"
-                            data-background="../assets/img/profile-cover.jpg"></div>
+                            data-background="../assets/img/gedung-sipil.png"></div>
                         <div class="card-body pb-5">
-                            <img src="../assets/img/team/profile-picture-1.jpg"
+                            <img src="../assets/img/team/nadit.jpg"
                                 class="avatar-xl rounded-circle mx-auto mt-n7 mb-4" alt="Neil Portrait">
                                 <h4 class="h3">
                                     {{ auth()->user()->name ?? 'User Name' }}

@@ -163,7 +163,7 @@
               My Profile
             </a>
             <div role="separator" class="dropdown-divider my-1"></div>
-            <a class="dropdown-item d-flex align-items-center">
+            <a class="dropdown-item">
               <livewire:logout /></a>
           </div>
         </li>
