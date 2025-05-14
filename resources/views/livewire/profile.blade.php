@@ -138,14 +138,14 @@
                         <div class="col-md-6 mb-3">
                             <div>
                                 <label for="first_name">Nama Lengkap</label>
-                                <input wire:model="user.first_name" class="form-control" id="first_name" type="text"
-                                    placeholder="{{ auth()->user()->name ?? 'User Name' }}" disabled>
+                                <input wire:model="user.first_name" class="form-control bg-white" id="first_name" type="text"
+                                    placeholder="Masukkan nama" value="{{ auth()->user()->name ?? 'User Name' }}" disabled>
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <div>
                                 <label for="first_name">Nomor Induk</label>
-                                <input wire:model="user.first_name" class="form-control" id="first_name" type="text"
+                                <input wire:model="user.first_name" class="form-control bg-white" id="first_name" type="text"
                                     placeholder="{{ auth()->user()->identifier ?? 'Nomor Induk' }}" disabled>
                             </div>
                         </div>
