@@ -145,7 +145,7 @@
           <a class="nav-link dropdown-toggle pt-1 px-0" href="#" role="button" data-bs-toggle="dropdown"
             aria-expanded="false">
             <div class="media d-flex align-items-center">
-    <img class="avatar rounded-circle" alt="Image placeholder" src="/assets/img/team/profile-picture-1.jpg">
+    <img class="avatar rounded-circle" alt="Image placeholder" src="/assets/img/team/nadit.jpg">
     <div class="media-body ms-2 text-dark align-items-center d-none d-lg-block">
         <span class="mb-0 font-small fw-bold text-gray-900">{{ auth()->user()->name ?? 'User Name' }}</span>
     </div>

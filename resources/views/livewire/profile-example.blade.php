@@ -1,4 +1,4 @@
-<title>Volt Laravel Dashboard - Profile</title>
+<title>Dashboard - Profile</title>
 <div>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
         <div>
