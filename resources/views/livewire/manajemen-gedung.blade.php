@@ -82,24 +82,17 @@
                         <td>{{ $gedung->nama_gedung }}</td>
                         <td>{{ $gedung->jumlah_lantai }}</td>
                         <td>
-                            <div class="btn-group">
-                                <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"
-                                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <svg class="icon icon-xs" fill="currentColor" viewBox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z">
-                                        </path>
-                                    </svg>
+                            <div class="d-flex gap-2">
+                                <button wire:click="edit({{ $gedung->id }})" 
+                                        class="btn btn-sm btn-warning" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#gedungModal">
+                                    <i class="fas fa-edit me-1"></i> Edit
                                 </button>
-                                <div class="dropdown-menu dashboard-dropdown dropdown-menu-start mt-2 py-1">
-                                    <button wire:click="edit({{ $gedung->id }})" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#gedungModal">
-                                        Edit
-                                    </button>
-                                    <button wire:click="deleteConfirmed ({{ $gedung->id }})" class="dropdown-item text-danger">
-                                        Hapus
-                                    </button>
-                                </div>
+                                <button wire:click="deleteConfirmed({{ $gedung->id }})" 
+                                        class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash me-1"></i> Hapus
+                                </button>
                             </div>
                         </td>
                     </tr>
