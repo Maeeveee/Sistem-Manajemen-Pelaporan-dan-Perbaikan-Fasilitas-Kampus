@@ -10,6 +10,7 @@ use App\Http\Livewire\Components\Forms\FormKerusakanFasilitas;
 use App\Http\Livewire\ManajemenFasilitas;
 use App\Http\Livewire\ManajemenGedung;
 use App\Http\Livewire\Dashboard;
+use App\Http\Livewire\DashboardTeknisi;
 use App\Http\Livewire\Err404;
 use App\Http\Livewire\Err500;
 use App\Http\Livewire\ResetPassword;
@@ -78,3 +79,5 @@ Route::get('/manajemen-gedung', ManajemenGedung::class)->name('manajemen.gedung'
 Route::get('/pelaporan/kerusakan-fasilitas', FormKerusakanFasilitas::class)
     ->middleware(['auth'])
     ->name('kerusakan.fasilitas');
+
+Route::get('/teknisi', DashboardTeknisi::class)->name('dashboard');
