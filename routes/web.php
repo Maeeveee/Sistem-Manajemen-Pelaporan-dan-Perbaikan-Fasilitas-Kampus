@@ -17,6 +17,7 @@ use App\Http\Livewire\Lock;
 use App\Http\Livewire\Auth\Login;
 use App\Http\Livewire\Profile;
 use App\Http\Livewire\Auth\Register;
+use App\Http\Livewire\DashboardTeknisi;
 use App\Http\Livewire\ForgotPasswordExample;
 use App\Http\Livewire\Index;
 use App\Http\Livewire\LoginExample;
@@ -80,4 +81,6 @@ Route::delete('/fasilitas/{id}', [ManajemenFasilitas::class, 'delete'])->name('f
 Route::get('/pelaporan/kerusakan-fasilitas', FormKerusakanFasilitas::class)
     ->middleware(['auth'])
     ->name('kerusakan.fasilitas');
+
+Route::get('/teknisi', DashboardTeknisi::class)->name('dashboard');
 
