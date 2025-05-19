@@ -8,10 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 class Fasilitas extends Model
 {
     use HasFactory;
-
-    // Pastikan nama kolom sesuai dengan nama yang digunakan di database
-    protected $fillable = [
-        'nama_fasilitas', 'kategori', 'status'
-    ];
     
+    protected $table = 'fasilitas';
+    
+    protected $fillable = [
+        'nama_fasilitas',
+        'lokasi',
+        'ruang',
+        'gedung_id',
+    ];
+
+    public function gedung()
+    {
+        return $this->belongsTo(Gedung::class);
+    }
 }

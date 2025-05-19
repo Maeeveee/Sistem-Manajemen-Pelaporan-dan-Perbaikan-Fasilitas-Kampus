@@ -8,6 +8,7 @@ use App\Http\Livewire\Components\Notifications;
 use App\Http\Livewire\Components\Typography;
 use App\Http\Livewire\Components\Forms\FormKerusakanFasilitas;
 use App\Http\Livewire\ManajemenFasilitas;
+use App\Http\Livewire\ManajemenGedung;
 use App\Http\Livewire\Dashboard;
 use App\Http\Livewire\Err404;
 use App\Http\Livewire\Err500;
@@ -69,15 +70,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/modals', Modals::class)->name('modals');
     Route::get('/typography', Typography::class)->name('typography');
 });
+
 Route::get('/manajemen-fasilitas', ManajemenFasilitas::class)->name('manajemen.fasilitas');
-Route::get('/fasilitas/create', ManajemenFasilitas::class)->name('fasilitas.create');
-Route::get('/fasilitas', ManajemenFasilitas::class)->name('fasilitas.index');
-Route::get('/fasilitas/{id}/edit', [ManajemenFasilitas::class, 'edit'])->name('fasilitas.edit');
-Route::delete('/fasilitas/{id}', [ManajemenFasilitas::class, 'delete'])->name('fasilitas.destroy');
 
-
+Route::get('/manajemen-gedung', ManajemenGedung::class)->name('manajemen.gedung');
 
 Route::get('/pelaporan/kerusakan-fasilitas', FormKerusakanFasilitas::class)
     ->middleware(['auth'])
     ->name('kerusakan.fasilitas');
-

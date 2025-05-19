@@ -132,7 +132,6 @@
     @endif
 
     {{ $slot }}
-
 </body>
 
 </html>

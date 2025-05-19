@@ -1,5 +1,5 @@
 <div>
-    <title>Manajemen Fasilitas</title>
+    <title>Manajemen Gedung</title>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
         <div class="d-block mb-4 mb-md-0">
             <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
@@ -15,14 +15,14 @@
                         </a>
                     </li>
                     <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Manajemen Fasilitas</li>
+                    <li class="breadcrumb-item active" aria-current="page">Manajemen Gedung</li>
                 </ol>
             </nav>
-            <h2 class="h4">Manajemen Fasilitas Kampus</h2>
+            <h2 class="h4">Manajemen Gedung Kampus</h2>
         </div>
         <div class="btn-toolbar mb-2 mb-md-0">
-            <button wire:click="resetInput" class="btn btn-sm btn-gray-800" data-bs-toggle="modal" data-bs-target="#fasilitasModal">
-                Tambah Fasilitas
+            <button wire:click="resetInput" class="btn btn-sm btn-gray-800" data-bs-toggle="modal" data-bs-target="#gedungModal">
+                Tambah Gedung
             </button>
         </div>
     </div>
@@ -38,7 +38,7 @@
                                 clip-rule="evenodd"></path>
                         </svg>
                     </span>
-                    <input type="text" wire:model.debounce.300ms="search" class="form-control" placeholder="Cari fasilitas">
+                    <input type="text" wire:model.debounce.300ms="search" class="form-control" placeholder="Cari gedung">
                 </div>
             </div>
             <div class="col-3 col-lg-4 d-flex justify-content-end">
@@ -69,22 +69,18 @@
         <table class="table user-table table-hover align-items-center">
             <thead>
                 <tr>
-                    <th class="border-bottom">No</th>
-                    <th class="border-bottom">Nama Fasilitas</th>
-                    <th class="border-bottom">Lokasi</th>
-                    <th class="border-bottom">Ruangan</th>
-                    <th class="border-bottom">Gedung</th>
-                    <th class="border-bottom">Aksi</th>
+                    <th>No</th>
+                    <th>Nama Gedung</th>
+                    <th>Jumlah Lantai</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
-                @forelse ($fasilitas as $index => $item)
+                @forelse ($gedungs as $index => $gedung)
                     <tr>
-                        <td>{{ $fasilitas->firstItem() + $index }}</td>
-                        <td>{{ $item->nama_fasilitas }}</td>
-                        <td>{{ $item->lokasi }}</td>
-                        <td>{{ $item->ruang }}</td>
-                        <td>{{ $item->gedung->nama_gedung ?? '-' }}</td>
+                        <td>{{ $gedungs->firstItem() + $index }}</td>
+                        <td>{{ $gedung->nama_gedung }}</td>
+                        <td>{{ $gedung->jumlah_lantai }}</td>
                         <td>
                             <div class="btn-group">
                                 <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"
@@ -97,10 +93,10 @@
                                     </svg>
                                 </button>
                                 <div class="dropdown-menu dashboard-dropdown dropdown-menu-start mt-2 py-1">
-                                    <button wire:click="edit({{ $item->id }})" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#fasilitasModal">
+                                    <button wire:click="edit({{ $gedung->id }})" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#gedungModal">
                                         Edit
                                     </button>
-                                    <button wire:click="deleteConfirmed({{ $item->id }})" class="dropdown-item text-danger">
+                                    <button wire:click="deleteConfirmed ({{ $gedung->id }})" class="dropdown-item text-danger">
                                         Hapus
                                     </button>
                                 </div>
@@ -109,26 +105,26 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="text-center text-muted">Tidak ada data fasilitas.</td>
+                        <td colspan="4" class="text-center text-muted">Tidak ada data gedung.</td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
         <div class="card-footer px-3 border-0 d-flex justify-content-between align-items-center">
             <div class="text-muted">
-                Menampilkan <strong>{{ $fasilitas->firstItem() ?? 0 }} - {{ $fasilitas->lastItem() ?? 0 }}</strong> dari <strong>{{ $fasilitas->total() }}</strong> data
+                Menampilkan <strong>{{ $gedungs->firstItem() ?? 0 }} - {{ $gedungs->lastItem() ?? 0 }}</strong> dari <strong>{{ $gedungs->total() }}</strong> data
             </div>
             <div>
                 <button 
                     wire:click="previousPage" 
                     wire:loading.attr="disabled"
-                    class="btn btn-sm btn-outline-primary {{ $fasilitas->onFirstPage() ? 'disabled' : '' }}">
+                    class="btn btn-sm btn-outline-primary {{ $gedungs->onFirstPage() ? 'disabled' : '' }}">
                     Sebelumnya
                 </button>
                 <button 
                     wire:click="nextPage" 
                     wire:loading.attr="disabled"
-                    class="btn btn-sm btn-outline-primary ms-2 {{ !$fasilitas->hasMorePages() ? 'disabled' : '' }}">
+                    class="btn btn-sm btn-outline-primary ms-2 {{ !$gedungs->hasMorePages() ? 'disabled' : '' }}">
                     Selanjutnya
                 </button>
             </div>
@@ -136,55 +132,35 @@
     </div>
 
     <!-- Modal Form -->
-    <div wire:ignore.self class="modal fade" id="fasilitasModal" tabindex="-1" role="dialog" aria-labelledby="fasilitasModalLabel" aria-hidden="true">
+    <div wire:ignore.self class="modal fade" id="gedungModal" tabindex="-1" role="dialog" aria-labelledby="gedungModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="fasilitasModalLabel">
-                        {{ $isEdit ? 'Edit Fasilitas' : 'Tambah Fasilitas Baru' }}
+                    <h5 class="modal-title" id="gedungModalLabel">
+                        {{ $isEdit ? 'Edit Gedung' : 'Tambah Gedung Baru' }}
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form wire:submit.prevent="{{ $isEdit ? 'update' : 'store' }}">
+                <form wire:submit.prevent="store">
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="nama_fasilitas" class="form-label">Nama Fasilitas</label>
-                            <input type="text" class="form-control" id="nama_fasilitas" wire:model.defer="nama_fasilitas">
-                            @error('nama_fasilitas') <span class="text-danger">{{ $message }}</span> @enderror
+                            <label for="nama_gedung" class="form-label">Nama Gedung</label>
+                            <input type="text" class="form-control" id="nama_gedung" wire:model.defer="nama_gedung">
+                            @error('nama_gedung') <span class="text-danger">{{ $message }}</span> @enderror
                         </div>
-                        
                         <div class="mb-3">
-                            <label for="gedung_id" class="form-label">Gedung</label>
-                            <select class="form-select" id="gedung_id" wire:model="gedung_id">
-                                <option value="">Pilih Gedung</option>
-                                @foreach($gedungs as $gedung)
-                                    <option value="{{ $gedung->id }}">{{ $gedung->nama_gedung }}</option>
-                                @endforeach
-                            </select>
-                            @error('gedung_id') <span class="text-danger">{{ $message }}</span> @enderror
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="lokasi" class="form-label">Lantai</label>
-                            <input type="number" class="form-control" id="lokasi" wire:model.defer="lokasi" 
-                                   min="1" :max="$jumlah_lantai">
-                            @error('lokasi') <span class="text-danger">{{ $message }}</span> @enderror
-                            <small class="text-muted">Maksimal lantai: {{ $jumlah_lantai }}</small>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="ruang" class="form-label">Ruangan</label>
-                            <input type="text" class="form-control" id="ruang" wire:model.defer="ruang">
-                            @error('ruang') <span class="text-danger">{{ $message }}</span> @enderror
+                            <label for="jumlah_lantai" class="form-label">Jumlah Lantai</label>
+                            <input type="number" min="1" class="form-control" id="jumlah_lantai" wire:model.defer="jumlah_lantai">
+                            @error('jumlah_lantai') <span class="text-danger">{{ $message }}</span> @enderror
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-primary">
-                            <span wire:loading.remove wire:target="{{ $isEdit ? 'update' : 'store' }}">
+                            <span wire:loading.remove wire:target="store">
                                 {{ $isEdit ? 'Update' : 'Simpan' }}
                             </span>
-                            <span wire:loading wire:target="{{ $isEdit ? 'update' : 'store' }}">
+                            <span wire:loading wire:target="store">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 Memproses...
                             </span>
@@ -198,36 +174,18 @@
 
 @push('scripts')
 <script>
-    document.addEventListener('livewire:load', function() {
+    document.addEventListener('livewire:init', function() {
         // Modal Control
         Livewire.on('showModal', () => {
-            var modal = new bootstrap.Modal(document.getElementById('fasilitasModal'));
+            var modal = new bootstrap.Modal(document.getElementById('gedungModal'));
             modal.show();
         });
         
         Livewire.on('hideModal', () => {
-            var modal = bootstrap.Modal.getInstance(document.getElementById('fasilitasModal'));
+            var modal = bootstrap.Modal.getInstance(document.getElementById('gedungModal'));
             if (modal) {
                 modal.hide();
             }
-        });
-        
-        // Delete Confirmation
-        Livewire.on('deleteConfirmation', (id) => {
-            Swal.fire({
-                title: 'Hapus Fasilitas?',
-                text: "Data yang dihapus tidak dapat dikembalikan!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, Hapus!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Livewire.emit('deleteConfirmed', id);
-                }
-            });
         });
     });
 </script>

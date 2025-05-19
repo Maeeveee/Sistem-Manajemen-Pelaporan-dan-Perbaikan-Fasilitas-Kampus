@@ -85,19 +85,32 @@
     </a>
 </li>
 
+      <li class="nav-item {{ Request::routeIs('manajemen.gedung') ? 'active' : '' }}">
+          <a href="{{ route('manajemen.gedung') }}" class="nav-link">
+              <span class="sidebar-icon">
+                  <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M10 2L2 7v11h16V7L10 2zm0 1.5L16 8v8H4V8l6-4.5z"/>
+                      <rect x="6" y="10" width="2" height="4"/>
+                      <rect x="12" y="10" width="2" height="4"/>
+                      <rect x="9" y="10" width="2" height="4"/>
+                  </svg>
+              </span>
+              <span class="sidebar-text">Manajemen Gedung</span>
+          </a>
+      </li>
       <li class="nav-item {{ Request::routeIs('manajemen.fasilitas') ? 'active' : '' }}">
-    <a href="{{ route('manajemen.fasilitas') }}" class="nav-link">
-        <span class="sidebar-icon">
-            <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd"
-                    d="M10 2a1 1 0 01.894.553l6 12A1 1 0 0116 16H4a1 1 0 01-.894-1.447l6-12A1 1 0 0110 2zm0 4a1 1 0 100 2 1 1 0 000-2zm1 4H9v4h2v-4z"
-                    clip-rule="evenodd" />
-            </svg>
-        </span>
-        <span class="sidebar-text">Manajemen Fasilitas</span>
-    </a>
-</li>
+          <a href="{{ route('manajemen.fasilitas') }}" class="nav-link">
+              <span class="sidebar-icon">
+                  <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd"
+                          d="M10 2a1 1 0 01.894.553l6 12A1 1 0 0116 16H4a1 1 0 01-.894-1.447l6-12A1 1 0 0110 2zm0 4a1 1 0 100 2 1 1 0 000-2zm1 4H9v4h2v-4z"
+                          clip-rule="evenodd" />
+                  </svg>
+              </span>
+              <span class="sidebar-text">Manajemen Fasilitas</span>
+          </a>
+      </li>
     </ul>
   </div>
 </nav>
