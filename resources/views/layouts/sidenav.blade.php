@@ -33,10 +33,10 @@
             <li class="nav-item">
         <a href="/dashboard" class="nav-link d-flex align-items-center">
           <span class="sidebar-icon me-3">
-            <img src="/assets/img/brand/light.svg" height="20" width="20" alt="Volt Logo">
+            <img src="/assets/img/brand/logo_sarpras2.png" height="50" width="50" alt="Volt Logo">
           </span>
           <span class="mt-1 ms-1 sidebar-text">
-            Volt Laravel
+            SarPolma
           </span>
         </a>
       </li>
