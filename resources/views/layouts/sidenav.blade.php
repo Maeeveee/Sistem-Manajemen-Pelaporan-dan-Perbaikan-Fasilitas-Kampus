@@ -30,7 +30,16 @@
       </div>
     </div>
     <ul class="nav flex-column pt-3 pt-md-0">
-      
+            <li class="nav-item">
+        <a href="/dashboard" class="nav-link d-flex align-items-center">
+          <span class="sidebar-icon me-3">
+            <img src="/assets/img/brand/light.svg" height="20" width="20" alt="Volt Logo">
+          </span>
+          <span class="mt-1 ms-1 sidebar-text">
+            Volt Laravel
+          </span>
+        </a>
+      </li>
       <li class="nav-item {{ Request::segment(1) == 'dashboard' ? 'active' : '' }}">
         <a href="/dashboard" class="nav-link">
           <span class="sidebar-icon"> <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
