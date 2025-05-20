@@ -1,4 +1,4 @@
-{{-- <div>
+<div>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
         <div class="d-block mb-4 mb-md-0">
             <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
@@ -161,15 +161,15 @@
     </div>
 
     <!-- Modal for Create/Edit -->
-    <div class="modal fade" id="userModal" tabindex="-1">
+    <div class="modal fade" id="userModal" tabindex="-1" wire:ignore.self>
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">{{ isset($isEdit) && $isEdit ? 'Edit Pengguna' : 'Tambah Pengguna' }}</h5>
+                    <h5 class="modal-title">{{ $isEdit ? 'Edit Pengguna' : 'Tambah Pengguna' }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form wire:submit.prevent="{{ isset($isEdit) && $isEdit ? 'update' : 'store' }}">
+                    <form wire:submit.prevent="{{ $isEdit ? 'update' : 'store' }}">
                         <!-- Nama -->
                         <div class="form-group mb-4">
                             <label for="name">Nama</label>
@@ -195,7 +195,7 @@
                             </div>
                         </div>
                         <!-- Password (only for create) -->
-                        @if (!isset($isEdit) || !$isEdit)
+                        @if (!$isEdit)
                             <div class="form-group mb-4">
                                 <label for="password">Password</label>
                                 <div class="input-group">
@@ -228,7 +228,7 @@
                         <!-- Submit Button -->
                         <div class="d-grid">
                             <button type="submit"
-                                class="btn btn-gray-800">{{ isset($isEdit) && $isEdit ? 'Update' : 'Simpan' }}</button>
+                                class="btn btn-gray-800">{{ $isEdit ? 'Update' : 'Simpan' }}</button>
                         </div>
                     </form>
                 </div>
@@ -238,12 +238,19 @@
 
     <script>
         document.addEventListener('livewire:load', function() {
-            window.livewire.on('open-modal', () => {
-                new bootstrap.Modal(document.getElementById('userModal')).show();
+            Livewire.on('open-modal', () => {
+                var userModal = new bootstrap.Modal(document.getElementById('userModal'));
+                userModal.show();
             });
-            window.livewire.on('close-modal', () => {
-                bootstrap.Modal.getInstance(document.getElementById('userModal')).hide();
+            
+            Livewire.on('close-modal', () => {
+                var userModalEl = document.getElementById('userModal');
+                var userModal = bootstrap.Modal.getInstance(userModalEl);
+                if (userModal) {
+                    userModal.hide();
+                }
             });
         });
     </script>
-</div> --}}
+</div>
+```

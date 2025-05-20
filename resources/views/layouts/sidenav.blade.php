@@ -3,11 +3,10 @@
     <div class="user-card d-flex d-md-none align-items-center justify-content-between justify-content-md-center pb-4">
       <div class="d-flex align-items-center">
         <div class="avatar-lg me-4">
-          <img src="/assets/img/team/profile-picture-3.jpg" class="card-img-top rounded-circle border-white"
-            alt="Bonnie Green">
+          <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name ?? 'User') }}&background=random&color=fff" class="avatar rounded-circle me-3" alt="Avatar">
         </div>
         <div class="d-block">
-          <h2 class="h5 mb-3">Hi, Jane</h2>
+          <h2 class="h5 mb-3">{{ auth()->user()->name ?? 'User Name' }}</h2>
           <a href="/login" class="btn btn-secondary btn-sm d-inline-flex align-items-center">
             <svg class="icon icon-xxs me-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
               xmlns="http://www.w3.org/2000/svg">

@@ -7,6 +7,8 @@ use App\Models\User;
 
 class Users extends Component
 {
+    public $identifier;
+
     public function render()
     {
         $users = User::all(); // Ambil semua user dari database
