@@ -94,7 +94,7 @@
                         </div>
                     </th>
                     <th class="border-bottom">Nama</th>
-                    <th class="border-bottom">Identifier</th>
+                    <th class="border-bottom">NIM/NIP/NIDN</th>
                     <th class="border-bottom">Role</th>
                     <th class="border-bottom">Aksi</th>
                 </tr>
@@ -184,11 +184,11 @@
                         </div>
                         <!-- Identifier -->
                         <div class="form-group mb-4">
-                            <label for="identifier">Identifier</label>
+                            <label for="identifier">NIM/NIP/NIDN</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fas fa-id-card"></i></span>
                                 <input type="text" wire:model="identifier" class="form-control" id="identifier"
-                                    placeholder="Identifier">
+                                    placeholder="NIM/NIP/NIDN">
                                 @error('identifier')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
