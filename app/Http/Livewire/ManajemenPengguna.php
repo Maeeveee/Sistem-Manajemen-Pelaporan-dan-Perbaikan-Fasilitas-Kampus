@@ -5,13 +5,14 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use App\Models\User;
 use App\Models\Role;
+use Illuminate\Support\Facades\Hash;
 use Livewire\WithPagination;
 
 class ManajemenPengguna extends Component
 {
     use WithPagination;
 
-    public $name, $identifier, $role_id, $user_id, $password;
+    public $name, $identifier, $role_id, $user_id, $password, $password_confirmation;
     public $isEdit = false;
     public $search = '';
     public $perPage = 10;
@@ -21,9 +22,16 @@ class ManajemenPengguna extends Component
     protected $rules = [
         'name' => 'required|min:3',
         'identifier' => 'required|unique:users,identifier',
-        'role_id' => 'required|exists:roles,id',
-        'password' => 'required|min:6',
+        'password' => 'required|min:6|same:password_confirmation',
+        'password_confirmation' => 'required|min:6',
     ];
+
+    public function create()
+    {
+        $this->resetFields();
+        $this->isEdit = false;
+        $this->emit('open-modal');
+    }
 
     // Specify the correct event listeners
     protected $listeners = ['open-modal' => 'openModal'];
@@ -58,21 +66,12 @@ class ManajemenPengguna extends Component
         ]);
     }
 
-    public function create()
-    {
-        $this->resetFields();
-        $this->isEdit = false;
-        // Emit the event instead of dispatching browser event
-        $this->emit('open-modal');
-    }
-
     public function edit($id)
     {
         $user = User::findOrFail($id);
         $this->user_id = $user->id;
         $this->name = $user->name;
         $this->identifier = $user->identifier;
-        $this->role_id = $user->role_id;
         $this->isEdit = true;
         // Emit the event instead of dispatching browser event
         $this->emit('open-modal');
@@ -81,11 +80,33 @@ class ManajemenPengguna extends Component
     public function store()
     {
         $this->validate();
+
+        $role = match (strlen($this->identifier)) {
+            10 => 'mahasiswa',
+            18 => 'dosen',
+            16 => 'tendik',
+            14 => 'sarpras',
+            12 => 'teknisi',
+            default => null,
+        };
+
+        if (!$role) {
+            session()->flash('error', 'Format NIM/NIP tidak dikenali.');
+            return;
+        }
+
+        // Ambil role_id dari tabel roles
+        $roleId = Role::where('name', $role)->value('id');
+        if (!$roleId) {
+            session()->flash('error', 'Role tidak ditemukan di database.');
+            return;
+        }
+
         User::create([
             'name' => $this->name,
             'identifier' => $this->identifier,
-            'role_id' => $this->role_id,
             'password' => bcrypt($this->password),
+            'role_id' => $roleId,
         ]);
         $this->resetFields();
         // Emit the close event
@@ -98,14 +119,35 @@ class ManajemenPengguna extends Component
         $this->validate([
             'name' => 'required|min:3',
             'identifier' => 'required|unique:users,identifier,' . $this->user_id,
-            'role_id' => 'required|exists:roles,id',
+            'password' => 'required|min:6|same:password_confirmation',
         ]);
+
+         $role = match (strlen($this->identifier)) {
+            10 => 'mahasiswa',
+            18 => 'dosen',
+            16 => 'tendik',
+            14 => 'sarpras',
+            12 => 'teknisi',
+            default => null,
+        };
+
+        if (!$role) {
+            session()->flash('error', 'Format NIM/NIP tidak dikenali.');
+            return;
+        }
+
+        // Ambil role_id dari tabel roles
+        $roleId = Role::where('name', $role)->value('id');
+        if (!$roleId) {
+            session()->flash('error', 'Role tidak ditemukan di database.');
+            return;
+        }
 
         $user = User::findOrFail($this->user_id);
         $user->update([
             'name' => $this->name,
             'identifier' => $this->identifier,
-            'role_id' => $this->role_id,
+            'role_id' => $roleId,
         ]);
 
         $this->resetFields();

@@ -161,6 +161,7 @@
     </div>
 
     <!-- Modal for Create/Edit -->
+    
     <div class="modal fade" id="userModal" tabindex="-1" wire:ignore.self>
         <div class="modal-dialog">
             <div class="modal-content">
@@ -169,68 +170,84 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form wire:submit.prevent="{{ $isEdit ? 'update' : 'store' }}">
-                        <!-- Nama -->
-                        <div class="form-group mb-4">
-                            <label for="name">Nama</label>
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-user"></i></span>
-                                <input type="text" wire:model="name" class="form-control" id="name"
-                                    placeholder="Nama Lengkap">
-                                @error('name')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </div>
-                        <!-- Identifier -->
-                        <div class="form-group mb-4">
-                            <label for="identifier">NIM/NIP/NIDN</label>
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-id-card"></i></span>
-                                <input type="text" wire:model="identifier" class="form-control" id="identifier"
-                                    placeholder="NIM/NIP/NIDN">
-                                @error('identifier')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </div>
-                        <!-- Password (only for create) -->
-                        @if (!$isEdit)
-                            <div class="form-group mb-4">
-                                <label for="password">Password</label>
+                    <form wire:submit.prevent="{{ $isEdit ? 'update' : 'store' }}" method="POST">
+                            <!-- Identifier -->
+                            <div class="form-group mt-4 mb-4">
+                                <label for="identifier">NIM/NIP/NIDN</label>
                                 <div class="input-group">
-                                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                                    <input type="password" wire:model="password" class="form-control" id="password"
-                                        placeholder="Password">
-                                    @error('password')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                    <span class="input-group-text" id="basic-addon-id"><svg
+                                            class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                            <path
+                                                d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5z" />
+                                        </svg></span>
+                                    <input wire:model="identifier" id="identifier" type="text" class="form-control"
+                                        placeholder="Masukkan NIM/NIP/NIDN" required>
+                                </div>
+                                @error('identifier')
+                                    <div class="invalid-feedback"> {{ $message }} </div>
+                                @enderror
+                            </div>
+
+                            <!-- Nama Lengkap -->
+                            <div class="form-group mt-4 mb-4">
+                                <label for="name">Nama Lengkap Anda</label>
+                                <div class="input-group">
+                                    <span class="input-group-text" id="basic-addon1"><svg
+                                            class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M18 6a6 6 0 10-12 0 6 6 0 0012 0zM9 8a3 3 0 116 0 3 3 0 01-6 0z" />
+                                        </svg></span>
+                                    <input wire:model="name" id="name" type="text" class="form-control"
+                                        placeholder="Nama Lengkap Anda" required>
+                                </div>
+                                @error('name')
+                                    <div class="invalid-feedback"> {{ $message }} </div>
+                                @enderror
+                            </div>
+                            <!-- Password -->
+                            <div class="form-group mb-4">
+                                <label for="password">Kata Sandi Anda</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><svg class="icon icon-xs text-gray-600"
+                                            fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd"
+                                                d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                                                clip-rule="evenodd" />
+                                        </svg></span>
+                                    <input wire:model="password" type="password" placeholder="Kata Sandi"
+                                        class="form-control" id="password" required>
+                                </div>
+                                @error('password')
+                                    <div class="invalid-feedback"> {{ $message }} </div>
+                                @enderror
+                            </div>
+                            <!-- Konfirmasi Password -->
+                            <div class="form-group mb-4">
+                                <label for="confirm_password">Konfirmasi Kata Sandi</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><svg class="icon icon-xs text-gray-600"
+                                            fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd"
+                                                d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                                                clip-rule="evenodd" />
+                                        </svg></span>
+                                    <input wire:model="password_confirmation" type="password"
+                                        placeholder="Konfirmasi Kata Sandi" class="form-control" id="confirm_password"
+                                        required>
                                 </div>
                             </div>
-                        @endif
-                        <!-- Role -->
-                        <div class="form-group mb-4">
-                            <label for="role_id">Role</label>
-                            <select wire:model="role_id" class="form-select" id="role_id">
-                                <option value="">-- Pilih Role --</option>
-                                @if (isset($roles) && $roles->isNotEmpty())
-                                    @foreach ($roles as $role)
-                                        <option value="{{ $role->id }}">{{ $role->name }}</option>
-                                    @endforeach
-                                @else
-                                    <option disabled>Tidak ada role tersedia</option>
-                                @endif
-                            </select>
-                            @error('role_id')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
-                        <!-- Submit Button -->
-                        <div class="d-grid">
-                            <button type="submit"
-                                class="btn btn-gray-800">{{ $isEdit ? 'Update' : 'Simpan' }}</button>
-                        </div>
-                    </form>
+
+
+                            <div class="form-check mb-4">
+                                <input class="form-check-input" type="checkbox" value="" id="terms" required>
+                                <label class="form-check-label fw-normal mb-0" for="terms">
+                                    Saya setuju dengan <a href="#">syarat dan ketentuan</a>
+                                </label>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-gray-800">Daftar</button>
+                            </div>
+                        </form>
                 </div>
             </div>
         </div>
