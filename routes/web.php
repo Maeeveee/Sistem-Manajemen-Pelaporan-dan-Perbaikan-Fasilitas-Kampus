@@ -19,6 +19,7 @@ use App\Http\Livewire\Lock;
 use App\Http\Livewire\Auth\Login;
 use App\Http\Livewire\Profile;
 use App\Http\Livewire\Auth\Register;
+use App\Http\Livewire\DashboardSarpras;
 use App\Http\Livewire\ForgotPasswordExample;
 use App\Http\Livewire\Index;
 use App\Http\Livewire\LoginExample;
@@ -83,3 +84,5 @@ Route::get('/pelaporan/kerusakan-fasilitas', FormKerusakanFasilitas::class)
     ->name('kerusakan.fasilitas');
 
 Route::get('/teknisi', DashboardTeknisi::class)->name('dashboard');
+
+Route::get('/sarpras', DashboardSarpras::class)->name('dashboard');
