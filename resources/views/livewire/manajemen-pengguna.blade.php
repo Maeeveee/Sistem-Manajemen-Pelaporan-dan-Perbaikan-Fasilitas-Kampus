@@ -161,7 +161,6 @@
     </div>
 
     <!-- Modal for Create/Edit -->
-    tes
     <div class="modal fade" id="userModal" tabindex="-1" wire:ignore.self>
         <div class="modal-dialog">
             <div class="modal-content">
