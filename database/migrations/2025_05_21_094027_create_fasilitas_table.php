@@ -10,10 +10,10 @@ return new class extends Migration
     {
         Schema::create('fasilitas', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_fasilitas')->unique(); // Tambahan kode fasilitas
             $table->string('nama_fasilitas');
-            $table->string('lokasi');
-            $table->string('ruang');
-            $table->foreignId('gedung_id')->references('id')->on('gedung')->onDelete('cascade');
+            $table->integer('jumlah')->default(1);
+            $table->foreignId('ruangan_id')->constrained('ruangan')->onDelete('cascade');
             $table->timestamps();
         });
     }

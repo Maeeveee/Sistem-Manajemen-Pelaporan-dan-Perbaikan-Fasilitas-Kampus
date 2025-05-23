@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('gedung', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_gedung')->unique(); // Tambahan kode gedung
             $table->string('nama_gedung', 100);
             $table->integer('jumlah_lantai')->default(1);
             $table->timestamps();
