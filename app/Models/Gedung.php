@@ -12,14 +12,13 @@ class Gedung extends Model
     protected $table = 'gedung';
     
     protected $fillable = [
+        'kode_gedung',
         'nama_gedung',
         'jumlah_lantai',
-        'created_at',
-        'updated_at'
     ];
 
-    public function fasilitas()
+    public function ruangans()
     {
-        return $this->hasMany(Fasilitas::class);
+        return $this->hasMany(Ruangan::class, 'gedung_id');
     }
 }

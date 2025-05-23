@@ -12,14 +12,20 @@ class Fasilitas extends Model
     protected $table = 'fasilitas';
     
     protected $fillable = [
+        'kode_fasilitas',
         'nama_fasilitas',
         'lokasi',
         'ruang',
-        'gedung_id',
+        'ruangan_id',
     ];
 
-    public function gedung()
+    public function ruangan()
     {
-        return $this->belongsTo(Gedung::class);
+        return $this->belongsTo(Ruangan::class);
+    }
+
+    public function setKodeFasilitasAttribute($value)
+    {
+        $this->attributes['kode_fasilitas'] = strtoupper($value);
     }
 }
