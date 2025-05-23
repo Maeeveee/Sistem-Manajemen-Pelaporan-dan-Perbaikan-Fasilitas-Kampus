@@ -29,23 +29,45 @@
             <div class="card-body">
                     <div class="mb-3">
                         <label for="nama_pelapor">Nama Pelapor</label>
-                        <input type="text" class="form-control" id="nama_pelapor" name="nama_pelapor" required>
+                        <input type="text" class="form-control bg-white" id="nama_pelapor" name="nama_pelapor" value="{{ Auth::user()->name }}" readonly>
                     </div>
 
                     <div class="mb-3">
-                        <label for="kategori">Kategori Fasilitas</label>
-                        <select class="form-select" id="kategori" name="kategori" required>
-                            <option selected disabled>Pilih Kategori</option>
-                            <option value="kelas">Ruang Kelas</option>
-                            <option value="lab">Laboratorium</option>
-                            <option value="toilet">Toilet</option>
-                            <option value="lainnya">Lainnya</option>
+                        <label for="identifier">NIM/NIP</label>
+                        <input type="text" class="form-control bg-white" id="identifier" name="identifier" value="{{ Auth::user()->identifier }}" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="ruang">Gedung</label>
+                        <select id="gedungSelect" class="form-select">
+                        <option value="">-- Pilih Gedung --</option>
+                            @foreach ($gedungList as $g)
+                                <option value="{{ $g->id }}">{{ $g->nama_gedung }}</option>
+                            @endforeach
+                    </select>
+                        @error('ruang') <span class="text-danger">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="ruang">Ruang</label>
+                        <select wire:model="ruang" class="form-select" id="ruang">
+                            <option value="">Pilih Ruang</option>
+                            @foreach($ruangList as $item)
+                                <option value="{{ $item->id }}">{{ $item->ruang }}</option>
+                            @endforeach
                         </select>
+                        @error('ruang') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="mb-3">
-                        <label for="lokasi">Lokasi Fasilitas</label>
-                        <input type="text" class="form-control" id="lokasi" name="lokasi" required>
+                        <label for="fasilitas">Fasilitas</label>
+                        <select wire:model="fasilitas" class="form-select" id="fasilitas">
+                            <option value="">Pilih fasilitas</option>
+                            @foreach($fasilitasList as $item)
+                                <option value="{{ $item->id }}">{{ $item->nama_fasilitas }}</option>
+                            @endforeach
+                        </select>
+                        @error('fasilitas') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="mb-3">

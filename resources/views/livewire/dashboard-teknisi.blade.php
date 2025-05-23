@@ -40,7 +40,7 @@
             </div>
             <select class="form-select fmxw-200 d-none d-md-inline" id="statusFilter" aria-label="Filter status">
                 <option value="all" selected>Semua</option>
-                <option value="Sedang Dikerjakan">Sedang dikerjakan</option>
+                <option value="Sedang Dikerjakan">Sedang Dikerjakan</option>
                 <option value="Pending">Pending</option>
                 <option value="Selesai">Selesai</option>
             </select>
@@ -97,9 +97,23 @@
           <td>{{ $item['nama_pelapor'] }}</td>
           <td>{{ $item['gedung'] }}</td>
           <td>{{ $item['ruangan'] }}</td>
-          <td class="status-cell">{{ $item['status'] }}</td>
+            @php
+              $status = $item['status'];
+              $statusClass = match($status) {
+                  'Sedang Dikerjakan' => 'bg-warning text-white', // kuning
+                  'Pending' => 'bg-gray-400 text-white',           // merah
+                  'Selesai' => 'bg-success text-white',          // hijau
+                  default => 'bg-secondary text-white',
+              };
+            @endphp
+            <td class="status-cell">
+              <span  class="badge {{ $statusClass }} py-1 px-2 rounded-pill status-cell fw-bold font-small">
+                {{ $status }}
+              </span>
+            </td>
+
           <td>
-            <a href="#" class="btn btn-sm btn-primary">Lihat Detail</a>
+            <a href="#" class="btn btn-sm btn-info">Lihat Detail</a>
           </td>
         </tr>
       @endforeach
@@ -112,43 +126,28 @@
 </body>
 
 <script>
-  document.getElementById('statusFilter').addEventListener('change', function () {
-    const selectedStatus = this.value.toLowerCase();
-    const rows = document.querySelectorAll('tbody tr');
-
-    rows.forEach(row => {
-      const statusCell = row.querySelector('.status-cell');
-      const statusText = statusCell.textContent.toLowerCase();
-
-      if (selectedStatus === 'all' || statusText === selectedStatus) {
-        row.style.display = '';
-      } else {
-        row.style.display = 'none';
-      }
-    });
-  });
-
-  const searchInput = document.querySelector('.form-control[placeholder="Cari"]');
   const statusFilter = document.getElementById('statusFilter');
+  const searchInput = document.querySelector('.form-control[placeholder="Cari"]');
   const rows = document.querySelectorAll('tbody tr');
 
   function filterTable() {
     const keyword = searchInput.value.toLowerCase();
-    const selectedStatus = statusFilter.value.toLowerCase();
-
+    const selectedStatus = statusFilter.value;
+    
     rows.forEach(row => {
       const rowText = row.textContent.toLowerCase();
-      const statusText = row.querySelector('.status-cell').textContent.toLowerCase();
-      const matchesSearch = rowText.includes(keyword);
+      const statusCell = row.querySelector('.status-cell');
+      const statusText = statusCell ? statusCell.textContent.trim() : '';
+      
       const matchesStatus = selectedStatus === 'all' || statusText === selectedStatus;
+      const matchesSearch = rowText.includes(keyword);
 
-      if (matchesSearch && matchesStatus) {
-        row.style.display = '';
-      } else {
-        row.style.display = 'none';
-      }
+      row.style.display = matchesStatus && matchesSearch ? '' : 'none';
     });
   }
+
+  // Jalankan filter saat halaman dimuat
+  document.addEventListener('DOMContentLoaded', filterTable);
 
   // Event listeners
   searchInput.addEventListener('input', filterTable);
