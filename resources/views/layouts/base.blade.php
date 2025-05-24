@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="scroll-behavior: smooth">
 
 <head>
     <!-- Favicons -->
@@ -85,7 +85,7 @@
     <script src="/assets/js/volt.js"></script>
 </head>
 
-<body>
+<body class="bg-white">
     {{ $slot }}
 </body>
 
