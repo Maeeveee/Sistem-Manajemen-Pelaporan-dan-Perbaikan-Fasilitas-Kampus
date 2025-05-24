@@ -7,61 +7,132 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\Fasilitas;
 use App\Models\Gedung;
-
+use App\Models\Ruangan;
+use App\Models\LaporanKerusakan;
 
 class FormKerusakanFasilitas extends Component
 {
     use WithFileUploads;
+
+    // Data pelapor
     public $nama_pelapor;
     public $identifier;
-    public $nama_gedung = '';
-    public $nama_fasilitas = '';
-    public $ruang = '';
-    public $daftarRuangan = [];
-    public $daftarFasilitas = [];
-    public $daftarGedung = [];
-    public $deskripsi;
-    public $kategori;
-    public $foto;
+
+    // Data laporan
+    public $gedung_id, $ruangan_id, $fasilitas_id, $deskripsi, $foto;
+    public $lantai = null;
+
+    // Daftar pilihan
+    public $gedungList = [];
+    public $lantaiList = [];
+    public $ruanganList = [];
+    public $fasilitasList = [];
+
+    protected $rules = [
+        'gedung_id' => 'required|exists:gedung,id',
+        'lantai' => 'required|integer',
+        'ruangan_id' => 'required|exists:ruangan,id',
+        'fasilitas_id' => 'required|exists:fasilitas,id',
+        'deskripsi' => 'required|string|min:10',
+        'foto' => 'required|image|max:2048' // Maks 2048 KB = 2 MB
+    ];
 
     public function mount()
     {
-        $this->nama_pelapor = Auth::user()->name; // atau 'nama' sesuai field user
-        $this->identifier = Auth::user()->identifier;
+        $user = Auth::user();
+        $this->nama_pelapor = $user->name;
+        $this->identifier = $user->identifier;
+
+        $this->loadGedung();
     }
 
-    protected $rules = [
-        'nama_fasilitas' => 'required|exists:nama_fasilitas,id',
-        'nama_gedung' => 'required|exists:gedung,id',
-        'ruang' => 'required|exists:ruang,id',
-        'deskripsi' => 'required|string|min:10',
-        'kategori' => 'required|in:komputer,kursi,lampu,jaringan internet',
-        'foto' => 'required|image|max:2048', // maksimal 2MB
-    ];
-
-    public function submit()
+    public function updatedGedungId($value)
     {
-        $this->validate();
+        $this->reset(['lantai', 'ruangan_id', 'fasilitas_id']);
+        $this->reset(['lantaiList', 'ruanganList', 'fasilitasList']);
+        
+        if ($value) {
+            $this->lantaiList = Ruangan::where('gedung_id', $value)
+                ->distinct()
+                ->orderBy('lantai')
+                ->pluck('lantai')
+                ->toArray();
+        }
+    }
 
-        // Simpan laporan (dummy dulu, sesuaikan nanti)
-        $path = $this->foto->store('public/bukti');
+    public function updatedLantai($value)
+    {
+        $this->reset(['ruangan_id', 'fasilitas_id']);
+        $this->reset(['ruanganList', 'fasilitasList']);
+        
+        if ($this->gedung_id && $value) {
+            $this->ruanganList = Ruangan::where('gedung_id', $this->gedung_id)
+                ->where('lantai', (int) $value)
+                ->orderBy('nama_ruangan')
+                ->get();
+        }
+    }
 
-        // Simulasi penyimpanan
-        session()->flash('success', 'Laporan kerusakan berhasil dikirim.');
+    public function updatedRuanganId($value)
+    {
+        $this->reset('fasilitas_id');
+        $this->fasilitasList = [];
+        
+        if ($value) {
+            $this->fasilitasList = Fasilitas::where('ruangan_id', $value)
+                ->orderBy('nama_fasilitas')
+                ->get();
+        }
+    }
 
-        // Reset input
-        $this->reset(['deskripsi', 'kategori', 'foto', 'ruang', 'nama_gedung', 'nama_fasilitas', 'nama_pelapor', 'identifier']);
+   public function submit()
+   {
+       $this->validate();
+
+       try {
+           // Store the image file
+           $path = $this->foto->store('images', 'public'); // Store in the 'public/images' directory
+
+           // Simpan ke database
+           LaporanKerusakan::create([
+               'nama_pelapor' => $this->nama_pelapor,
+               'identifier' => $this->identifier,
+               'gedung_id' => $this->gedung_id,
+               'ruangan_id' => $this->ruangan_id,
+               'lantai' => $this->lantai,
+               'fasilitas_id' => $this->fasilitas_id,
+               'deskripsi' => $this->deskripsi,
+               'foto' => $path, // Store the file path
+               'status' => 'dilaporkan',
+           ]);
+
+           $this->resetForm();
+           session()->flash('success', 'Laporan kerusakan berhasil dikirim.');
+           $this->emit('laporanBerhasil');
+
+       } catch (\Exception $e) {
+           $this->addError('foto', 'Gagal memproses gambar: ' . $e->getMessage());
+       }
+   }
+   
+
+    private function resetForm()
+    {
+        $this->reset([
+            'gedung_id', 'lantai', 'ruangan_id', 'fasilitas_id',
+            'deskripsi', 'foto'
+        ]);
+        $this->resetErrorBag();
+        $this->loadGedung();
+    }
+
+    private function loadGedung()
+    {
+        $this->gedungList = Gedung::orderBy('nama_gedung')->get();
     }
 
     public function render()
     {
-        $this->daftarFasilitas = Fasilitas::all();
-        $this->daftarGedung = Gedung::all();
-        $this->daftarRuangan = Fasilitas::all();
-        return view('livewire.components.forms.form-kerusakan-fasilitas',[
-            'fasilitasList' => $this->daftarFasilitas,
-            'gedungList' => $this->daftarGedung,
-            'ruangList' => $this->daftarRuangan
-        ]);
+        return view('livewire.components.forms.form-kerusakan-fasilitas');
     }
 }
