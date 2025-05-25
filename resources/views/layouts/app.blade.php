@@ -19,6 +19,7 @@
                 'user.create',
                 'dashboard-teknisi',
                 'dashboard-sarpras',
+                'dashboard-admin',
             ]))
             @include('layouts.nav')
             @include('layouts.sidenav')

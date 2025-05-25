@@ -89,7 +89,7 @@ Route::get('/pelaporan/kerusakan-fasilitas', FormKerusakanFasilitas::class)
 Route::get('/teknisi', DashboardTeknisi::class)->name('dashboard-teknisi');
 
 
-Route::get('/admin', DashboardAdmin::class)->name('dashboard');
+Route::get('/admin', DashboardAdmin::class)->name('dashboard-admin');
 Route::get('/admin/laporan/detail/{id}', LihatDetailAdmin::class)->name('lihat-detail-admin');
 Route::put('/laporan/{id}/update-status', [LihatDetailAdmin::class, 'updateStatus'])->name('laporan.updateStatus');
 
