@@ -22,6 +22,7 @@ use App\Http\Livewire\Auth\Register;
 use App\Http\Livewire\DashboardSarpras;
 use App\Http\Livewire\ForgotPasswordExample;
 use App\Http\Livewire\Index;
+use App\Http\Livewire\ManajemenKriteriaFasilitas;
 use App\Http\Livewire\LoginExample;
 use App\Http\Livewire\ManajemenPengguna;
 use App\Http\Livewire\ProfileExample;
@@ -78,6 +79,9 @@ Route::middleware('auth')->group(function () {
 Route::get('/manajemen-fasilitas', ManajemenFasilitas::class)->name('manajemen.fasilitas');
 
 Route::get('/manajemen-gedung', ManajemenGedung::class)->name('manajemen.gedung');
+
+Route::get('/manajemen-kriteria-fasilitas', ManajemenKriteriaFasilitas::class)->name('manajemen.kriteria.fasilitas');
+
 
 Route::get('/pelaporan/kerusakan-fasilitas', FormKerusakanFasilitas::class)
     ->middleware(['auth'])

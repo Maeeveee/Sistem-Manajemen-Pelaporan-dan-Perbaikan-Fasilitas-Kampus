@@ -2,7 +2,7 @@
 
 
     @if(in_array(request()->route()->getName(), ['dashboard', 'profile', 'profile-example', 'users', 'bootstrap-tables', 'transactions',
-'buttons', 'forms', 'modals', 'notifications', 'typography', 'upgrade-to-pro','kerusakan.fasilitas', 'manajemen.fasilitas', 'manajemen.gedung','user.create']
+'buttons', 'forms', 'modals', 'notifications', 'typography', 'upgrade-to-pro','kerusakan.fasilitas', "manajemen.kriteria.fasilitas" ,'manajemen.fasilitas', 'manajemen.gedung','user.create']
 ))
 
     {{-- Nav --}}
