@@ -35,6 +35,8 @@ use App\Http\Livewire\LandingPage;
 use App\Http\Livewire\Users;
 use App\Models\LaporanKerusakan;
 use App\Http\Livewire\LihatDetailAdmin;
+use App\Http\Livewire\HistoryLaporan;
+use App\Http\Livewire\DetailHistoryLaporan;
 
 /*
 |--------------------------------------------------------------------------
@@ -85,9 +87,11 @@ Route::get('/manajemen-gedung', ManajemenGedung::class)->name('manajemen.gedung'
 Route::get('/pelaporan/kerusakan-fasilitas', FormKerusakanFasilitas::class)
     ->middleware(['auth'])
     ->name('kerusakan.fasilitas');
+    
+Route::get('/history-laporan', HistoryLaporan::class)->name('history.laporan');
+Route::get('/detail-history-laporan/{id}', DetailHistoryLaporan::class)->name('detail.history.laporan');
 
 Route::get('/teknisi', DashboardTeknisi::class)->name('dashboard-teknisi');
-
 
 Route::get('/admin', DashboardAdmin::class)->name('dashboard');
 Route::get('/admin/laporan/detail/{id}', LihatDetailAdmin::class)->name('lihat-detail-admin');
