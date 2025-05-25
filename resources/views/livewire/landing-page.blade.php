@@ -38,8 +38,8 @@
                 <p class="">Platform digital untuk melaporkan dan memantau perbaikan sarana dan prasarana kampus
                     secara cepat dan transparan</p>
                 <div class="d-flex flex-column flex-lg-row gap-2 justify-content-center justify-content-lg-start">
-                    <a href="{{ route('login') }}" class="btn btn-primary">Login</a>
-                    <a href="{{ route('register') }}" class="btn btn-secondary">Register</a>
+                    <a href="{{ route('login') }}" class="btn btn-primary">Masuk</a>
+                    <a href="{{ route('register') }}" class="btn btn-secondary">Daftar</a>
                 </div>
             </div>
             <div class="d-none d-lg-block">
