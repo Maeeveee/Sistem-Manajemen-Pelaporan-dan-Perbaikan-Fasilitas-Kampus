@@ -1,8 +1,7 @@
 @section('breadcrumbs')
     @php
         $breadcrumbs = [
-            'kelola Gedung' => '',
-            'Manajemen Gedung' => route('manajemen.gedung'),
+            'Manajemen Gedung' => '',
         ];
     @endphp
     @include('layouts.breadcrumb', ['breadcrumbs' => $breadcrumbs])
