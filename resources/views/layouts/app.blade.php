@@ -17,6 +17,8 @@
                 'manajemen.fasilitas',
                 'manajemen.gedung',
                 'user.create',
+                'dashboard-teknisi',
+                'dashboard-sarpras',
             ]))
             @include('layouts.nav')
             @include('layouts.sidenav')
