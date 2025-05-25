@@ -1,8 +1,7 @@
 @section('breadcrumbs')
     @php
         $breadcrumbs = [
-            'Pelaporan' => '',
-            'Form Laporan Kerusakan' => route('kerusakan.fasilitas'),
+            'Form Laporan Kerusakan' => '',
         ];
     @endphp
     @include('layouts.breadcrumb', ['breadcrumbs' => $breadcrumbs])
