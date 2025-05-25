@@ -19,6 +19,7 @@ use App\Http\Livewire\Lock;
 use App\Http\Livewire\Auth\Login;
 use App\Http\Livewire\Profile;
 use App\Http\Livewire\Auth\Register;
+use App\Http\Livewire\DashboardAdmin;
 use App\Http\Livewire\DashboardSarpras;
 use App\Http\Livewire\ForgotPasswordExample;
 use App\Http\Livewire\Index;
@@ -32,6 +33,8 @@ use App\Http\Livewire\ResetPasswordExample;
 use App\Http\Livewire\UpgradeToPro;
 use App\Http\Livewire\LandingPage;
 use App\Http\Livewire\Users;
+use App\Models\LaporanKerusakan;
+use App\Http\Livewire\LihatDetailAdmin;
 
 /*
 |--------------------------------------------------------------------------
@@ -84,5 +87,11 @@ Route::get('/pelaporan/kerusakan-fasilitas', FormKerusakanFasilitas::class)
     ->name('kerusakan.fasilitas');
 
 Route::get('/teknisi', DashboardTeknisi::class)->name('dashboard-teknisi');
+
+
+Route::get('/admin', DashboardAdmin::class)->name('dashboard');
+Route::get('/admin/laporan/detail/{id}', LihatDetailAdmin::class)->name('lihat-detail-admin');
+Route::put('/laporan/{id}/update-status', [LihatDetailAdmin::class, 'updateStatus'])->name('laporan.updateStatus');
+
 
 Route::get('/sarpras', DashboardSarpras::class)->name('dashboard-sarpras');
