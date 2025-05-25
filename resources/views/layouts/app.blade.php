@@ -20,6 +20,7 @@
                 'dashboard-teknisi',
                 'dashboard-sarpras',
                 'dashboard-admin',
+                'history.laporan',
             ]))
             @include('layouts.nav')
             @include('layouts.sidenav')
@@ -39,7 +40,8 @@
                 'reset-password',
                 'reset-password-example',
                 'landing-page',
-                'lihat-detail-admin'
+                'lihat-detail-admin',
+                'detail-history-laporan'
             ]))
             {{ $slot }}
 
