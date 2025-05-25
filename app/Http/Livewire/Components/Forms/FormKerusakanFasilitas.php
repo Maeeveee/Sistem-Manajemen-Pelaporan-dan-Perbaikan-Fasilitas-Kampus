@@ -34,7 +34,7 @@ class FormKerusakanFasilitas extends Component
         'ruangan_id' => 'required|exists:ruangan,id',
         'fasilitas_id' => 'required|exists:fasilitas,id',
         'deskripsi' => 'required|string|min:10',
-        'foto' => 'required|image|max:2048' // Maks 2048 KB = 2 MB
+        'foto' => 'required|image|mimes:jpeg,png,jpg|max:2048'
     ];
 
     public function mount()
@@ -85,35 +85,35 @@ class FormKerusakanFasilitas extends Component
         }
     }
 
-   public function submit()
-   {
-       $this->validate();
+    public function submit()
+    {
+        $this->validate();
 
-       try {
-           // Store the image file
-           $path = $this->foto->store('images', 'public'); // Store in the 'public/images' directory
+        try {
+            // Simpan foto ke folder 'storage/app/public/laporan-kerusakan'
+            $path = $this->foto->store('laporan-kerusakan', 'public');
 
-           // Simpan ke database
-           LaporanKerusakan::create([
-               'nama_pelapor' => $this->nama_pelapor,
-               'identifier' => $this->identifier,
-               'gedung_id' => $this->gedung_id,
-               'ruangan_id' => $this->ruangan_id,
-               'lantai' => $this->lantai,
-               'fasilitas_id' => $this->fasilitas_id,
-               'deskripsi' => $this->deskripsi,
-               'foto' => $path, // Store the file path
-               'status' => 'dilaporkan',
-           ]);
+            // Simpan ke database
+            LaporanKerusakan::create([
+                'nama_pelapor' => $this->nama_pelapor,
+                'identifier' => $this->identifier,
+                'gedung_id' => $this->gedung_id,
+                'ruangan_id' => $this->ruangan_id,
+                'lantai' => $this->lantai,
+                'fasilitas_id' => $this->fasilitas_id,
+                'deskripsi' => $this->deskripsi,
+                'foto' => $path,
+                'status' => 'dilaporkan',
+            ]);
 
-           $this->resetForm();
-           session()->flash('success', 'Laporan kerusakan berhasil dikirim.');
-           $this->emit('laporanBerhasil');
+            $this->resetForm();
+            session()->flash('success', 'Laporan kerusakan berhasil dikirim.');
+            $this->emit('laporanBerhasil');
 
-       } catch (\Exception $e) {
-           $this->addError('foto', 'Gagal memproses gambar: ' . $e->getMessage());
-       }
-   }
+        } catch (\Exception $e) {
+            $this->addError('foto', 'Gagal memproses gambar: ' . $e->getMessage());
+        }
+    }
    
 
     private function resetForm()
