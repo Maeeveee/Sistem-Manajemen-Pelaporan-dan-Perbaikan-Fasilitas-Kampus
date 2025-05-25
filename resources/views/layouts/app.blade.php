@@ -38,6 +38,7 @@
                 'reset-password',
                 'reset-password-example',
                 'landing-page',
+                'lihat-detail-admin'
             ]))
             {{ $slot }}
 
