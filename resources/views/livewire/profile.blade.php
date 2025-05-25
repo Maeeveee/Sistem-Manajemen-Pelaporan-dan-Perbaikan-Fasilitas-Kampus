@@ -1,3 +1,13 @@
+@section('breadcrumbs')
+    @php
+        $breadcrumbs = [
+            'Kelola Pengguna' => '',
+            'Profile' => route('profile'),
+        ];
+    @endphp
+    @include('layouts.breadcrumb', ['breadcrumbs' => $breadcrumbs])
+@endsection
+
 <title>Dashboard - Profile</title>
 <div>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
