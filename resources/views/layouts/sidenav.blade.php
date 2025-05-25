@@ -173,7 +173,7 @@
 
 <li class="nav-item">
         <span class="nav-link collapsed d-flex justify-content-between align-items-center" data-bs-toggle="collapse"
-          data-bs-target="#submenu-laravel" aria-expanded="true">
+          data-bs-target="#submenu-admin" aria-expanded="true">
           <span>
             <span class="sidebar-icon"><i class="fas fa-users me-2" style="color: White;"></i></span>
             <span class="sidebar-text" style="color: White;">Admin</span>
@@ -185,7 +185,7 @@
                 clip-rule="evenodd"></path>
             </svg></span>
         </span>
-        <div class="multi-level collapse show" role="list" id="submenu-laravel" aria-expanded="false">
+        <div class="multi-level collapse show" role="list" id="submenu-admin" aria-expanded="false">
           <ul class="flex-column nav">
             <li class="nav-item {{ Request::segment(1) == 'admin' ? 'active' : '' }}">
               <a href="/admin" class="nav-link">
