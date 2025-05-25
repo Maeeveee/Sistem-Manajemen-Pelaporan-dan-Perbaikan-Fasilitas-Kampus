@@ -83,6 +83,6 @@ Route::get('/pelaporan/kerusakan-fasilitas', FormKerusakanFasilitas::class)
     ->middleware(['auth'])
     ->name('kerusakan.fasilitas');
 
-Route::get('/teknisi', DashboardTeknisi::class)->name('dashboard');
+Route::get('/teknisi', DashboardTeknisi::class)->name('dashboard-teknisi');
 
-Route::get('/sarpras', DashboardSarpras::class)->name('dashboard');
+Route::get('/sarpras', DashboardSarpras::class)->name('dashboard-sarpras');

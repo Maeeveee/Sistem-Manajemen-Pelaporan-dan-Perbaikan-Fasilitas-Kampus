@@ -1,3 +1,11 @@
+@section('breadcrumbs')
+    @php
+        $breadcrumbs = [
+            'Dashboard' => '',
+        ];
+    @endphp
+    @include('layouts.breadcrumb', ['breadcrumbs' => $breadcrumbs])
+@endsection
 <title>Dashboard</title>
 <div class="py-4">
     <div class="dropdown">
