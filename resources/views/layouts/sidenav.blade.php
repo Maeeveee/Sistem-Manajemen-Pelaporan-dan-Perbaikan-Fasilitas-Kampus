@@ -1,4 +1,4 @@
-<nav id="sidebarMenu" class="sidebar d-lg-block bg-gray-800 text-white collapse" data-simplebar>
+<nav id="sidebarMenu" class="sidebar d-lg-block bg-gray-800 text-white collapse">
   <div class="sidebar-inner px-2 pt-3">
     <div class="user-card d-flex d-md-none align-items-center justify-content-between justify-content-md-center pb-4">
       <div class="d-flex align-items-center">
@@ -24,13 +24,13 @@
       </div>
     </div>
     
-    <ul class="nav flex-column pt-3 pt-md-0">
+    <ul class="nav flex-column pt-3 pt-md-0 ">
       <li class="nav-item">
         <a href="/dashboard" class="nav-link d-flex align-items-center">
           <span class="sidebar-icon me-3">
             <img src="/assets/img/brand/logo_sarpras2.png" height="50" width="50" alt="Volt Logo">
           </span>
-          <span class="mt-1 ms-1 sidebar-text">SarPolma</span>
+          <h3 class="mt-1 ms-1 sidebar-text fw-bold">SarPolma</h3>
         </a>
       </li>
       
@@ -49,8 +49,8 @@
       <li class="nav-item">
         <span class="nav-link collapsed d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#submenu-Pengguna" aria-expanded="false">
           <span>
-            <span class="sidebar-icon"><i class="fas fa-users me-2" style="color: #fb503b;"></i></span>
-            <span class="sidebar-text" style="color: #fb503b;">Kelola Pengguna</span>
+            <span class="sidebar-icon"><i class="fas fa-users me-2"></i></span>
+            <span class="sidebar-text">Kelola Pengguna</span>
           </span>
           <span class="link-arrow">
             <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -130,15 +130,15 @@
                     <rect x="9" y="10" width="2" height="4"/>
                 </svg>
             </span>
-            <span class="sidebar-text">Menajemen Kriteria Fasilitas</span>
+            <span class="sidebar-text">Manajemen Kriteria</span>
         </a>
       </li>
 <li class="nav-item">
         <span class="nav-link collapsed d-flex justify-content-between align-items-center" data-bs-toggle="collapse"
-          data-bs-target="#submenu-laravel" aria-expanded="true">
+          data-bs-target="#submenu-teknisi" aria-expanded="false">
           <span>
-            <span class="sidebar-icon"><i class="fas fa-users me-2" style="color: White;"></i></span>
-            <span class="sidebar-text" style="color: White;">Teknisi</span>
+            <span class="sidebar-icon"><i class="fas fa-users me-2"></i></span>
+            <span class="sidebar-text">Teknisi</span>
           </span>
           <span class="link-arrow">
             <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -160,8 +160,8 @@
       <li class="nav-item">
         <span class="nav-link collapsed d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#submenu-sarpras" aria-expanded="false">
           <span>
-            <span class="sidebar-icon"><i class="fas fa-users me-2" style="color: White;"></i></span>
-            <span class="sidebar-text" style="color: White;">Sarana Prasarana</span>
+            <span class="sidebar-icon"><i class="fas fa-users me-2"></i></span>
+            <span class="sidebar-text">Sarana Prasarana</span>
           </span>
           <span class="link-arrow">
             <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -183,8 +183,8 @@
       <li class="nav-item">
         <span class="nav-link collapsed d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#submenu-admin" aria-expanded="false">
           <span>
-            <span class="sidebar-icon"><i class="fas fa-users me-2" style="color: White;"></i></span>
-            <span class="sidebar-text" style="color: White;">Admin</span>
+            <span class="sidebar-icon"><i class="fas fa-users me-2"></i></span>
+            <span class="sidebar-text">Admin</span>
           </span>
           <span class="link-arrow">
             <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
