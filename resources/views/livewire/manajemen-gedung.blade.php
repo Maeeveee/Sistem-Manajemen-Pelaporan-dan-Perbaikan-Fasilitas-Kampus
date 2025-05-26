@@ -100,14 +100,9 @@
             </tbody>
         </table>
 
-        <div class="card-footer px-3 border-0 d-flex flex-column flex-lg-row align-items-center justify-content-between">
-            <nav aria-label="Page navigation">
-                {{ $gedungs->links() }}
-            </nav>
-            <div class="fw-normal small mt-4 mt-lg-0">
-                Menampilkan <b>{{ $gedungs->firstItem() }}</b> sampai <b>{{ $gedungs->lastItem() }}</b> dari <b>{{ $gedungs->total() }}</b> data
-            </div>
-        </div>
+        <nav aria-label="Page navigation">
+            {{ $gedungs->links('pagination::bootstrap-5')}}
+        </nav>
     </div>
 
     <!-- Modal Gedung -->
