@@ -47,7 +47,7 @@
       </li>
       
       <li class="nav-item">
-        <span class="nav-link collapsed d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#submenu-Pengguna" aria-expanded="true">
+        <span class="nav-link collapsed d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#submenu-Pengguna" aria-expanded="false">
           <span>
             <span class="sidebar-icon"><i class="fas fa-users me-2" style="color: #fb503b;"></i></span>
             <span class="sidebar-text" style="color: #fb503b;">Kelola Pengguna</span>
@@ -58,7 +58,7 @@
             </svg>
           </span>
         </span>
-        <div class="multi-level collapse show" role="list" id="submenu-Pengguna" aria-expanded="false">
+        <div class="multi-level collapse" role="list" id="submenu-Pengguna" aria-expanded="false">
           <ul class="flex-column nav">
             <li class="nav-item {{ Request::segment(1) == 'profile' ? 'active' : '' }}">
               <a href="/profile" class="nav-link">
@@ -122,7 +122,7 @@
       </li>
       
       <li class="nav-item">
-        <span class="nav-link collapsed d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#submenu-teknisi" aria-expanded="true">
+        <span class="nav-link collapsed d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#submenu-teknisi" aria-expanded="false">
           <span>
             <span class="sidebar-icon"><i class="fas fa-users me-2" style="color: White;"></i></span>
             <span class="sidebar-text" style="color: White;">Teknisi</span>
@@ -133,7 +133,7 @@
             </svg>
           </span>
         </span>
-        <div class="multi-level collapse show" role="list" id="submenu-teknisi" aria-expanded="false">
+        <div class="multi-level collapse" role="list" id="submenu-teknisi" aria-expanded="false">
           <ul class="flex-column nav">
             <li class="nav-item {{ Request::segment(1) == 'teknisi' ? 'active' : '' }}">
               <a href="/teknisi" class="nav-link">
@@ -145,7 +145,7 @@
       </li>
       
       <li class="nav-item">
-        <span class="nav-link collapsed d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#submenu-sarpras" aria-expanded="true">
+        <span class="nav-link collapsed d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#submenu-sarpras" aria-expanded="false">
           <span>
             <span class="sidebar-icon"><i class="fas fa-users me-2" style="color: White;"></i></span>
             <span class="sidebar-text" style="color: White;">Sarana Prasarana</span>
@@ -156,7 +156,7 @@
             </svg>
           </span>
         </span>
-        <div class="multi-level collapse show" role="list" id="submenu-sarpras" aria-expanded="false">
+        <div class="multi-level collapse" role="list" id="submenu-sarpras" aria-expanded="true">
           <ul class="flex-column nav">
             <li class="nav-item {{ Request::segment(1) == 'sarpras' ? 'active' : '' }}">
               <a href="/sarpras" class="nav-link">
@@ -168,7 +168,7 @@
       </li>
       
       <li class="nav-item">
-        <span class="nav-link collapsed d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#submenu-laravel" aria-expanded="true">
+        <span class="nav-link collapsed d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#submenu-admin" aria-expanded="false">
           <span>
             <span class="sidebar-icon"><i class="fas fa-users me-2" style="color: White;"></i></span>
             <span class="sidebar-text" style="color: White;">Admin</span>
@@ -179,7 +179,7 @@
             </svg>
           </span>
         </span>
-        <div class="multi-level collapse show" role="list" id="submenu-admin" aria-expanded="false">
+        <div class="multi-level collapse" role="list" id="submenu-admin" aria-expanded="false">
           <ul class="flex-column nav">
             <li class="nav-item {{ Request::segment(1) == 'admin' ? 'active' : '' }}">
               <a href="/admin" class="nav-link">

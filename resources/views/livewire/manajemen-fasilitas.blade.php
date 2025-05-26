@@ -98,14 +98,9 @@
             </tbody>
         </table>
 
-        <div class="card-footer px-3 border-0 d-flex flex-column flex-lg-row align-items-center justify-content-between">
-            <nav aria-label="Page navigation">
-                {{ $fasilitas->links() }}
-            </nav>
-            <div class="fw-normal small mt-4 mt-lg-0">
-                Menampilkan <b>{{ $fasilitas->firstItem() ?? 0 }}</b> sampai <b>{{ $fasilitas->lastItem() ?? 0 }}</b> dari <b>{{ $fasilitas->total() }}</b> data
-            </div>
-        </div>
+        <nav aria-label="Page navigation">
+            {{ $fasilitas->links('pagination::bootstrap-5')}}
+        </nav>
     </div>
 
     <!-- Modal Form -->
