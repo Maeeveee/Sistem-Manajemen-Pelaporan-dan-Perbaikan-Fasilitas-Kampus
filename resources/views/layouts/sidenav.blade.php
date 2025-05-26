@@ -120,9 +120,22 @@
           <span class="sidebar-text">Manajemen Fasilitas</span>
         </a>
       </li>
-      
-      <li class="nav-item">
-        <span class="nav-link collapsed d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#submenu-teknisi" aria-expanded="false">
+      <li class="nav-item {{ Request::routeIs('manajemen.kriteria.fasilitas') ? 'active' : '' }}">
+        <a href="{{ route('manajemen.kriteria.fasilitas') }}" class="nav-link">
+            <span class="sidebar-icon">
+                <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 2L2 7v11h16V7L10 2zm0 1.5L16 8v8H4V8l6-4.5z"/>
+                    <rect x="6" y="10" width="2" height="4"/>
+                    <rect x="12" y="10" width="2" height="4"/>
+                    <rect x="9" y="10" width="2" height="4"/>
+                </svg>
+            </span>
+            <span class="sidebar-text">Menajemen Kriteria Fasilitas</span>
+        </a>
+      </li>
+<li class="nav-item">
+        <span class="nav-link collapsed d-flex justify-content-between align-items-center" data-bs-toggle="collapse"
+          data-bs-target="#submenu-laravel" aria-expanded="true">
           <span>
             <span class="sidebar-icon"><i class="fas fa-users me-2" style="color: White;"></i></span>
             <span class="sidebar-text" style="color: White;">Teknisi</span>
