@@ -14,6 +14,7 @@
                 'notifications',
                 'typography',
                 'kerusakan.fasilitas',
+                "manajemen.kriteria.fasilitas" ,
                 'manajemen.fasilitas',
                 'manajemen.gedung',
                 'user.create',
