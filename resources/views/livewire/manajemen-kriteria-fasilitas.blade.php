@@ -84,6 +84,7 @@
                     </th>
                     <th class="border-bottom">Jumlah Sub Kriteria</th>
                     <th class="border-bottom">Sub Kriteria</th>
+                    <th class="border-bottom">Jenis</th>
                     <th class="border-bottom">Aksi</th>
                 </tr>
             </thead>
@@ -106,6 +107,9 @@
                             @else
                                 <span class="text-muted small">Belum ada sub kriteria</span>
                             @endif
+                        </td>
+                        <td>
+                            {{-- Masukkin jenis disini ya guys (Cost/Benefit) --}}
                         </td>
                         <td>
                             <div class="btn-group" role="group">
