@@ -44,7 +44,8 @@
                 'reset-password-example',
                 'landing-page',
                 'lihat-detail-admin',
-                'detail-history-laporan'
+                'detail-history-laporan',
+                'input_laporan-sarpras'
             ]))
             {{ $slot }}
 

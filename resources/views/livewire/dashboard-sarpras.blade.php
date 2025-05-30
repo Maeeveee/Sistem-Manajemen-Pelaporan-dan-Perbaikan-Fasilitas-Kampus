@@ -9,11 +9,27 @@
 @endsection
 <title>Dashboard -Teknisi</title>
 <body>
+
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
+  <h2>Laporan Perbaikan Fasilitas</h2>
     <div class="d-block mb-4 mb-md-0">
-        <h2 class="h4">Laporan Perbaikan Fasilitas</h2>
     </div>
 </div>
+
+   @if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  @endif
+
+  @if(session('error'))
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          {{ session('error') }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+  @endif
+
 
 <div class="table-settings mb-4">
     <div class="row justify-content-between align-items-center">
@@ -31,9 +47,8 @@
             </div>
             <select class="form-select fmxw-200 d-none d-md-inline" id="statusFilter" aria-label="Filter status">
                 <option value="all" selected>Semua</option>
-                <option value="Verifikasi">Verifikasi</option>
-                <option value="Pending">Pending</option>
-                <option value="Reject">Reject</option>
+                <option value="terkirim">Terkirim</option>
+                <option value="pending">Pending</option>
             </select>
 
 
@@ -71,44 +86,48 @@
         <th>Nama Pelapor</th>
         <th>Gedung</th>
         <th>Ruangan</th>
-        <th>Status</th>
+        <th>Estimasi</th>
         <th>Aksi</th>
       </tr>
     </thead>
     <tbody>
-      @php
-        $laporan = [
-            ['nama_pelapor' => 'Nadif', 'gedung' => 'Teknik Mesin', 'ruangan' => 'LER P3', 'status' => 'Verifikasi'],
-            ['nama_pelapor' => 'Kamila', 'gedung' => 'Teknik Sipil', 'ruangan' => 'LAB 1', 'status' => 'Pending'],
-            ['nama_pelapor' => 'Rizky', 'gedung' => 'Informatika', 'ruangan' => 'Lab Komputer 2', 'status' => 'Reject'],
-        ];
-      @endphp
       @foreach ($laporan as $index => $item)
         <tr>
           <td>{{ $index + 1 }}</td>
-          <td>{{ $item['nama_pelapor'] }}</td>
-          <td>{{ $item['gedung'] }}</td>
-          <td>{{ $item['ruangan'] }}</td>
-          @php
-              $statusClass = match($item['status']) {
-                'Verifikasi' => 'bg-success text-white',
-                'Pending' => 'bg-gray-400 text-white',
-                'Reject' => 'bg-danger text-white',
-              };
-            @endphp
+          <td>{{ $item->nama_pelapor }}</td>
+          <td>{{ $item->gedung->nama_gedung }}</td>
+          <td>{{ $item->fasilitas->nama_fasilitas }}</td>
 
-          <td class="status-cell">
-            <span  class="badge {{ $statusClass }} py-1 px-2 rounded-pill status-cell fw-bold font-small">
-                {{ $item['status'] }}
-              </span>
+          <td class="text-middle">
+            @if ($item->sub_kriteria_id)
+              <i class="fas fa-check-circle text-success" title="Estimasi sudah diisi"></i>
+            @else
+              <i class="fas fa-times-circle text-danger" title="Belum ada estimasi"></i>
+            @endif
           </td>
+
+
           <td>
-            <a href="#" class="btn btn-sm btn-info">Lihat Detail</a>
+            <button class="btn btn-sm btn-info lihat-detail" data-id="{{ $item->id }}"><i class="fas fa-eye"></i>  Lihat Detail</button>
           </td>
         </tr>
       @endforeach
     </tbody>
   </table>
+  <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="detailModalLabel">Detail Laporan Kerusakan</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="modalDetailContent">
+        <!-- Konten akan diisi via AJAX -->
+      </div>
+    </div>
+  </div>
+</div>
+
 </div>
 
   <!-- Bootstrap Volt JS Bundle -->
@@ -116,6 +135,28 @@
 </body>
 
 <script>
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const detailButtons = document.querySelectorAll('.lihat-detail');
+
+    detailButtons.forEach(button => {
+      button.addEventListener('click', function () {
+        const id = this.getAttribute('data-id');
+        
+        fetch(`/sarpras/laporan/detail/${id}`)
+          .then(response => response.text())
+          .then(data => {
+            document.getElementById('modalDetailContent').innerHTML = data;
+            const modal = new bootstrap.Modal(document.getElementById('detailModal'));
+            modal.show();
+          })
+          .catch(error => {
+            console.error('Terjadi kesalahan:', error);
+            alert('Gagal memuat detail laporan.');
+          });
+      });
+    });
+  });
  const statusFilter = document.getElementById('statusFilter');
   const searchInput = document.querySelector('.form-control[placeholder="Cari"]');
   const rows = document.querySelectorAll('tbody tr');
