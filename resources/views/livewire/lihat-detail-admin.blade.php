@@ -41,13 +41,28 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Deskripsi Kerusakan</label>
-                        <textarea class="form-control bg-white" rows="3" readonly>{{ $laporan->deskripsi }}</textarea>
+                        <label class="form-label">Tingkat Kerusakan</label>
+                        <input type="text" class="form-control bg-white" value="{{ $laporan->tingkatKerusakan->nama_subkriteria ?? '-' }}" readonly>
                     </div>
 
                     <div class="mb-3">
+                        <label class="form-label">Dampak Terhadap Aktivitas Akademik</label>
+                        <input type="text" class="form-control bg-white" value="{{ $laporan->dampakAkademik->nama_subkriteria ?? '-' }}" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Tingkat Risiko Keselamatan</label>
+                        <input type="text" class="form-control bg-white" value="{{ $laporan->resikoKeselamatan->nama_subkriteria ?? '-' }}" readonly>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Deskripsi Kerusakan</label>
+                        <textarea class="form-control bg-white" rows="3" readonly>{{ $laporan->deskripsi }}</textarea>
+                    </div>
+                    
+                    <div class="mb-3">
                         <label class="form-label">Status</label>
-                        <input type="text" class="form-control bg-white" value="{{ ucfirst($laporan->status) }}" readonly>
+                        <input type="text" class="form-control bg-white" value="{{ ucfirst($laporan->status ?? 'pending') }}" readonly>
                     </div>
 
                     <div class="mb-3">

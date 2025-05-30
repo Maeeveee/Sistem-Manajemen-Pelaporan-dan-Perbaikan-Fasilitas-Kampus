@@ -124,6 +124,55 @@
                         <!-- Detail Kerusakan -->
                         <h5 class="mb-3">Detail Kerusakan</h5>
 
+                        <!-- Frekuensi Penggunaan -->
+                        <div class="mb-3">
+                            <label class="form-label">Frekuensi Penggunaan <span class="text-danger">*</span></label>
+                            <select class="form-select @error('frekuensi_penggunaan_fasilitas') is-invalid @enderror" wire:model="frekuensi_penggunaan_fasilitas" required>
+                                <option value="">Pilih Frekuensi Penggunaan</option>
+                                @foreach($subKriterias->where('kriteria.nama_kriteria', 'Frekuensi Penggunaan Fasilitas') as $sub)
+                                    <option value="{{ $sub->id }}">{{ $sub->nama_subkriteria }} </option>
+                                @endforeach
+                            </select>
+                            @error('frekuensi_penggunaan') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+
+                        <!-- Tingkat Kerusakan -->
+                        <div class="mb-3">
+                            <label class="form-label">Tingkat Kerusakan <span class="text-danger">*</span></label>
+                            <select class="form-select @error('tingkat_kerusakan') is-invalid @enderror" wire:model="tingkat_kerusakan" required>
+                                <option value="">Pilih Tingkat Kerusakan</option>
+                                @foreach($subKriterias->where('kriteria.nama_kriteria', 'Tingkat Kerusakan') as $sub)
+                                    <option value="{{ $sub->id }}">{{ $sub->nama_subkriteria }}</option>
+                                @endforeach
+                            </select>
+                            @error('tingkat_kerusakan') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+
+                        <!-- Dampak Kerusakan -->
+                        <div class="mb-3">
+                            <label class="form-label">Dampak Kerusakan <span class="text-danger">*</span></label>
+                            <select class="form-select @error('dampak_terhadap_aktivitas_akademik') is-invalid @enderror" wire:model="dampak_terhadap_aktivitas_akademik" required>
+                                <option value="">Pilih Dampak Kerusakan</option>
+                                @foreach($subKriterias->where('kriteria.nama_kriteria', 'Dampak Terhadap Aktivitas Akademik') as $sub)
+                                    <option value="{{ $sub->id }}">{{ $sub->nama_subkriteria }}</option>
+                                @endforeach
+                            </select>
+                            @error('dampak_terhadap_aktivitas_akademik') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+
+                        <!-- Tingkat Resiko -->
+                        <div class="mb-3">
+                            <label class="form-label">Tingkat Resiko <span class="text-danger">*</span></label>
+                            <select class="form-select @error('tingkat_resiko_keselamatan') is-invalid @enderror" wire:model="tingkat_resiko_keselamatan" required>
+                                <option value="">Pilih Tingkat Resiko</option>
+                                @foreach($subKriterias->where('kriteria.nama_kriteria', 'Tingkat Resiko Keselamatan') as $sub)
+                                    <option value="{{ $sub->id }}">{{ $sub->nama_subkriteria }}</option>
+                                @endforeach
+                            </select>
+                            @error('tingkat_resiko_keselamatan') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+
+
                         <div class="mb-3">
                             <label class="form-label">Deskripsi Kerusakan <span class="text-danger">*</span></label>
                             <textarea class="form-control @error('deskripsi') is-invalid @enderror" 

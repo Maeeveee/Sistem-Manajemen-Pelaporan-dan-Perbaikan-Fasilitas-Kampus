@@ -9,32 +9,41 @@ use App\Models\Fasilitas;
 use App\Models\Gedung;
 use App\Models\Ruangan;
 use App\Models\LaporanKerusakan;
+use App\Models\SubKriteria;
 
 class FormKerusakanFasilitas extends Component
 {
     use WithFileUploads;
 
-    // Data pelapor
+    public $subKriterias;
+
+    public $frekuensi_penggunaan_fasilitas;
+    public $tingkat_kerusakan;
+    public $dampak_terhadap_aktivitas_akademik;
+    public $tingkat_resiko_keselamatan;
+
     public $nama_pelapor;
     public $identifier;
 
-    // Data laporan
     public $gedung_id, $ruangan_id, $fasilitas_id, $deskripsi, $foto;
     public $lantai = null;
 
-    // Daftar pilihan
     public $gedungList = [];
     public $lantaiList = [];
     public $ruanganList = [];
     public $fasilitasList = [];
 
     protected $rules = [
-        'gedung_id' => 'required|exists:gedung,id',
-        'lantai' => 'required|integer',
-        'ruangan_id' => 'required|exists:ruangan,id',
-        'fasilitas_id' => 'required|exists:fasilitas,id',
-        'deskripsi' => 'required|string|min:10',
-        'foto' => 'required|image|mimes:jpeg,png,jpg|max:2048'
+        'gedung_id'                             => 'required|exists:gedung,id',
+        'lantai'                                => 'required|integer|min:1',
+        'ruangan_id'                            => 'required|exists:ruangan,id',
+        'fasilitas_id'                          => 'required|exists:fasilitas,id',
+        'frekuensi_penggunaan_fasilitas'       => 'required|exists:sub_kriterias,id',
+        'tingkat_kerusakan'                    => 'required|exists:sub_kriterias,id',
+        'dampak_terhadap_aktivitas_akademik'   => 'required|exists:sub_kriterias,id',
+        'tingkat_resiko_keselamatan'           => 'required|exists:sub_kriterias,id',
+        'deskripsi'                             => 'required|string|min:10',
+        'foto'                                  => 'required|image|mimes:jpeg,png,jpg|max:2048',
     ];
 
     public function mount()
@@ -44,13 +53,14 @@ class FormKerusakanFasilitas extends Component
         $this->identifier = $user->identifier;
 
         $this->loadGedung();
+        $this->subKriterias = SubKriteria::with('kriteria')->get();
     }
 
     public function updatedGedungId($value)
     {
         $this->reset(['lantai', 'ruangan_id', 'fasilitas_id']);
         $this->reset(['lantaiList', 'ruanganList', 'fasilitasList']);
-        
+
         if ($value) {
             $this->lantaiList = Ruangan::where('gedung_id', $value)
                 ->distinct()
@@ -64,7 +74,7 @@ class FormKerusakanFasilitas extends Component
     {
         $this->reset(['ruangan_id', 'fasilitas_id']);
         $this->reset(['ruanganList', 'fasilitasList']);
-        
+
         if ($this->gedung_id && $value) {
             $this->ruanganList = Ruangan::where('gedung_id', $this->gedung_id)
                 ->where('lantai', (int) $value)
@@ -77,7 +87,7 @@ class FormKerusakanFasilitas extends Component
     {
         $this->reset('fasilitas_id');
         $this->fasilitasList = [];
-        
+
         if ($value) {
             $this->fasilitasList = Fasilitas::where('ruangan_id', $value)
                 ->orderBy('nama_fasilitas')
@@ -90,20 +100,22 @@ class FormKerusakanFasilitas extends Component
         $this->validate();
 
         try {
-            // Simpan foto ke folder 'storage/app/public/laporan-kerusakan'
             $path = $this->foto->store('laporan-kerusakan', 'public');
 
-            // Simpan ke database
             LaporanKerusakan::create([
-                'nama_pelapor' => $this->nama_pelapor,
-                'identifier' => $this->identifier,
-                'gedung_id' => $this->gedung_id,
-                'ruangan_id' => $this->ruangan_id,
-                'lantai' => $this->lantai,
-                'fasilitas_id' => $this->fasilitas_id,
-                'deskripsi' => $this->deskripsi,
-                'foto' => $path,
-                'status' => 'dilaporkan',
+                'nama_pelapor'                          => $this->nama_pelapor,
+                'identifier'                            => $this->identifier,
+                'gedung_id'                             => $this->gedung_id,
+                'ruangan_id'                            => $this->ruangan_id,
+                'lantai'                                => $this->lantai,
+                'fasilitas_id'                          => $this->fasilitas_id,
+                'frekuensi_penggunaan_fasilitas'        => $this->frekuensi_penggunaan_fasilitas,
+                'tingkat_kerusakan'                     => $this->tingkat_kerusakan,
+                'dampak_terhadap_aktivitas_akademik'    => $this->dampak_terhadap_aktivitas_akademik,
+                'tingkat_resiko_keselamatan'            => $this->tingkat_resiko_keselamatan,
+                'deskripsi'                             => $this->deskripsi,
+                'foto'                                  => $path,
+                'status'                                => 'dilaporkan',
             ]);
 
             $this->resetForm();
@@ -114,12 +126,13 @@ class FormKerusakanFasilitas extends Component
             $this->addError('foto', 'Gagal memproses gambar: ' . $e->getMessage());
         }
     }
-   
 
     private function resetForm()
     {
         $this->reset([
             'gedung_id', 'lantai', 'ruangan_id', 'fasilitas_id',
+            'frekuensi_penggunaan_fasilitas', 'tingkat_kerusakan',
+            'dampak_terhadap_aktivitas_akademik', 'tingkat_resiko_keselamatan',
             'deskripsi', 'foto'
         ]);
         $this->resetErrorBag();
