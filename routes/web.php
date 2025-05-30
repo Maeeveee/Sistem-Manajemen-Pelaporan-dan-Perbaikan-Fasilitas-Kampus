@@ -38,6 +38,7 @@ use App\Models\LaporanKerusakan;
 use App\Http\Livewire\LihatDetailAdmin;
 use App\Http\Livewire\HistoryLaporan;
 use App\Http\Livewire\DetailHistoryLaporan;
+use App\Http\Livewire\LihatDetailSarpras;
 use App\Http\Livewire\PerhitunganSpk;
 use App\Http\Livewire\ManajemenSubkriteria;
 /*
@@ -106,6 +107,8 @@ Route::put('/laporan/{id}/update-status', [LihatDetailAdmin::class, 'updateStatu
 
 
 Route::get('/sarpras', DashboardSarpras::class)->name('dashboard-sarpras');
+Route::get('/sarpras/laporan/detail/{id}', LihatDetailSarpras::class)->name('input_laporan-sarpras');
+Route::put('/laporan/{id}/update-laporan', [LihatDetailSarpras::class, 'updateEstimasi'])->name('laporan.updateLaporan');
 
 Route::get('/sarpras-spk', PerhitunganSpk::class)->name('perhitungan-spk');
 
