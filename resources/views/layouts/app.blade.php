@@ -23,6 +23,7 @@
                 'dashboard-admin',
                 'history.laporan',
                 'perhitungan-spk',
+                'manajemen.subkriteria',
             ]))
             @include('layouts.nav')
             @include('layouts.sidenav')

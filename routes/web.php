@@ -39,6 +39,7 @@ use App\Http\Livewire\LihatDetailAdmin;
 use App\Http\Livewire\HistoryLaporan;
 use App\Http\Livewire\DetailHistoryLaporan;
 use App\Http\Livewire\PerhitunganSpk;
+use App\Http\Livewire\ManajemenSubkriteria;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -87,6 +88,7 @@ Route::get('/manajemen-gedung', ManajemenGedung::class)->name('manajemen.gedung'
 
 Route::get('/manajemen-kriteria-fasilitas', ManajemenKriteriaFasilitas::class)->name('manajemen.kriteria.fasilitas');
 
+Route::get('/manajemen-subkriteria', ManajemenSubkriteria::class)->name('manajemen.subkriteria');
 
 Route::get('/pelaporan/kerusakan-fasilitas', FormKerusakanFasilitas::class)
     ->middleware(['auth'])
