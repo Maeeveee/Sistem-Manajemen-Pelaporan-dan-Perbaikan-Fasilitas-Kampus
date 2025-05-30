@@ -39,6 +39,11 @@ class SubKriteriaSeeder extends Seeder
                 ['nama_subkriteria' => 'Ringan (minor)', 'nilai' => 1.00],
                 ['nama_subkriteria' => 'Sedang (perlu perbaikan)', 'nilai' => 2.00],
                 ['nama_subkriteria' => 'Berat (ganti total)', 'nilai' => 3.00],
+            ],
+            'Banyaknya Laporan' => [
+                ['nama_subkriteria' => 'sedikit (≤1 laporan)', 'nilai' => 1.00],
+                ['nama_subkriteria' => 'Sedang (2-3 laporan)', 'nilai' => 2.00],
+                ['nama_subkriteria' => 'Berat (5 laporan)', 'nilai' => 3.00],
             ]
         ];
 

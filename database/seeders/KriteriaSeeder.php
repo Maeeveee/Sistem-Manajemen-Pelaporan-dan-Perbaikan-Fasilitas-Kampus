@@ -29,7 +29,12 @@ class KriteriaSeeder extends Seeder
             [
                 'nama_kriteria' => 'Tingkat Kerusakan',
                 'bobot' => 20.00,
+            ],
+            [
+                'nama_kriteria' => 'Banyaknya Laporan',
+                'bobot' => 20.00,
             ]
+
         ];
 
         foreach ($fixedKriterias as $kriteria) {
