@@ -25,23 +25,22 @@ class HistoryLaporan extends Component
             ->where('identifier', Auth::user()->identifier)
             ->orderBy('created_at', 'desc');
             
-        // Apply search filter
         if (!empty($this->search)) {
-            $query->where(function($q) {
-                $q->whereHas('gedung', function($q) {
-                    $q->where('nama_gedung', 'like', '%'.$this->search.'%');
+            $searchTerm = '%' . $this->search . '%';
+            $query->where(function($q) use ($searchTerm) {
+                $q->whereHas('gedung', function($q) use ($searchTerm) {
+                    $q->where('nama_gedung', 'like', $searchTerm);
                 })
-                ->orWhereHas('ruangan', function($q) {
-                    $q->where('nama_ruangan', 'like', '%'.$this->search.'%');
+                ->orWhereHas('ruangan', function($q) use ($searchTerm) {
+                    $q->where('nama_ruangan', 'like', $searchTerm);
                 })
-                ->orWhereHas('fasilitas', function($q) {
-                    $q->where('nama_fasilitas', 'like', '%'.$this->search.'%');
+                ->orWhereHas('fasilitas', function($q) use ($searchTerm) {
+                    $q->where('nama_fasilitas', 'like', $searchTerm);
                 })
-                ->orWhere('deskripsi', 'like', '%'.$this->search.'%');
+                ->orWhere('deskripsi', 'like', $searchTerm);
             });
         }
         
-        // Apply status filter
         if ($this->statusFilter !== 'all') {
             $query->where('status_admin', $this->statusFilter);
         }
@@ -61,7 +60,16 @@ class HistoryLaporan extends Component
 
     public function showDetail($id)
     {
-        $this->selectedLaporan = LaporanKerusakan::with(['gedung', 'ruangan', 'fasilitas'])->findOrFail($id);
+        $this->selectedLaporan = LaporanKerusakan::with([
+            'gedung', 
+            'ruangan', 
+            'fasilitas',
+            'frekuensiPenggunaan',
+            'tingkatKerusakan',
+            'dampakAkademik',        
+            'resikoKeselamatan'      
+        ])->findOrFail($id);
+
         $this->showModal = true;
     }
 

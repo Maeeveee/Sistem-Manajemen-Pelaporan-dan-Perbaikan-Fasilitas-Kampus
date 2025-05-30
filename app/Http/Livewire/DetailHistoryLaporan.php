@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Livewire;
-use App\Models\LaporanKerusakan;
 
+use App\Models\LaporanKerusakan;
 use Livewire\Component;
 
 class DetailHistoryLaporan extends Component
@@ -11,7 +11,15 @@ class DetailHistoryLaporan extends Component
 
     public function mount($id)
     {
-        $this->laporan = LaporanKerusakan::with(['gedung', 'ruangan', 'fasilitas'])->findOrFail($id);
+        $this->laporan = LaporanKerusakan::with([
+            'gedung', 
+            'ruangan', 
+            'fasilitas',
+            'frekuensiPenggunaan',
+            'tingkatKerusakan',
+            'dampakAkademik',        
+            'resikoKeselamatan'      
+        ])->findOrFail($id);
     }
 
     public function render()

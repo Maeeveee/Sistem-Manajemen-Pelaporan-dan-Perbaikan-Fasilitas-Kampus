@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\SubKriteria;
 
 class LaporanKerusakan extends Model
 {
@@ -18,6 +19,10 @@ class LaporanKerusakan extends Model
         'ruangan_id',
         'lantai',
         'fasilitas_id',
+        'frekuensi_penggunaan_fasilitas',
+        'tingkat_kerusakan',
+        'dampak_terhadap_aktivitas_akademik',
+        'tingkat_resiko_keselamatan',
         'deskripsi',
         'foto',
         'status'
@@ -44,5 +49,25 @@ class LaporanKerusakan extends Model
     public function fasilitas()
     {
         return $this->belongsTo(Fasilitas::class);
+    }
+
+    public function frekuensiPenggunaan()
+    {
+        return $this->belongsTo(SubKriteria::class, 'frekuensi_penggunaan_fasilitas');
+    }
+
+    public function tingkatKerusakan()
+    {
+        return $this->belongsTo(SubKriteria::class, 'tingkat_kerusakan');
+    }
+
+    public function dampakAkademik()
+    {
+        return $this->belongsTo(SubKriteria::class, 'dampak_terhadap_aktivitas_akademik');
+    }
+ 
+    public function resikoKeselamatan()
+    {
+        return $this->belongsTo(SubKriteria::class, 'tingkat_resiko_keselamatan');
     }
 }

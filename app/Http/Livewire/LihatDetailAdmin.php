@@ -16,22 +16,21 @@ class LihatDetailAdmin extends Component
     {
         $this->laporan = LaporanKerusakan::with(['gedung', 'ruangan', 'fasilitas'])->findOrFail($id);
     }
+    
     public function updateStatus(Request $request, $id)
-{
-    $request->validate([
-        'status_admin' => 'required|in:verifikasi,reject',
-        'komentar_admin' => 'nullable|string',
-    ]);
+    {
+        $request->validate([
+            'status_admin' => 'required|in:verifikasi,reject',
+            'komentar_admin' => 'nullable|string',
+        ]);
 
-    $laporan = LaporanKerusakan::findOrFail($id);
-    $laporan->status_admin = $request->status_admin;
-    $laporan->komentar_admin = $request->komentar_admin;
-    $laporan->save();
+        $laporan = LaporanKerusakan::findOrFail($id);
+        $laporan->status_admin = $request->status_admin;
+        $laporan->komentar_admin = $request->komentar_admin;
+        $laporan->save();
 
-    return redirect()->back()->with('success', 'Status berhasil diperbarui.');
-}
-
-
+        return redirect()->back()->with('success', 'Status berhasil diperbarui.');
+    }
 
     public function render()
     {
