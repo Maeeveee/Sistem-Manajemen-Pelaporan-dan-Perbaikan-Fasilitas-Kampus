@@ -22,6 +22,7 @@
                 'dashboard-sarpras',
                 'dashboard-admin',
                 'history.laporan',
+                'perhitungan-spk',
             ]))
             @include('layouts.nav')
             @include('layouts.sidenav')
