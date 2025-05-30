@@ -14,6 +14,8 @@ class ManajemenKriteriaFasilitas extends Component
     public $search = '';
     public $sortField = 'id';
     public $sortDirection = 'asc';
+
+    public $isEditing = false;
     
     public $currentKriteria = [
         'id' => null,

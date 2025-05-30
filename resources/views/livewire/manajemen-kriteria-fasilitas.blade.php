@@ -71,16 +71,8 @@
                         @endif
                     </th>
                     <th class="border-bottom" wire:click="sortBy('nama_kriteria')">
-                        Kriteria
+                        Nama Kriteria
                         @if($sortField === 'nama_kriteria')
-                            <span class="icon icon-sm">
-                                {!! $sortDirection === 'asc' ? '&#8593;' : '&#8595;' !!}
-                            </span>
-                        @endif
-                    </th>
-                    <th class="border-bottom" wire:click="sortBy('jenis')">
-                        Jenis
-                        @if($sortField === 'jenis')
                             <span class="icon icon-sm">
                                 {!! $sortDirection === 'asc' ? '&#8593;' : '&#8595;' !!}
                             </span>
@@ -94,9 +86,8 @@
                             </span>
                         @endif
                     </th>
-                    <th class="border-bottom">Scoring (Rendah)</th>
-                    <th class="border-bottom">Scoring (Sedang)</th>
-                    <th class="border-bottom">Scoring (Tinggi)</th>
+                    <th class="border-bottom">Jumlah Sub Kriteria</th>
+                    <th class="border-bottom">Sub Kriteria</th>
                     <th class="border-bottom">Aksi</th>
                 </tr>
             </thead>
@@ -105,27 +96,35 @@
                     <tr>
                         <td>{{ ($kriterias->currentPage() - 1) * $kriterias->perPage() + $loop->iteration }}</td>
                         <td>{{ $kriteria->nama_kriteria }}</td>
+                        <td>{{ number_format($kriteria->bobot, 2) }}%</td>
+                        <td>{{ $kriteria->subKriterias->count() }} Sub Kriteria</td>
                         <td>
-                            <span class="badge {{ $kriteria->jenis === 'benefit' ? 'bg-success' : 'bg-danger' }}">
-                                {{ ucfirst($kriteria->jenis) }}
-                            </span>
+                            @if($kriteria->subKriterias->count() > 0)
+                                <div class="d-flex flex-wrap gap-1">
+                                    @foreach($kriteria->subKriterias as $sub)
+                                        <small>
+                                            {{ $sub->nama_subkriteria }} ({{ number_format($sub->nilai, 2) }})
+                                        </small>
+                                    @endforeach
+                                </div>
+                            @else
+                                <span class="text-muted small">Belum ada sub kriteria</span>
+                            @endif
                         </td>
-                        <td>{{ number_format($kriteria->bobot, 2) }}</td>
-                        <td>{{ number_format($kriteria->nilai_rendah, 2) }}</td>
-                        <td>{{ number_format($kriteria->nilai_sedang, 2) }}</td>
-                        <td>{{ number_format($kriteria->nilai_tinggi, 2) }}</td>
                         <td>
-                            <button wire:click="editKriteria({{ $kriteria->id }})" 
-                                    class="btn btn-sm btn-warning" 
-                                    data-bs-toggle="modal" 
-                                    data-bs-target="#kriteriaModal">
-                                <i class="fas fa-edit me-1"></i> Edit
-                            </button>
+                            <div class="btn-group" role="group">
+                                <button wire:click="editKriteria({{ $kriteria->id }})" 
+                                        class="btn btn-sm btn-warning" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#kriteriaModal">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="8" class="text-center text-muted">Tidak ada data kriteria ditemukan</td>
+                        <td colspan="6" class="text-center text-muted">Tidak ada data kriteria ditemukan</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -134,22 +133,11 @@
             <div class="text-muted">
                 Menampilkan <strong>{{ $kriterias->firstItem() }} - {{ $kriterias->lastItem() }}</strong> dari <strong>{{ $kriterias->total() }}</strong> data
             </div>
-            <div>
-                <button wire:click="previousPage" 
-                        wire:loading.attr="disabled"
-                        class="btn btn-sm btn-outline-primary {{ $kriterias->onFirstPage() ? 'disabled' : '' }}">
-                    Sebelumnya
-                </button>
-                <button wire:click="nextPage" 
-                        wire:loading.attr="disabled"
-                        class="btn btn-sm btn-outline-primary ms-2 {{ !$kriterias->hasMorePages() ? 'disabled' : '' }}">
-                    Selanjutnya
-                </button>
-            </div>
+            {{ $kriterias->links() }}
         </div>
     </div>
 
-    <!-- Modal Form -->
+    <!-- Modal Edit Kriteria -->
     <div wire:ignore.self class="modal fade" id="kriteriaModal" tabindex="-1" role="dialog" aria-labelledby="kriteriaModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -161,53 +149,27 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Nama Kriteria</label>
-                            <input type="text" class="form-control bg-light" 
-                                   value="{{ $currentKriteria['nama_kriteria'] ?? '' }}" readonly>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Jenis Kriteria</label>
-                            <input type="text" class="form-control bg-light" 
-                                   value="{{ ucfirst($currentKriteria['jenis'] ?? '') }}" readonly>
+                            <input type="text" class="form-control" 
+                                   wire:model.defer="currentKriteria.nama_kriteria" 
+                                   placeholder="Masukkan nama kriteria" readonly>
+                            @error('currentKriteria.nama_kriteria') <span class="text-danger">{{ $message }}</span> @enderror
                         </div>
                         
                         <div class="mb-3">
                             <label for="bobot" class="form-label">Bobot (%)</label>
                             <input type="number" class="form-control" id="bobot" 
                                    wire:model.defer="currentKriteria.bobot" 
-                                   step="0.01" min="1" max="100" required>
+                                   step="0.01" min="0.01" max="100" 
+                                   placeholder="Masukkan bobot dalam persen" required>
                             @error('currentKriteria.bobot') <span class="text-danger">{{ $message }}</span> @enderror
-                        </div>
-                        
-                        <div class="mb-4">
-                            <label class="form-label fw-bold">Nilai Scoring</label>
-                            <div class="row g-3">
-                                <div class="col-md-4">
-                                    <label for="nilai_rendah">Rendah</label>
-                                    <input type="number" id="nilai_rendah" class="form-control" 
-                                           wire:model.defer="currentKriteria.nilai_rendah" step="0.01" required>
-                                    @error('currentKriteria.nilai_rendah') <span class="text-danger">{{ $message }}</span> @enderror
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="nilai_sedang">Sedang</label>
-                                    <input type="number" id="nilai_sedang" class="form-control" 
-                                           wire:model.defer="currentKriteria.nilai_sedang" step="0.01" required>
-                                    @error('currentKriteria.nilai_sedang') <span class="text-danger">{{ $message }}</span> @enderror
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="nilai_tinggi">Tinggi</label>
-                                    <input type="number" id="nilai_tinggi" class="form-control" 
-                                           wire:model.defer="currentKriteria.nilai_tinggi" step="0.01" required>
-                                    @error('currentKriteria.nilai_tinggi') <span class="text-danger">{{ $message }}</span> @enderror
-                                </div>
-                            </div>
+                            <div class="form-text">Masukkan nilai bobot antara 0.01 - 100</div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-primary">
                             <span wire:loading.remove wire:target="updateKriteria">
-                                Update
+                                Update Kriteria
                             </span>
                             <span wire:loading wire:target="updateKriteria">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -219,19 +181,113 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Manage Sub Kriteria -->
+    <div wire:ignore.self class="modal fade" id="subKriteriaModal" tabindex="-1" role="dialog" aria-labelledby="subKriteriaModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="subKriteriaModalLabel">
+                        Kelola Sub Kriteria - {{ $currentKriteria['nama_kriteria'] ?? '' }}
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Form Tambah Sub Kriteria -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h6 class="mb-0">Tambah Sub Kriteria Baru</h6>
+                        </div>
+                        <div class="card-body">
+                            <form wire:submit.prevent="addSubKriteria">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Nama Sub Kriteria</label>
+                                        <input type="text" class="form-control" 
+                                               wire:model.defer="newSubKriteria.nama_subkriteria" 
+                                               placeholder="Masukkan nama sub kriteria" required>
+                                        @error('newSubKriteria.nama_subkriteria') <span class="text-danger">{{ $message }}</span> @enderror
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Nilai</label>
+                                        <input type="number" class="form-control" 
+                                               wire:model.defer="newSubKriteria.nilai" 
+                                               step="0.01" placeholder="Nilai" required>
+                                        @error('newSubKriteria.nilai') <span class="text-danger">{{ $message }}</span> @enderror
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-label">&nbsp;</label>
+                                        <button type="submit" class="btn btn-success d-block">
+                                            <i class="fas fa-plus"></i> Tambah
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Daftar Sub Kriteria -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="mb-0">Daftar Sub Kriteria</h6>
+                        </div>
+                        <div class="card-body">
+                            @if(!empty($currentSubKriterias))
+                                <div class="table-responsive">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Nama Sub Kriteria</th>
+                                                <th>Nilai</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($currentSubKriterias as $index => $subKriteria)
+                                                <tr>
+                                                    <td>{{ $index + 1 }}</td>
+                                                    <td>{{ $subKriteria['nama_subkriteria'] }}</td>
+                                                    <td>{{ number_format($subKriteria['nilai'], 2) }}</td>
+                                                    <td>
+                                                        <button wire:click="editSubKriteria({{ $subKriteria['id'] }})" 
+                                                                class="btn btn-sm btn-warning me-1">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @else
+                                <div class="text-center text-muted py-3">
+                                    <i class="fas fa-info-circle fa-2x mb-2"></i>
+                                    <p>Belum ada sub kriteria untuk kriteria ini</p>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @push('scripts')
 <script>
     document.addEventListener('livewire:load', function() {
         // Modal Control
-        Livewire.on('show-modal', () => {
-            var modal = new bootstrap.Modal(document.getElementById('kriteriaModal'));
+        Livewire.on('show-modal', (modalId) => {
+            var modal = new bootstrap.Modal(document.getElementById(modalId));
             modal.show();
         });
         
-        Livewire.on('hide-modal', () => {
-            var modal = bootstrap.Modal.getInstance(document.getElementById('kriteriaModal'));
+        Livewire.on('hide-modal', (modalId) => {
+            var modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
             if (modal) {
                 modal.hide();
             }
