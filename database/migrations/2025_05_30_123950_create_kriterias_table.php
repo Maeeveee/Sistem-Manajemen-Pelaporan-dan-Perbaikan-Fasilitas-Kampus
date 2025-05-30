@@ -14,11 +14,7 @@ return new class extends Migration
         Schema::create('kriterias', function (Blueprint $table) {
             $table->id();
             $table->string('nama_kriteria')->unique();
-            $table->enum('jenis', ['benefit', 'cost']);
             $table->decimal('bobot', 5, 2)->comment('Dalam persentase');
-            $table->decimal('nilai_rendah', 10, 2);
-            $table->decimal('nilai_sedang', 10, 2);
-            $table->decimal('nilai_tinggi', 10, 2);
             $table->timestamps();
         });
     }
@@ -28,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kriteria');
+        Schema::dropIfExists('kriterias');
     }
 };

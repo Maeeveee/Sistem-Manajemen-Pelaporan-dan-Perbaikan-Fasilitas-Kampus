@@ -9,21 +9,21 @@ class Kriteria extends Model
 {
     use HasFactory;
 
-    protected $table = 'kriterias';
-    
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'nama_kriteria',
-        'jenis',
-        'bobot',
-        'nilai_rendah',
-        'nilai_sedang',
-        'nilai_tinggi'
+        'bobot'
     ];
 
-    protected $casts = [
-        'bobot' => 'decimal:2',
-        'nilai_rendah' => 'decimal:2',
-        'nilai_sedang' => 'decimal:2',
-        'nilai_tinggi' => 'decimal:2'
-    ];
+    /**
+     * Get the sub kriterias for the kriteria.
+     */
+    public function subKriterias()
+    {
+        return $this->hasMany(SubKriteria::class, 'kriterias_id');
+    }
 }

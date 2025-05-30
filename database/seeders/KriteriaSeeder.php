@@ -11,44 +11,24 @@ class KriteriaSeeder extends Seeder
     {
         $fixedKriterias = [
             [
-                'nama_kriteria' => 'Biaya Perbaikan',
-                'jenis' => 'benefit',
+                'nama_kriteria' => 'Frekuensi Penggunaan Fasilitas',
                 'bobot' => 25.00,
-                'nilai_rendah' => 1.00,
-                'nilai_sedang' => 2.00,
-                'nilai_tinggi' => 3.00,
             ],
             [
-                'nama_kriteria' => 'Dampak',
-                'jenis' => 'cost',
+                'nama_kriteria' => 'Dampak Terhadap Aktivitas Akademik',
                 'bobot' => 20.00,
-                'nilai_rendah' => 1.00,
-                'nilai_sedang' => 2.00,
-                'nilai_tinggi' => 3.00,
             ],
             [
-                'nama_kriteria' => 'Tenaga yang Dibutuhkan',
-                'jenis' => 'benefit',
+                'nama_kriteria' => 'Tingkat Resiko Keselamatan',
                 'bobot' => 15.00,
-                'nilai_rendah' => 1.00,
-                'nilai_sedang' => 2.00,
-                'nilai_tinggi' => 3.00,
             ],
             [
-                'nama_kriteria' => 'Waktu',
-                'jenis' => 'cost',
+                'nama_kriteria' => 'Estimasi Waktu',
                 'bobot' => 20.00,
-                'nilai_rendah' => 1.00,
-                'nilai_sedang' => 2.00,
-                'nilai_tinggi' => 3.00,
             ],
             [
                 'nama_kriteria' => 'Tingkat Kerusakan',
-                'jenis' => 'benefit',
                 'bobot' => 20.00,
-                'nilai_rendah' => 1.00,
-                'nilai_sedang' => 2.00,
-                'nilai_tinggi' => 3.00,
             ]
         ];
 
