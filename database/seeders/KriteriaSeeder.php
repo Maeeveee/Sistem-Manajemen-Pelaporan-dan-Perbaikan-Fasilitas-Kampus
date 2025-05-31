@@ -24,11 +24,11 @@ class KriteriaSeeder extends Seeder
             ],
             [
                 'nama_kriteria' => 'Estimasi Waktu',
-                'bobot' => 20.00,
+                'bobot' => 10.00,
             ],
             [
                 'nama_kriteria' => 'Tingkat Kerusakan',
-                'bobot' => 20.00,
+                'bobot' => 10.00,
             ],
             [
                 'nama_kriteria' => 'Banyaknya Laporan',

@@ -33,72 +33,16 @@
                                 <th>Ruangan</th>
                                 <th>Lantai</th>
                                 <th>Fasilitas</th>
-                                <th>Urgensi (C1)</th>
-                                <th>Tingkat Kerusakan (C2)</th>
-                                <th>Frekuensi Penggunaan (C3)</th>
-                                <th>Usia Fasilitas (C4)</th>
+                                <th>Frekuensi Penggunaan (C1)</th>
+                                <th>Dampak Akademik (C2)</th>
+                                <th>Tingkat Resiko (C3)</th>
+                                <th>Tingkat Kerusakan (C4)</th>
+                                <th>Estimasi Waktu (C5)</th>
+                                <th>Banyaknya Laporan (C6)</th>
+                                <th>Jumlah Laporan Asli</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @php
-                                $laporan = [
-                                    [
-                                        'nama_pelapor' => 'Nadif', 
-                                        'gedung' => 'Teknik Mesin', 
-                                        'ruangan' => 'LER P3', 
-                                        'lantai' => 2,
-                                        'fasilitas' => 'AC Split',
-                                        'urgensi' => 5,
-                                        'kerusakan' => 4,
-                                        'penggunaan' => 3,
-                                        'usia' => 2
-                                    ],
-                                    [
-                                        'nama_pelapor' => 'Kamila', 
-                                        'gedung' => 'Teknik Sipil', 
-                                        'ruangan' => 'LAB 1', 
-                                        'lantai' => 1,
-                                        'fasilitas' => 'Projector',
-                                        'urgensi' => 4,
-                                        'kerusakan' => 3,
-                                        'penggunaan' => 5,
-                                        'usia' => 4
-                                    ],
-                                    [
-                                        'nama_pelapor' => 'Rizky', 
-                                        'gedung' => 'Informatika', 
-                                        'ruangan' => 'Lab Komputer 2', 
-                                        'lantai' => 3,
-                                        'fasilitas' => 'Komputer',
-                                        'urgensi' => 3,
-                                        'kerusakan' => 5,
-                                        'penggunaan' => 4,
-                                        'usia' => 3
-                                    ],
-                                    [
-                                        'nama_pelapor' => 'Dewi', 
-                                        'gedung' => 'Administrasi', 
-                                        'ruangan' => 'Ruang Dosen', 
-                                        'lantai' => 2,
-                                        'fasilitas' => 'Kursi',
-                                        'urgensi' => 2,
-                                        'kerusakan' => 2,
-                                        'penggunaan' => 4,
-                                        'usia' => 5
-                                    ],
-                                    [
-                                        'nama_pelapor' => 'Fajar', 
-                                        'gedung' => 'Perpustakaan', 
-                                        'ruangan' => 'Ruang Baca', 
-                                        'lantai' => 1,
-                                        'fasilitas' => 'Lampu',
-                                        'urgensi' => 4,
-                                        'kerusakan' => 3,
-                                        'penggunaan' => 5,
-                                        'usia' => 2
-                                    ]
-                                ];
-                            @endphp
                             @foreach ($laporan as $index => $item)
                             <tr>
                                 <td>{{ $index + 1 }}</td>
@@ -107,27 +51,36 @@
                                 <td>{{ $item['ruangan'] }}</td>
                                 <td>Lantai {{ $item['lantai'] }}</td>
                                 <td>{{ $item['fasilitas'] }}</td>
-                                <td>{{ $item['urgensi'] }}</td>
-                                <td>{{ $item['kerusakan'] }}</td>
-                                <td>{{ $item['penggunaan'] }}</td>
-                                <td>{{ $item['usia'] }}</td>
+                                <td>{{ number_format($item['frekuensi'], 2) }}</td>
+                                <td>{{ number_format($item['dampak'], 2) }}</td>
+                                <td>{{ number_format($item['resiko'], 2) }}</td>
+                                <td>{{ number_format($item['kerusakan'], 2) }}</td>
+                                <td>{{ number_format($item['estimasi'], 2) }}</td>
+                                <td>{{ number_format($item['banyaknya_laporan'], 2) }}</td>
+                                <td>{{ $item['total_laporan_asli'] }}</td>
                             </tr>
                             @endforeach
                         </tbody>
                         <tfoot>
                             <tr class="table-info">
                                 <td colspan="6" class="text-center"><strong>Bobot Kriteria (W)</strong></td>
-                                <td>0.35</td>
-                                <td>0.25</td>
-                                <td>0.25</td>
-                                <td>0.15</td>
+                                <td>{{ number_format($bobot['frekuensi'] ?? 0, 4) }}</td>
+                                <td>{{ number_format($bobot['dampak'] ?? 0, 4) }}</td>
+                                <td>{{ number_format($bobot['resiko'] ?? 0, 4) }}</td>
+                                <td>{{ number_format($bobot['kerusakan'] ?? 0, 4) }}</td>
+                                <td>{{ number_format($bobot['estimasi'] ?? 0, 4) }}</td>
+                                <td>{{ number_format($bobot['laporan'] ?? 0, 4) }}</td>
+                                <td>-</td>
                             </tr>
                             <tr class="table-info">
                                 <td colspan="6" class="text-center"><strong>Atribut Kriteria</strong></td>
                                 <td>Benefit</td>
                                 <td>Benefit</td>
+                                <td>Cost</td>
                                 <td>Benefit</td>
                                 <td>Cost</td>
+                                <td>Benefit</td>
+                                <td>-</td>
                             </tr>
                         </tfoot>
                     </table>
@@ -147,44 +100,24 @@
                         <thead class="thead-dark">
                             <tr>
                                 <th>Alternatif</th>
-                                <th>Urgensi (C1)</th>
-                                <th>Tingkat Kerusakan (C2)</th>
-                                <th>Frekuensi Penggunaan (C3)</th>
-                                <th>Usia Fasilitas (C4)</th>
+                                <th>Frekuensi Penggunaan (C1)</th>
+                                <th>Dampak Akademik (C2)</th>
+                                <th>Tingkat Resiko (C3)</th>
+                                <th>Tingkat Kerusakan (C4)</th>
+                                <th>Estimasi Waktu (C5)</th>
+                                <th>Banyaknya Laporan (C6)</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @php
-                                // Hitung nilai normalisasi
-                                $normalized = [];
-                                $max = [
-                                    'urgensi' => max(array_column($laporan, 'urgensi')),
-                                    'kerusakan' => max(array_column($laporan, 'kerusakan')),
-                                    'penggunaan' => max(array_column($laporan, 'penggunaan')),
-                                    'usia' => max(array_column($laporan, 'usia'))
-                                ];
-                                
-                                $min = [
-                                    'usia' => min(array_column($laporan, 'usia'))
-                                ];
-                                
-                                foreach ($laporan as $item) {
-                                    $normalized[] = [
-                                        'nama' => $item['nama_pelapor'],
-                                        'urgensi' => round($item['urgensi'] / $max['urgensi'], 3),
-                                        'kerusakan' => round($item['kerusakan'] / $max['kerusakan'], 3),
-                                        'penggunaan' => round($item['penggunaan'] / $max['penggunaan'], 3),
-                                        'usia' => round($min['usia'] / $item['usia'], 3)
-                                    ];
-                                }
-                            @endphp
                             @foreach ($normalized as $index => $item)
                             <tr>
-                                <td>A{{ $index + 1 }} ({{ $item['nama'] }})</td>
-                                <td>{{ $item['urgensi'] }}</td>
-                                <td>{{ $item['kerusakan'] }}</td>
-                                <td>{{ $item['penggunaan'] }}</td>
-                                <td>{{ $item['usia'] }}</td>
+                                <td>A{{ $index + 1 }} ({{ $item['nama_pelapor'] }})</td>
+                                <td>{{ number_format($item['frekuensi'], 3) }}</td>
+                                <td>{{ number_format($item['dampak'], 3) }}</td>
+                                <td>{{ number_format($item['resiko'], 3) }}</td>
+                                <td>{{ number_format($item['kerusakan'], 3) }}</td>
+                                <td>{{ number_format($item['estimasi'], 3) }}</td>
+                                <td>{{ number_format($item['laporan'], 3) }}</td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -205,34 +138,24 @@
                         <thead class="thead-dark">
                             <tr>
                                 <th>Alternatif</th>
-                                <th>Urgensi (C1)</th>
-                                <th>Tingkat Kerusakan (C2)</th>
-                                <th>Frekuensi Penggunaan (C3)</th>
-                                <th>Usia Fasilitas (C4)</th>
+                                <th>Frekuensi Penggunaan (C1)</th>
+                                <th>Dampak Akademik (C2)</th>
+                                <th>Tingkat Resiko (C3)</th>
+                                <th>Tingkat Kerusakan (C4)</th>
+                                <th>Estimasi Waktu (C5)</th>
+                                <th>Banyaknya Laporan (C6)</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @php
-                                $bobot = [0.35, 0.25, 0.25, 0.15];
-                                $weighted = [];
-                                
-                                foreach ($normalized as $index => $item) {
-                                    $weighted[] = [
-                                        'nama' => $item['nama'],
-                                        'urgensi' => round($item['urgensi'] * $bobot[0], 3),
-                                        'kerusakan' => round($item['kerusakan'] * $bobot[1], 3),
-                                        'penggunaan' => round($item['penggunaan'] * $bobot[2], 3),
-                                        'usia' => round($item['usia'] * $bobot[3], 3)
-                                    ];
-                                }
-                            @endphp
                             @foreach ($weighted as $index => $item)
                             <tr>
-                                <td>A{{ $index + 1 }} ({{ $item['nama'] }})</td>
-                                <td>{{ $item['urgensi'] }}</td>
-                                <td>{{ $item['kerusakan'] }}</td>
-                                <td>{{ $item['penggunaan'] }}</td>
-                                <td>{{ $item['usia'] }}</td>
+                                <td>A{{ $index + 1 }} ({{ $item['nama_pelapor'] }})</td>
+                                <td>{{ number_format($item['frekuensi'], 3) }}</td>
+                                <td>{{ number_format($item['dampak'], 3) }}</td>
+                                <td>{{ number_format($item['resiko'], 3) }}</td>
+                                <td>{{ number_format($item['kerusakan'], 3) }}</td>
+                                <td>{{ number_format($item['estimasi'], 3) }}</td>
+                                <td>{{ number_format($item['laporan'], 3) }}</td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -258,40 +181,35 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @php
-                                $aPlus = [
-                                    'urgensi' => max(array_column($weighted, 'urgensi')),
-                                    'kerusakan' => max(array_column($weighted, 'kerusakan')),
-                                    'penggunaan' => max(array_column($weighted, 'penggunaan')),
-                                    'usia' => max(array_column($weighted, 'usia'))
-                                ];
-                                
-                                $aMin = [
-                                    'urgensi' => min(array_column($weighted, 'urgensi')),
-                                    'kerusakan' => min(array_column($weighted, 'kerusakan')),
-                                    'penggunaan' => min(array_column($weighted, 'penggunaan')),
-                                    'usia' => min(array_column($weighted, 'usia'))
-                                ];
-                            @endphp
                             <tr>
-                                <td>Urgensi (C1)</td>
-                                <td>{{ $aPlus['urgensi'] }}</td>
-                                <td>{{ $aMin['urgensi'] }}</td>
+                                <td>Frekuensi Penggunaan (C1)</td>
+                                <td>{{ number_format($aPlus['frekuensi'], 3) }}</td>
+                                <td>{{ number_format($aMin['frekuensi'], 3) }}</td>
                             </tr>
                             <tr>
-                                <td>Tingkat Kerusakan (C2)</td>
-                                <td>{{ $aPlus['kerusakan'] }}</td>
-                                <td>{{ $aMin['kerusakan'] }}</td>
+                                <td>Dampak Akademik (C2)</td>
+                                <td>{{ number_format($aPlus['dampak'], 3) }}</td>
+                                <td>{{ number_format($aMin['dampak'], 3) }}</td>
                             </tr>
                             <tr>
-                                <td>Frekuensi Penggunaan (C3)</td>
-                                <td>{{ $aPlus['penggunaan'] }}</td>
-                                <td>{{ $aMin['penggunaan'] }}</td>
+                                <td>Tingkat Resiko (C3)</td>
+                                <td>{{ number_format($aPlus['resiko'], 3) }}</td>
+                                <td>{{ number_format($aMin['resiko'], 3) }}</td>
                             </tr>
                             <tr>
-                                <td>Usia Fasilitas (C4)</td>
-                                <td>{{ $aPlus['usia'] }}</td>
-                                <td>{{ $aMin['usia'] }}</td>
+                                <td>Tingkat Kerusakan (C4)</td>
+                                <td>{{ number_format($aPlus['kerusakan'], 3) }}</td>
+                                <td>{{ number_format($aMin['kerusakan'], 3) }}</td>
+            </tr>
+                            <tr>
+                                <td>Estimasi Waktu (C5)</td>
+                                <td>{{ number_format($aPlus['estimasi'], 3) }}</td>
+                                <td>{{ number_format($aMin['estimasi'], 3) }}</td>
+                            </tr>
+                            <tr>
+                                <td>Banyaknya Laporan (C6)</td>
+                                <td>{{ number_format($aPlus['laporan'], 3) }}</td>
+                                <td>{{ number_format($aMin['laporan'], 3) }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -318,51 +236,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @php
-                                $results = [];
-                                $ranking = [];
-                                
-                                foreach ($weighted as $index => $item) {
-                                    $dPlus = sqrt(
-                                        pow($item['urgensi'] - $aPlus['urgensi'], 2) +
-                                        pow($item['kerusakan'] - $aPlus['kerusakan'], 2) +
-                                        pow($item['penggunaan'] - $aPlus['penggunaan'], 2) +
-                                        pow($item['usia'] - $aPlus['usia'], 2)
-                                    );
-                                    
-                                    $dMin = sqrt(
-                                        pow($item['urgensi'] - $aMin['urgensi'], 2) +
-                                        pow($item['kerusakan'] - $aMin['kerusakan'], 2) +
-                                        pow($item['penggunaan'] - $aMin['penggunaan'], 2) +
-                                        pow($item['usia'] - $aMin['usia'], 2)
-                                    );
-                                    
-                                    $v = $dMin / ($dPlus + $dMin);
-                                    
-                                    $results[] = [
-                                        'nama' => $item['nama'],
-                                        'dPlus' => round($dPlus, 3),
-                                        'dMin' => round($dMin, 3),
-                                        'v' => round($v, 3)
-                                    ];
-                                    
-                                    $ranking[$index] = $v;
-                                }
-                                
-                                // Urutkan ranking
-                                arsort($ranking);
-                                $rank = 1;
-                                $finalRanking = [];
-                                foreach ($ranking as $key => $value) {
-                                    $finalRanking[$key] = $rank++;
-                                }
-                            @endphp
                             @foreach ($results as $index => $item)
                             <tr>
-                                <td>A{{ $index + 1 }} ({{ $item['nama'] }})</td>
-                                <td>{{ $item['dPlus'] }}</td>
-                                <td>{{ $item['dMin'] }}</td>
-                                <td>{{ $item['v'] }}</td>
+                                <td>A{{ $index + 1 }} ({{ $item['nama_pelapor'] }})</td>
+                                <td>{{ number_format($item['dPlus'], 3) }}</td>
+                                <td>{{ number_format($item['dMin'], 3) }}</td>
+                                <td>{{ number_format($item['v'], 3) }}</td>
                                 <td>{{ $finalRanking[$index] }}</td>
                             </tr>
                             @endforeach
@@ -389,36 +268,18 @@
                                 <th>Fasilitas</th>
                                 <th>Nilai Preferensi</th>
                                 <th>Status</th>
+                                <th>Jumlah Laporan</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @php
-                                // Urutkan hasil berdasarkan ranking
-                                $sortedResults = [];
-                                foreach ($finalRanking as $key => $rank) {
-                                    $sortedResults[] = [
-                                        'rank' => $rank,
-                                        'nama' => $results[$key]['nama'],
-                                        'lokasi' => $laporan[$key]['gedung'] . ', ' . $laporan[$key]['ruangan'],
-                                        'fasilitas' => $laporan[$key]['fasilitas'],
-                                        'nilai' => $results[$key]['v'],
-                                        'status' => ($rank == 1) ? 'Prioritas Tinggi' : (($rank <= 3) ? 'Prioritas Menengah' : 'Prioritas Rendah')
-                                    ];
-                                }
-                                
-                                // Urutkan berdasarkan ranking
-                                usort($sortedResults, function($a, $b) {
-                                    return $a['rank'] <=> $b['rank'];
-                                });
-                            @endphp
                             @foreach ($sortedResults as $item)
                             <tr>
                                 <td>{{ $item['rank'] }}</td>
                                 <td>{{ $item['nama'] }}</td>
                                 <td>{{ $item['lokasi'] }}</td>
                                 <td>{{ $item['fasilitas'] }}</td>
-                                <td>{{ $item['nilai'] }}</td>
+                                <td>{{ number_format($item['nilai'], 3) }}</td>
                                 <td>
                                     @if($item['rank'] == 1)
                                         <span class="badge bg-danger">Prioritas Tinggi</span>
@@ -428,6 +289,7 @@
                                         <span class="badge bg-success">Prioritas Rendah</span>
                                     @endif
                                 </td>
+                                <td>{{ $item['total_laporan'] }}</td>
                                 <td>
                                     <button class="btn btn-sm btn-primary">Proses</button>
                                     <button class="btn btn-sm btn-info">Detail</button>
@@ -442,4 +304,58 @@
     </div>
 </div>
 
+<!-- Grafik Prioritas Perbaikan -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Visualisasi Prioritas Perbaikan</h5>
+                <canvas id="priorityChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('priorityChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [@foreach($sortedResults as $item)"A{{ $loop->iteration }} ({{ $item['nama'] }})",@endforeach],
+            datasets: [{
+                label: 'Nilai Preferensi',
+                data: [@foreach($sortedResults as $item){{ $item['nilai'] }},@endforeach],
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'],
+                borderColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Nilai Preferensi'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Alternatif'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
+                }
+            }
+        }
+    });
+</script>
+@endpush
 </body>

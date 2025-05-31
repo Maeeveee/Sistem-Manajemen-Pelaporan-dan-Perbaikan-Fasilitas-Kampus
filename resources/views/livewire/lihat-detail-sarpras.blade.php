@@ -72,13 +72,13 @@
                         <label for="estimasiWaktu" class="form-label fw-bold">Estimasi Waktu</label>
                         <select id="estimasiWaktu" name="sub_kriteria_id" class="form-select shadow-sm"
                                 {{ $laporan->sub_kriteria_id ? 'disabled' : '' }}>
-                            <option value="1" {{ $laporan->sub_kriteria_id == 1 ? 'selected' : '' }}>
+                            <option value="34" {{ $laporan->sub_kriteria_id == 34 ? 'selected' : '' }}>
                                 Cepat (≤1 hari)
                             </option>
-                            <option value="2" {{ $laporan->sub_kriteria_id == 2 ? 'selected' : '' }}>
+                            <option value="35" {{ $laporan->sub_kriteria_id == 35 ? 'selected' : '' }}>
                                 Sedang (2-3 hari)
                             </option>
-                            <option value="3" {{ $laporan->sub_kriteria_id == 3 ? 'selected' : '' }}>
+                            <option value="36" {{ $laporan->sub_kriteria_id == 36 ? 'selected' : '' }}>
                                 Lama (≥4 hari)
                             </option>
                         </select>

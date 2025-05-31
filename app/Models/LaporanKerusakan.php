@@ -70,4 +70,8 @@ class LaporanKerusakan extends Model
     {
         return $this->belongsTo(SubKriteria::class, 'tingkat_resiko_keselamatan');
     }
+    public function alternatifs()
+    {
+        return $this->hasMany(Alternatif::class);
+    }
 }
