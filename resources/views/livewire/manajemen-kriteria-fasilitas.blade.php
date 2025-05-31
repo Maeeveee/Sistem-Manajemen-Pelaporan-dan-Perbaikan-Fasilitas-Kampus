@@ -104,8 +104,9 @@
                         'Frekuensi Penggunaan Fasilitas' => 'Benefit',
                         'Dampak Terhadap Aktivitas Akademik' => 'Benefit',
                         'Tingkat Resiko Keselamatan' => 'Cost',
-                        'Estimasi Waktu' => 'Cost',
-                        'Tingkat Kerusakan' => 'Benefit',
+                        'Estimasi Waktu' => 'Benefit',
+                        'Tingkat Kerusakan' => 'Cost',
+                        'Banyaknya Laporan' => 'Benefit',
                     ];
                 @endphp
                 @forelse ($kriterias as $kriteria)
