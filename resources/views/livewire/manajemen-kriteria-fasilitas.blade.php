@@ -11,7 +11,7 @@
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
         <div class="d-block mb-4 mb-md-0">
             <h2 class="h4">Manajemen Kriteria Fasilitas</h2>
-            @if(session('success'))
+            @if (session('success'))
                 <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
                     {{ session('success') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -25,11 +25,15 @@
             <div class="col-9 col-lg-8 d-md-flex">
                 <div class="input-group me-2 me-lg-3 fmxw-300">
                     <span class="input-group-text">
-                        <svg class="icon icon-xs" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
+                        <svg class="icon icon-xs" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                            fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd"
+                                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                clip-rule="evenodd"></path>
                         </svg>
                     </span>
-                    <input type="text" wire:model.debounce.300ms="search" class="form-control" placeholder="Cari kriteria...">
+                    <input type="text" wire:model.debounce.300ms="search" class="form-control"
+                        placeholder="Cari kriteria...">
                 </div>
             </div>
             <div class="col-3 col-lg-4 d-flex justify-content-end">
@@ -37,16 +41,22 @@
                     <div class="dropdown me-1">
                         <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-1"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z"></path>
+                            <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z">
+                                </path>
                             </svg>
                             <span class="visually-hidden">Toggle Dropdown</span>
                         </button>
                         <div class="dropdown-menu dropdown-menu-end pb-0">
                             <span class="small ps-3 fw-bold text-dark">Tampilkan</span>
-                            <a class="dropdown-item d-flex align-items-center fw-bold" href="#" wire:click.prevent="changePerPage(10)">10</a>
-                            <a class="dropdown-item fw-bold" href="#" wire:click.prevent="changePerPage(20)">20</a>
-                            <a class="dropdown-item fw-bold rounded-bottom" href="#" wire:click.prevent="changePerPage(30)">30</a>
+                            <a class="dropdown-item d-flex align-items-center fw-bold" href="#"
+                                wire:click.prevent="changePerPage(10)">10</a>
+                            <a class="dropdown-item fw-bold" href="#"
+                                wire:click.prevent="changePerPage(20)">20</a>
+                            <a class="dropdown-item fw-bold rounded-bottom" href="#"
+                                wire:click.prevent="changePerPage(30)">30</a>
                         </div>
                     </div>
                 </div>
@@ -60,7 +70,7 @@
                 <tr>
                     <th class="border-bottom" wire:click="sortBy('id')">
                         No
-                        @if($sortField === 'id')
+                        @if ($sortField === 'id')
                             <span class="icon icon-sm">
                                 {!! $sortDirection === 'asc' ? '&#8593;' : '&#8595;' !!}
                             </span>
@@ -68,7 +78,7 @@
                     </th>
                     <th class="border-bottom" wire:click="sortBy('nama_kriteria')">
                         Nama Kriteria
-                        @if($sortField === 'nama_kriteria')
+                        @if ($sortField === 'nama_kriteria')
                             <span class="icon icon-sm">
                                 {!! $sortDirection === 'asc' ? '&#8593;' : '&#8595;' !!}
                             </span>
@@ -76,7 +86,7 @@
                     </th>
                     <th class="border-bottom" wire:click="sortBy('bobot')">
                         Bobot (%)
-                        @if($sortField === 'bobot')
+                        @if ($sortField === 'bobot')
                             <span class="icon icon-sm">
                                 {!! $sortDirection === 'asc' ? '&#8593;' : '&#8595;' !!}
                             </span>
@@ -89,6 +99,15 @@
                 </tr>
             </thead>
             <tbody>
+                @php
+                    $jenisList = [
+                        'Frekuensi Penggunaan Fasilitas' => 'Benefit',
+                        'Dampak Terhadap Aktivitas Akademik' => 'Benefit',
+                        'Tingkat Resiko Keselamatan' => 'Cost',
+                        'Estimasi Waktu' => 'Cost',
+                        'Tingkat Kerusakan' => 'Benefit',
+                    ];
+                @endphp
                 @forelse ($kriterias as $kriteria)
                     <tr>
                         <td>{{ ($kriterias->currentPage() - 1) * $kriterias->perPage() + $loop->iteration }}</td>
@@ -96,9 +115,9 @@
                         <td>{{ number_format($kriteria->bobot, 2) }}%</td>
                         <td>{{ $kriteria->subKriterias->count() }} Sub Kriteria</td>
                         <td>
-                            @if($kriteria->subKriterias->count() > 0)
+                            @if ($kriteria->subKriterias->count() > 0)
                                 <div class="d-flex flex-wrap gap-1">
-                                    @foreach($kriteria->subKriterias as $sub)
+                                    @foreach ($kriteria->subKriterias as $sub)
                                         <small>
                                             {{ $sub->nama_subkriteria }} ({{ number_format($sub->nilai, 2) }})
                                         </small>
@@ -109,14 +128,12 @@
                             @endif
                         </td>
                         <td>
-                            {{-- Masukkin jenis disini ya guys (Cost/Benefit) --}}
+                            {{ $jenisList[$kriteria->nama_kriteria] ?? '-' }}
                         </td>
                         <td>
                             <div class="btn-group" role="group">
-                                <button wire:click="editKriteria({{ $kriteria->id }})" 
-                                        class="btn btn-sm btn-warning" 
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#kriteriaModal">
+                                <button wire:click="editKriteria({{ $kriteria->id }})" class="btn btn-sm btn-warning"
+                                    data-bs-toggle="modal" data-bs-target="#kriteriaModal">
                                     <i class="fas fa-edit"></i>
                                 </button>
                             </div>
@@ -130,12 +147,13 @@
             </tbody>
         </table>
         <nav aria-label="Page navigation">
-                {{ $kriterias->links('pagination::bootstrap-5') }}
-            </nav>
+            {{ $kriterias->links('pagination::bootstrap-5') }}
+        </nav>
     </div>
 
     <!-- Modal Edit Kriteria -->
-    <div wire:ignore.self class="modal fade" id="kriteriaModal" tabindex="-1" role="dialog" aria-labelledby="kriteriaModalLabel" aria-hidden="true">
+    <div wire:ignore.self class="modal fade" id="kriteriaModal" tabindex="-1" role="dialog"
+        aria-labelledby="kriteriaModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -146,19 +164,21 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Nama Kriteria</label>
-                            <input type="text" class="form-control" 
-                                   wire:model.defer="currentKriteria.nama_kriteria" 
-                                   placeholder="Masukkan nama kriteria" readonly>
-                            @error('currentKriteria.nama_kriteria') <span class="text-danger">{{ $message }}</span> @enderror
+                            <input type="text" class="form-control" wire:model.defer="currentKriteria.nama_kriteria"
+                                placeholder="Masukkan nama kriteria" readonly>
+                            @error('currentKriteria.nama_kriteria')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
-                        
+
                         <div class="mb-3">
                             <label for="bobot" class="form-label">Bobot (%)</label>
-                            <input type="number" class="form-control" id="bobot" 
-                                   wire:model.defer="currentKriteria.bobot" 
-                                   step="0.01" min="0.01" max="100" 
-                                   placeholder="Masukkan bobot dalam persen" required>
-                            @error('currentKriteria.bobot') <span class="text-danger">{{ $message }}</span> @enderror
+                            <input type="number" class="form-control" id="bobot"
+                                wire:model.defer="currentKriteria.bobot" step="0.01" min="0.01"
+                                max="100" placeholder="Masukkan bobot dalam persen" required>
+                            @error('currentKriteria.bobot')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                             <div class="form-text">Masukkan nilai bobot antara 0.01 - 100</div>
                         </div>
                     </div>
@@ -169,7 +189,8 @@
                                 Update Kriteria
                             </span>
                             <span wire:loading wire:target="updateKriteria">
-                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                <span class="spinner-border spinner-border-sm" role="status"
+                                    aria-hidden="true"></span>
                                 Memproses...
                             </span>
                         </button>
@@ -180,7 +201,8 @@
     </div>
 
     <!-- Modal Manage Sub Kriteria -->
-    <div wire:ignore.self class="modal fade" id="subKriteriaModal" tabindex="-1" role="dialog" aria-labelledby="subKriteriaModalLabel" aria-hidden="true">
+    <div wire:ignore.self class="modal fade" id="subKriteriaModal" tabindex="-1" role="dialog"
+        aria-labelledby="subKriteriaModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -200,17 +222,21 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label class="form-label">Nama Sub Kriteria</label>
-                                        <input type="text" class="form-control" 
-                                               wire:model.defer="newSubKriteria.nama_subkriteria" 
-                                               placeholder="Masukkan nama sub kriteria" required>
-                                        @error('newSubKriteria.nama_subkriteria') <span class="text-danger">{{ $message }}</span> @enderror
+                                        <input type="text" class="form-control"
+                                            wire:model.defer="newSubKriteria.nama_subkriteria"
+                                            placeholder="Masukkan nama sub kriteria" required>
+                                        @error('newSubKriteria.nama_subkriteria')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Nilai</label>
-                                        <input type="number" class="form-control" 
-                                               wire:model.defer="newSubKriteria.nilai" 
-                                               step="0.01" placeholder="Nilai" required>
-                                        @error('newSubKriteria.nilai') <span class="text-danger">{{ $message }}</span> @enderror
+                                        <input type="number" class="form-control"
+                                            wire:model.defer="newSubKriteria.nilai" step="0.01"
+                                            placeholder="Nilai" required>
+                                        @error('newSubKriteria.nilai')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                     <div class="col-md-2">
                                         <label class="form-label">&nbsp;</label>
@@ -229,7 +255,7 @@
                             <h6 class="mb-0">Daftar Sub Kriteria</h6>
                         </div>
                         <div class="card-body">
-                            @if(!empty($currentSubKriterias))
+                            @if (!empty($currentSubKriterias))
                                 <div class="table-responsive">
                                     <table class="table table-sm">
                                         <thead>
@@ -241,14 +267,14 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach($currentSubKriterias as $index => $subKriteria)
+                                            @foreach ($currentSubKriterias as $index => $subKriteria)
                                                 <tr>
                                                     <td>{{ $index + 1 }}</td>
                                                     <td>{{ $subKriteria['nama_subkriteria'] }}</td>
                                                     <td>{{ number_format($subKriteria['nilai'], 2) }}</td>
                                                     <td>
-                                                        <button wire:click="editSubKriteria({{ $subKriteria['id'] }})" 
-                                                                class="btn btn-sm btn-warning me-1">
+                                                        <button wire:click="editSubKriteria({{ $subKriteria['id'] }})"
+                                                            class="btn btn-sm btn-warning me-1">
                                                             <i class="fas fa-edit"></i>
                                                         </button>
                                                     </td>
@@ -275,20 +301,20 @@
 </div>
 
 @push('scripts')
-<script>
-    document.addEventListener('livewire:load', function() {
-        // Modal Control
-        Livewire.on('show-modal', (modalId) => {
-            var modal = new bootstrap.Modal(document.getElementById(modalId));
-            modal.show();
+    <script>
+        document.addEventListener('livewire:load', function() {
+            // Modal Control
+            Livewire.on('show-modal', (modalId) => {
+                var modal = new bootstrap.Modal(document.getElementById(modalId));
+                modal.show();
+            });
+
+            Livewire.on('hide-modal', (modalId) => {
+                var modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+                if (modal) {
+                    modal.hide();
+                }
+            });
         });
-        
-        Livewire.on('hide-modal', (modalId) => {
-            var modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
-            if (modal) {
-                modal.hide();
-            }
-        });
-    });
-</script>
+    </script>
 @endpush

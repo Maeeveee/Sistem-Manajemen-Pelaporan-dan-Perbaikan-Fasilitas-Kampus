@@ -141,14 +141,6 @@
                                 </span>
                             @endif
                         </th>
-                        <th class="border-bottom" wire:click="sortBy('jenis')">
-                            jenis
-                            @if ($sortField === 'jenis')
-                                <span class="icon icon-sm">
-                                    {!! $sortDirection === 'asc' ? '&#8593;' : '&#8595;' !!}
-                                </span>
-                            @endif
-                        </th>
                         <th class="border-bottom">Aksi</th>
                     </tr>
                 </thead>
@@ -159,7 +151,6 @@
                             </td>
                             <td>{{ $subkriteria->nama_subkriteria }}</td>
                             <td>{{ $subkriteria->nilai }}</td>
-                            <td>{{ $subkriteria->jenis }}</td>
                             <td>
                                 <div class="btn-group" role="group">
                                     <button wire:click="editSubKriteria({{ $subkriteria->id }})"
