@@ -1,12 +1,3 @@
-@section('breadcrumbs')
-    @php
-        $breadcrumbs = [
-            'Manajemen Kriteria Fasilitas' => '',
-        ];
-    @endphp
-    @include('layouts.breadcrumb', ['breadcrumbs' => $breadcrumbs])
-@endsection
-
 <div>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
         <div class="d-block mb-4 mb-md-0">
@@ -113,7 +104,28 @@
                     <tr>
                         <td>{{ ($kriterias->currentPage() - 1) * $kriterias->perPage() + $loop->iteration }}</td>
                         <td>{{ $kriteria->nama_kriteria }}</td>
-                        <td>{{ number_format($kriteria->bobot, 2) }}%</td>
+                        {{-- <td>{{ number_format($kriteria->bobot, 2) }}%</td> --}} 
+                        <td>
+                            @switch($kriteria->bobot)
+                                @case(20)
+                                    Sama Penting (20%)
+                                    @break
+                                @case(30)
+                                    Sedikit lebih Penting (30%)
+                                    @break
+                                @case(50)
+                                    Lebih Penting (50%)
+                                    @break
+                                @case(80)
+                                    jauh lebih Penting (80%)
+                                    @break
+                                @case(100)
+                                    mutlak lebih Penting (100%)
+                                    @break
+                                @default
+                                    {{ number_format($kriteria->bobot, 2) }}%
+                            @endswitch
+                        </td>
                         <td>{{ $kriteria->subKriterias->count() }} Sub Kriteria</td>
                         <td>
                             @if ($kriteria->subKriterias->count() > 0)
@@ -153,54 +165,65 @@
     </div>
 
     <!-- Modal Edit Kriteria -->
-    <div wire:ignore.self class="modal fade" id="kriteriaModal" tabindex="-1" role="dialog"
-        aria-labelledby="kriteriaModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="kriteriaModalLabel">Edit Kriteria</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form wire:submit.prevent="updateKriteria">
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label">Nama Kriteria</label>
-                            <input type="text" class="form-control" wire:model.defer="currentKriteria.nama_kriteria"
-                                placeholder="Masukkan nama kriteria" readonly>
-                            @error('currentKriteria.nama_kriteria')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="bobot" class="form-label">Bobot (%)</label>
-                            <input type="number" class="form-control" id="bobot"
-                                wire:model.defer="currentKriteria.bobot" step="0.01" min="0.01"
-                                max="100" placeholder="Masukkan bobot dalam persen" required>
-                            @error('currentKriteria.bobot')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
-                            <div class="form-text">Masukkan nilai bobot antara 0.01 - 100</div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary">
-                            <span wire:loading.remove wire:target="updateKriteria">
-                                Update Kriteria
-                            </span>
-                            <span wire:loading wire:target="updateKriteria">
-                                <span class="spinner-border spinner-border-sm" role="status"
-                                    aria-hidden="true"></span>
-                                Memproses...
-                            </span>
-                        </button>
-                    </div>
-                </form>
+<div wire:ignore.self class="modal fade" id="kriteriaModal" tabindex="-1" role="dialog" aria-labelledby="kriteriaModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="kriteriaModalLabel">Edit Kriteria</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <form wire:submit.prevent="updateKriteria">
+                <div class="modal-body">
+                    <!-- Nama Kriteria (readonly) -->
+                    <div class="mb-3">
+                        <label class="form-label">Nama Kriteria</label>
+                        <input type="text" class="form-control" 
+                            wire:model.defer="currentKriteria.nama_kriteria"
+                            placeholder="Nama Kriteria" readonly>
+                    </div>
+                    
+                    <!-- Jenis Kriteria (readonly) -->
+                    <div class="mb-3">
+                        <label class="form-label">Jenis Kriteria</label>
+                        <input type="text" class="form-control" 
+                            value="{{ $currentKriteria['jenis'] == 'benefit' ? 'Benefit' : 'Cost' }}"
+                            readonly>
+                    </div>
+
+                    <!-- Tingkat Kepentingan -->
+                    <div class="mb-3">
+                        <label for="tingkat_kepentingan" class="form-label">Tingkat Kepentingan</label>
+                        <select class="form-select" id="tingkat_kepentingan" 
+                                wire:model.defer="currentKriteria.bobot" required>
+                            <option value="">Pilih Tingkat Kepentingan</option>
+                            <option value="20">Sama Penting (20%)</option>
+                            <option value="30">Sedikit Lebih Penting (30%)</option>
+                            <option value="50">Lebih Penting (50%)</option>
+                            <option value="80">Jauh Lebih Penting (80%)</option>
+                            <option value="100">Mutlak Penting (100%)</option>
+                        </select>
+                        @error('currentKriteria.bobot')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                        <div class="form-text">Skala prioritas kriteria</div>
+                    </div>
+
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">
+                        <span wire:loading.remove wire:target="updateKriteria">
+                            <i class="fas fa-save me-1"></i> Simpan Perubahan
+                        </span>
+                        <span wire:loading wire:target="updateKriteria">
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Menyimpan...
+                        </span>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
-
+</div>
     <!-- Modal Manage Sub Kriteria -->
     <div wire:ignore.self class="modal fade" id="subKriteriaModal" tabindex="-1" role="dialog"
         aria-labelledby="subKriteriaModalLabel" aria-hidden="true">
