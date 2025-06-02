@@ -1,11 +1,10 @@
 <div>
-    <title>Evaluasi Laporan - SPK CRITIC TOPSIS</title>
-    
+    <title>Evaluasi Laporan - SPK CRITIC TOPSIS</title>  
     @section('breadcrumbs')
         @php
             $breadcrumbs = [
                 'Sarana Prasarana' => '',
-                'Evaluasi Laporan Kerusakan (CRITIC TOPSIS)' => route('dashboard-sarpras'),
+                'Evaluasi Laporan Kerusakan (AHP TOPSIS)' => route('perhitungan-spk'),
             ];
         @endphp
         @include('layouts.breadcrumb', ['breadcrumbs' => $breadcrumbs])
@@ -13,7 +12,7 @@
 
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
         <div class="d-block mb-4 mb-md-0">
-            <h2 class="h4">Evaluasi Laporan Kerusakan dengan Metode CRITIC TOPSIS</h2>
+            <h2 class="h4">Evaluasi Laporan Kerusakan dengan Metode AHP dan TOPSIS</h2>
             <p class="mb-0">Sistem Pendukung Keputusan untuk Prioritas Perbaikan Fasilitas Kampus</p>
         </div>
         <div>
