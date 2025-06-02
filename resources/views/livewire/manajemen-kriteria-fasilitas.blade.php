@@ -105,27 +105,7 @@
                         <td>{{ ($kriterias->currentPage() - 1) * $kriterias->perPage() + $loop->iteration }}</td>
                         <td>{{ $kriteria->nama_kriteria }}</td>
                         {{-- <td>{{ number_format($kriteria->bobot, 2) }}%</td> --}} 
-                        <td>
-                            @switch($kriteria->bobot)
-                                @case(20)
-                                    Sama Penting (20%)
-                                    @break
-                                @case(30)
-                                    Sedikit lebih Penting (30%)
-                                    @break
-                                @case(50)
-                                    Lebih Penting (50%)
-                                    @break
-                                @case(80)
-                                    jauh lebih Penting (80%)
-                                    @break
-                                @case(100)
-                                    mutlak lebih Penting (100%)
-                                    @break
-                                @default
-                                    {{ number_format($kriteria->bobot, 2) }}%
-                            @endswitch
-                        </td>
+                        <td>{{ $kriteria->bobot }}%</td>
                         <td>{{ $kriteria->subKriterias->count() }} Sub Kriteria</td>
                         <td>
                             @if ($kriteria->subKriterias->count() > 0)
