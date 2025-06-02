@@ -27,12 +27,6 @@ class ManajemenKriteriaFasilitas extends Component
         'nilai_tinggi' => null
     ];
 
-    protected $rules = [
-        'currentKriteria.bobot' => 'required|numeric|min:1|max:100',
-        'currentKriteria.nilai_rendah' => 'required|numeric',
-        'currentKriteria.nilai_sedang' => 'required|numeric',
-        'currentKriteria.nilai_tinggi' => 'required|numeric',
-    ];
 
     public function sortBy($field)
     {

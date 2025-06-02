@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PerhitunganKriteria as ControllersPerhitunganKriteria;
 use App\Http\Livewire\BootstrapTables;
 use App\Http\Livewire\Components\Buttons;
 use App\Http\Livewire\Components\Forms;
@@ -40,7 +41,9 @@ use App\Http\Livewire\HistoryLaporan;
 use App\Http\Livewire\DetailHistoryLaporan;
 use App\Http\Livewire\LihatDetailSarpras;
 use App\Http\Livewire\PerhitunganSpk;
+use App\Http\Livewire\PerhitunganKriteria;
 use App\Http\Livewire\ManajemenSubkriteria;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -113,3 +116,5 @@ Route::put('/laporan/{id}/update-laporan', [LihatDetailSarpras::class, 'updateEs
 Route::get('/sarpras-spk', PerhitunganSpk::class)->name('perhitungan-spk');
 
 Route::get('/perhitungan-spk', PerhitunganSpk::class)->name('perhitungan-spk');
+
+Route::get('/perhitungan-kriteria', PerhitunganKriteria::class)->name('perhitungan-kriteria');
