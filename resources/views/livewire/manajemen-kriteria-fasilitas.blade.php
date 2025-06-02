@@ -86,7 +86,6 @@
                     <th class="border-bottom">Jumlah Sub Kriteria</th>
                     <th class="border-bottom">Sub Kriteria</th>
                     <th class="border-bottom">Jenis</th>
-                    <th class="border-bottom">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -122,14 +121,6 @@
                         </td>
                         <td>
                             {{ $jenisList[$kriteria->nama_kriteria] ?? '-' }}
-                        </td>
-                        <td>
-                            <div class="btn-group" role="group">
-                                <button wire:click="editKriteria({{ $kriteria->id }})" class="btn btn-sm btn-warning"
-                                    data-bs-toggle="modal" data-bs-target="#kriteriaModal">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                            </div>
                         </td>
                     </tr>
                 @empty
