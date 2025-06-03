@@ -17,11 +17,8 @@
                 'history.laporan',
                 'perhitungan-spk',
                 'perhitungan-kriteria',
-                'manajemen.subkriteria',
-                'lihat-detail-admin',
-                'detail-history-laporan',
-                'input_laporan-sarpras'
-            ]))
+                'manajemen.subkriteria'
+                ]))
             @include('layouts.nav')
             @include('layouts.sidenav')
             <main class="content">
@@ -29,11 +26,15 @@
                 {{ $slot }}
                 @include('layouts.footer')
             </main>
-
-        @elseif(in_array(request()->route()->getName(), [
+            
+            @elseif(in_array(request()->route()->getName(), [
                 'register',
                 'login',
                 'landing-page',
+                'lihat-detail-admin',
+                'detail-history-laporan',
+                'input_laporan-sarpras'
+
             ]))
             {{ $slot }}
         @endif
