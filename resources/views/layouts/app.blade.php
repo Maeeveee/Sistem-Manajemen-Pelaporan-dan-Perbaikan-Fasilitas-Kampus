@@ -4,15 +4,8 @@
         @if (in_array(request()->route()->getName(), [
                 'dashboard',
                 'profile',
-                'profile-example',
                 'users',
-                'bootstrap-tables',
-                'transactions',
-                'buttons',
-                'forms',
-                'modals',
                 'notifications',
-                'typography',
                 'kerusakan.fasilitas',
                 "manajemen.kriteria.fasilitas" ,
                 'manajemen.fasilitas',
@@ -25,6 +18,9 @@
                 'perhitungan-spk',
                 'perhitungan-kriteria',
                 'manajemen.subkriteria',
+                'lihat-detail-admin',
+                'detail-history-laporan',
+                'input_laporan-sarpras'
             ]))
             @include('layouts.nav')
             @include('layouts.sidenav')
@@ -36,23 +32,10 @@
 
         @elseif(in_array(request()->route()->getName(), [
                 'register',
-                'register-example',
                 'login',
-                'login-example',
-                'forgot-password',
-                'forgot-password-example',
-                'reset-password',
-                'reset-password-example',
                 'landing-page',
-                'lihat-detail-admin',
-                'detail-history-laporan',
-                'input_laporan-sarpras'
             ]))
             {{ $slot }}
-
-        @elseif(in_array(request()->route()->getName(), ['404', '500', 'lock']))
-            {{ $slot }}
         @endif
-
     </div>
 </x-layouts.base>
