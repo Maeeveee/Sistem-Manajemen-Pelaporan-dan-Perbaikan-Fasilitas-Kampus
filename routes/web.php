@@ -1,38 +1,19 @@
 <?php
 
 use App\Http\Controllers\PerhitunganKriteria as ControllersPerhitunganKriteria;
-use App\Http\Livewire\BootstrapTables;
-use App\Http\Livewire\Components\Buttons;
-use App\Http\Livewire\Components\Forms;
-use App\Http\Livewire\Components\Modals;
-use App\Http\Livewire\Components\Notifications;
-use App\Http\Livewire\Components\Typography;
 use App\Http\Livewire\Components\Forms\FormKerusakanFasilitas;
 use App\Http\Livewire\ManajemenFasilitas;
 use App\Http\Livewire\ManajemenGedung;
 use App\Http\Livewire\Dashboard;
 use App\Http\Livewire\DashboardTeknisi;
-use App\Http\Livewire\Err404;
-use App\Http\Livewire\Err500;
-use App\Http\Livewire\ResetPassword;
-use App\Http\Livewire\ForgotPassword;
-use App\Http\Livewire\Lock;
 use App\Http\Livewire\Auth\Login;
 use App\Http\Livewire\Profile;
 use App\Http\Livewire\Auth\Register;
 use App\Http\Livewire\DashboardAdmin;
 use App\Http\Livewire\DashboardSarpras;
-use App\Http\Livewire\ForgotPasswordExample;
-use App\Http\Livewire\Index;
 use App\Http\Livewire\ManajemenKriteriaFasilitas;
-use App\Http\Livewire\LoginExample;
 use App\Http\Livewire\ManajemenPengguna;
-use App\Http\Livewire\ProfileExample;
-use App\Http\Livewire\RegisterExample;
-use App\Http\Livewire\Transactions;
 use Illuminate\Support\Facades\Route;
-use App\Http\Livewire\ResetPasswordExample;
-use App\Http\Livewire\UpgradeToPro;
 use App\Http\Livewire\LandingPage;
 use App\Http\Livewire\Users;
 use App\Models\LaporanKerusakan;
