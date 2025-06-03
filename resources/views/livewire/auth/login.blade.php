@@ -56,8 +56,7 @@
                                             Ingat saya
                                         </label>
                                     </div>
-                                    <div><a href="{{ route('forgot-password') }}" class="small text-right">Lupa
-                                            kata sandi?</a></div>
+                                    
                                 </div>
                             </div>
                             <div class="d-grid">
