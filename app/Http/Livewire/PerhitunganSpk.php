@@ -37,6 +37,7 @@ class PerhitunganSpk extends Component
                 return $key ? [$key => $item->bobot / 100] : [];
             })
             ->toArray();
+        $this->calculateTopsis();
     }
 
     public function calculateTopsis()
@@ -72,7 +73,7 @@ class PerhitunganSpk extends Component
         }
     }
 
-    private function resetArrays()
+    public function resetArrays()
     {
         $this->laporan = [];
         $this->normalized = [];
