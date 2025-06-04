@@ -14,11 +14,7 @@ class DetailHistoryLaporan extends Component
         $this->laporan = LaporanKerusakan::with([
             'gedung', 
             'ruangan', 
-            'fasilitas',
-            'frekuensiPenggunaan',
-            'tingkatKerusakan',
-            'dampakAkademik',        
-            'resikoKeselamatan'      
+            'fasilitas'
         ])->findOrFail($id);
     }
 
