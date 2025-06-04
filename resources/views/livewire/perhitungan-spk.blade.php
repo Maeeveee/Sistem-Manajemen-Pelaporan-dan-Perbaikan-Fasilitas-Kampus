@@ -15,10 +15,6 @@
             <h2 class="h4">Evaluasi Laporan Kerusakan dengan Metode AHP dan TOPSIS</h2>
             <p class="mb-0">Sistem Pendukung Keputusan untuk Prioritas Perbaikan Fasilitas Kampus</p>
         </div>
-        <div>
-            <button wire:click="calculateTopsis" class="btn btn-primary">Hitung TOPSIS</button>
-            <button wire:click="resetArrays" class="btn btn-danger">Reset Perhitungan</button>
-        </div>
     </div>
 
     <div class="row mb-4">
