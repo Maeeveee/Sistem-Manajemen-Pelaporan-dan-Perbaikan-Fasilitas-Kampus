@@ -342,19 +342,6 @@
         </div>
     </div>
 
-    @if (!empty($sortedResults))
-    <div class="row mt-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Visualisasi Prioritas Perbaikan</h5>
-                    <canvas id="priorityChart"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-    @endif
-
     @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @if (!empty($sortedResults))

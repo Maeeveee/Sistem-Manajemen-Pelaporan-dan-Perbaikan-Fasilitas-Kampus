@@ -27,7 +27,15 @@ class ManajemenFasilitas extends Component
     protected function rules()
     {
         return [
-            'kode_fasilitas' => 'required|string|max:20|unique:fasilitas,kode_fasilitas,' . $this->fasilitasId,
+            'kode_fasilitas' => [
+                'required',
+                'string',
+                'max:20',
+                // Ensure kode_fasilitas is unique for the same ruangan_id
+                \Illuminate\Validation\Rule::unique('fasilitas')->where(function ($query) {
+                    return $query->where('ruangan_id', $this->ruangan_id);
+                })->ignore($this->fasilitasId),
+            ],
             'nama_fasilitas' => 'required|string|max:255',
             'jumlah' => 'required|integer|min:1',
             'gedung_id' => 'required|exists:gedung,id',
@@ -51,7 +59,6 @@ class ManajemenFasilitas extends Component
         $this->gedung = Gedung::orderBy('nama_gedung')->get();
     }
 
-    // Method yang dipanggil ketika gedung berubah
     public function updatedGedungId()
     {
         $this->lantai = '';
@@ -68,7 +75,6 @@ class ManajemenFasilitas extends Component
         }
     }
 
-    // Method yang dipanggil ketika lantai berubah
     public function updatedLantai()
     {
         $this->ruangan_id = '';
@@ -172,7 +178,7 @@ class ManajemenFasilitas extends Component
             
             if ($fasilitas) {
                 $fasilitas->update([
-                    'kode_fasilitas' => $this->kode_fasilitas,
+                    'kode_fasilitas' => strtoupper($this->kode_fasilitas),
                     'nama_fasilitas' => $this->nama_fasilitas,
                     'jumlah' => $this->jumlah,
                     'ruangan_id' => $this->ruangan_id,
@@ -208,10 +214,5 @@ class ManajemenFasilitas extends Component
     {
         $this->perPage = $value;
         $this->resetPage();
-    }
-
-    public function setKodeFasilitasAttribute($value)
-    {
-        $this->attributes['kode_fasilitas'] = strtoupper($value);
     }
 }
