@@ -64,10 +64,6 @@ class HistoryLaporan extends Component
             'gedung', 
             'ruangan', 
             'fasilitas',
-            'frekuensiPenggunaan',
-            'tingkatKerusakan',
-            'dampakAkademik',        
-            'resikoKeselamatan'      
         ])->findOrFail($id);
 
         $this->showModal = true;

@@ -69,6 +69,69 @@
                     @method('PUT')
 
                     <div class="mb-3">
+                        <label for="frekuensiPenggunaanFasilitas" class="form-label fw-bold">Frekuensi Penggunaan Fasilitas></label>
+                        <select id="frekuensiPenggunaanFasilitas" name="frekuensi_penggunaan_fasilitas" class="form-select shadow-sm">
+                            {{ $laporan->frekuensi_penggunaan_fasilitas ? 'disabled' : '' }}>
+                            <option value="25" {{ $laporan->frekuensi_penggunaan_fasilitas == 25 ? 'selected' : '' }}>">
+                                Jarang (≤1x/minggu)
+                            </option>
+                            <option value="26" {{ $laporan->frekuensi_penggunaan_fasilitas == 26 ? 'selected' : '' }}>
+                                Periodik (2-3x/minggu)
+                            </option>
+                            <option value="27" {{ $laporan->frekuensi_penggunaan_fasilitas == 27 ? 'selected' : '' }}>
+                                Rutin (hampir setiap hari)
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label id="tingkatKerusakan" name="tingkat_kerusakan" class="form-label fw-bold">Tingkat Kerusakan></label>
+                        <select name="tingkat_kerusakan" id="tingkatKerusakan" class="form-select shadow-sm"
+                                {{ $laporan->tingkat_kerusakan ? 'disabled' : '' }}>
+                            <option value="28" {{ $laporan->tingkat_kerusakan == 28 ? 'selected' : '' }}>
+                                Minimal (tidak mengganggu)
+                            </option>
+                            <option value="29" {{ $laporan->tingkat_kerusakan == 29 ? 'selected' : '' }}>
+                                Parsial (mengganggu sebagian)
+                            </option>
+                            <option value="30" {{ $laporan->tingkat_kerusakan == 30 ? 'selected' : '' }}>
+                                Signifikan (menghentikan aktivitas)
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3"> 
+                        <label id="dampakTerhadapAktivitasAkademik" name="dampak_terhadap_aktivitas_akademik" class="form-label fw-bold">Dampak Terhadap Aktivitas Akademik></label>
+                        <select name="dampak_terhadap_aktivitas_akademik" id="dampak_terhadap_aktivitas_akademik" class="form-select shadow-sm"
+                                {{ $laporan->dampak_terhadap_aktivitas_akademik ? 'disabled' : '' }}>
+                            <option value="31" {{ $laporan->dampak_terhadap_aktivitas_akademik == 31 ? 'selected' : '' }}>
+                                Aman
+                            </option>
+                            <option value="32" {{ $laporan->dampak_terhadap_aktivitas_akademik == 32 ? 'selected' : '' }}>
+                                Waspada
+                            </option>
+                            <option value="33" {{ $laporan->dampak_terhadap_aktivitas_akademik == 33 ? 'selected' : '' }}>
+                                Bahaya
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label id="tingkatResikoKeselamatan" name="tingkat_resiko_keselamatan" class="form-label fw-bold">Tingkat Resiko Keselamatan></label>
+                        <select name="tingkat_resiko_keselamatan" id="tingat_resiko_keselamatan" class="form-select shadow-sm"
+                                {{ $laporan->tingkat_resiko_keselamatan ? 'disabled' : '' }}>
+                            <option value="37" {{ $laporan->tingkat_resiko_keselamatan == 37 ? 'selected' : '' }}>
+                                Ringan (minor)
+                            </option>
+                            <option value="38" {{ $laporan->tingkat_resiko_keselamatan == 38 ? 'selected' : '' }}>
+                                Sedang (perlu perbaikan)
+                            </option>
+                            <option value="39" {{ $laporan->tingkat_resiko_keselamatan == 39 ? 'selected' : '' }}>
+                                Berat (ganti total)
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
                         <label for="estimasiWaktu" class="form-label fw-bold">Estimasi Waktu</label>
                         <select id="estimasiWaktu" name="sub_kriteria_id" class="form-select shadow-sm"
                                 {{ $laporan->sub_kriteria_id ? 'disabled' : '' }}>

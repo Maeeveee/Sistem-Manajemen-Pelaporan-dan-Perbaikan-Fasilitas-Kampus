@@ -148,26 +148,6 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Frekuensi Penggunaan Fasilitas</label>
-                                <input type="text" class="form-control bg-white" value="{{ $selectedLaporan->frekuensiPenggunaan->nama_subkriteria ?? '-' }}" readonly>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">Tingkat Kerusakan</label>
-                                <input type="text" class="form-control bg-white" value="{{ $selectedLaporan->tingkatKerusakan->nama_subkriteria ?? '-' }}" readonly>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">Dampak Terhadap Aktivitas Akademik</label>
-                                <input type="text" class="form-control bg-white" value="{{ $selectedLaporan->dampakAkademik->nama_subkriteria ?? '-' }}" readonly>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">Tingkat Risiko Keselamatan</label>
-                                <input type="text" class="form-control bg-white" value="{{ $selectedLaporan->resikoKeselamatan->nama_subkriteria ?? '-' }}" readonly>
-                            </div>
-
-                            <div class="mb-3">
                                 <label class="form-label">Deskripsi Kerusakan</label>
                                 <textarea class="form-control bg-white" rows="3" readonly>{{ $selectedLaporan->deskripsi }}</textarea>
                             </div>
