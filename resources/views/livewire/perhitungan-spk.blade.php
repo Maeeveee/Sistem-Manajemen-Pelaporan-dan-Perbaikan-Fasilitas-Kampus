@@ -15,8 +15,62 @@
             <h2 class="h4">Evaluasi Laporan Kerusakan dengan Metode AHP dan TOPSIS</h2>
             <p class="mb-0">Sistem Pendukung Keputusan untuk Prioritas Perbaikan Fasilitas Kampus</p>
         </div>
-        <div>
-            <button wire:click="calculateTopsis" class="btn btn-primary">Hitung TOPSIS</button>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Rekomendasi Prioritas Perbaikan</h5>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Ranking</th>
+                                    <th>Nama Pelapor</th>
+                                    <th>Lokasi</th>
+                                    <th>Fasilitas</th>
+                                    <th>Nilai Preferensi</th>
+                                    <th>Status</th>
+                                    <th>Jumlah Laporan</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (empty($sortedResults))
+                                    <tr>
+                                        <td colspan="8" class="text-center">Data akan muncul setelah klik tombol Hitung TOPSIS</td>
+                                    </tr>
+                                @else
+                                    @foreach ($sortedResults as $item)
+                                    <tr>
+                                        <td>{{ $item['rank'] }}</td>
+                                        <td>{{ $item['nama'] }}</td>
+                                        <td>{{ $item['lokasi'] }}</td>
+                                        <td>{{ $item['fasilitas'] }}</td>
+                                        <td>{{ number_format($item['nilai'], 3) }}</td>
+                                        <td>
+                                            @if($item['rank'] == 1)
+                                                <span class="badge bg-danger">Prioritas Tinggi</span>
+                                            @elseif($item['rank'] <= 3)
+                                                <span class="badge bg-warning text-dark">Prioritas Menengah</span>
+                                            @else
+                                                <span class="badge bg-success">Prioritas Rendah</span>
+                                            @endif
+                                        </td>
+                                        <td>{{ $item['total_laporan'] }}</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary">Proses</button>
+                                            <button class="btn btn-sm btn-info">Detail</button>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -274,63 +328,6 @@
                                         <td>{{ number_format($item['dMin'], 3) }}</td>
                                         <td>{{ number_format($item['v'], 3) }}</td>
                                         <td>{{ $finalRanking[$index] }}</td>
-                                    </tr>
-                                    @endforeach
-                                @endif
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Rekomendasi Prioritas Perbaikan</h5>
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-hover">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th>Ranking</th>
-                                    <th>Nama Pelapor</th>
-                                    <th>Lokasi</th>
-                                    <th>Fasilitas</th>
-                                    <th>Nilai Preferensi</th>
-                                    <th>Status</th>
-                                    <th>Jumlah Laporan</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (empty($sortedResults))
-                                    <tr>
-                                        <td colspan="8" class="text-center">Data akan muncul setelah klik tombol Hitung TOPSIS</td>
-                                    </tr>
-                                @else
-                                    @foreach ($sortedResults as $item)
-                                    <tr>
-                                        <td>{{ $item['rank'] }}</td>
-                                        <td>{{ $item['nama'] }}</td>
-                                        <td>{{ $item['lokasi'] }}</td>
-                                        <td>{{ $item['fasilitas'] }}</td>
-                                        <td>{{ number_format($item['nilai'], 3) }}</td>
-                                        <td>
-                                            @if($item['rank'] == 1)
-                                                <span class="badge bg-danger">Prioritas Tinggi</span>
-                                            @elseif($item['rank'] <= 3)
-                                                <span class="badge bg-warning text-dark">Prioritas Menengah</span>
-                                            @else
-                                                <span class="badge bg-success">Prioritas Rendah</span>
-                                            @endif
-                                        </td>
-                                        <td>{{ $item['total_laporan'] }}</td>
-                                        <td>
-                                            <button class="btn btn-sm btn-primary">Proses</button>
-                                            <button class="btn btn-sm btn-info">Detail</button>
-                                        </td>
                                     </tr>
                                     @endforeach
                                 @endif
