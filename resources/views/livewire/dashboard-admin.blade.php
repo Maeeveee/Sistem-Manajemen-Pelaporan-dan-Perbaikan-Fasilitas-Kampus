@@ -63,6 +63,26 @@
     </div>
 </div>
 
+@if(session('success'))
+    <div id="successAlert" class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <script>
+        // Setelah 4 detik, hilangkan alert secara perlahan
+        setTimeout(() => {
+            const alert = document.getElementById('successAlert');
+            if (alert) {
+                alert.classList.remove('show');
+                alert.classList.add('fade');
+                setTimeout(() => alert.remove(), 500); // Hapus elemen dari DOM setelah animasi
+            }
+        }, 4000); // 4000 ms = 4 detik
+    </script>
+@endif
+
+
 <div class="card card-body shadow border-0 table-wrapper table-responsive">
   <table class="table table-hover align-items-center">
     <thead>
