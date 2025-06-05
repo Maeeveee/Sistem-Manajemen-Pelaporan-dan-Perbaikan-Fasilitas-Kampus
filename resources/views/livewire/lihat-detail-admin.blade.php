@@ -76,25 +76,46 @@
                 </form>
 
                 <hr>
-                     <form method="POST" action="{{ route('laporan.updateStatus', $laporan->id) }}">
-                        @csrf
-                        @method('PUT')
+                    @php 
+                        $sudahDisimpan = in_array($laporan->status_admin, ['verifikasi', 'reject']);
+                    @endphp
+                <form method="POST" action="{{ route('laporan.updateStatus', $laporan->id) }}">
+                    @csrf
+                    @method('PUT')
 
-                        <div class="mb-3">
-                            <label class="form-label">Ubah Status</label>
-                            <select name="status_admin" class="form-select" required>
-                                <option value="">-- Pilih Status --</option>
-                                <option value="verifikasi" {{ $laporan->status_admin === 'verifikasi' ? 'selected' : '' }}>verifikasi</option>
-                                <option value="reject" {{ $laporan->status_admin === 'reject' ? 'selected' : '' }}>Reject</option>
-                            </select>
-                        </div>
+                    <div class="mb-3">
+                        <label class="form-label">Ubah Status</label>
+                        <select name="status_admin" class="form-select" required {{ $sudahDisimpan ? 'disabled' : '' }}>
+                            <option value="">-- Pilih Status --</option>
+                            <option value="verifikasi" {{ $laporan->status_admin === 'verifikasi' ? 'selected' : '' }}>verifikasi</option>
+                            <option value="reject" {{ $laporan->status_admin === 'reject' ? 'selected' : '' }}>Reject</option>
+                        </select>
+                    </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Komentar</label>
-                            <textarea name="komentar_admin" class="form-control" rows="3" placeholder="Berikan alasan/verifikasi...">{{ old('komentar_admin', $laporan->komentar_admin) }}</textarea>
-                        </div>
+                    <div class="mb-3">
+                        <label class="form-label">Komentar</label>
+                        <textarea name="komentar_admin" class="form-control" rows="3" placeholder="Berikan alasan/verifikasi..." {{ $sudahDisimpan ? 'disabled' : '' }}>{{ old('komentar_admin', $laporan->komentar_admin) }}</textarea>
+                    </div>
 
-                        <button type="submit" class="btn btn-success text-white">Simpan Perubahan</button>
-                    </form>
+                    <button type="submit" class="btn btn-success text-white" {{ $sudahDisimpan ? 'disabled' : '' }}>Simpan Perubahan</button>
+                </form>
+
+        <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const form = document.querySelector('form[action*="laporan/updateStatus"]');
+        const submitBtn = form.querySelector('button[type="submit"]');
+
+        if (submitBtn && !submitBtn.disabled) {
+            form.addEventListener('submit', function(e) {
+                const konfirmasi = confirm('Yakin ingin menyimpan perubahan status laporan ini?');
+                if (!konfirmasi) {
+                    e.preventDefault();
+                }
+            });
+        }
+    });
+</script>
+
+
     </div>
 </div>
