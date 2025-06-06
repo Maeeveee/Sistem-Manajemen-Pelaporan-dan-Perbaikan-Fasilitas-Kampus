@@ -28,7 +28,11 @@ class LaporanKerusakan extends Model
         'status_sarpras',
         'status_teknisi',
         'foto',
-        'status'
+        'status',
+        'status_perbaikan',
+        'catatan_teknisi',
+        'tingkat_prioritas',
+        'teknisi_id'
     ];
 
     protected $casts = [
@@ -76,5 +80,13 @@ class LaporanKerusakan extends Model
     public function alternatifs()
     {
         return $this->hasMany(Alternatif::class);
+    }
+    public function teknisi()
+    {
+        return $this->belongsTo(User::class, 'teknisi_id');
+    }
+    public function subKriteria()
+    {
+        return $this->belongsTo(SubKriteria::class, 'frekuensi_penggunaan_fasilitas'); // Sesuaikan dengan kolom foreign key yang benar
     }
 }

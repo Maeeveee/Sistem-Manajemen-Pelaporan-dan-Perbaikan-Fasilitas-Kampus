@@ -5,7 +5,9 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-
+use App\Models\User;
+use App\Models\LaporanKerusakan;
+use App\Models\HasilTopsis;
 class PerhitunganSpk extends Component
 {
     public $laporan = [];
@@ -17,6 +19,20 @@ class PerhitunganSpk extends Component
     public $finalRanking = [];
     public $sortedResults = [];
     public $bobot = [];
+
+    // Properti untuk modal
+    public $showProsesModal = false;
+    public $showDetailModal = false;
+    public $selectedLaporanId;
+    public $teknisiId;
+    public $laporanId;
+    public $statusPerbaikan;
+    public $catatanTeknisi;
+    public $estimasiWaktu;
+    public $daftarTeknisi;
+    public $laporanDetail;
+    public $hasilSpkDetail;
+    public $rankingDetail;
     
     private $criteriaMap = [
         'Frekuensi Penggunaan Fasilitas' => 'frekuensi',
@@ -37,9 +53,11 @@ class PerhitunganSpk extends Component
                 return $key ? [$key => $item->bobot / 100] : [];
             })
             ->toArray();
+
+            $this->daftarTeknisi = User::where('role_id', 5)->get(); // Role teknisi
         $this->calculateTopsis();
     }
-
+        
     public function calculateTopsis()
     {
         try {
@@ -440,13 +458,85 @@ class PerhitunganSpk extends Component
         });
     }
 
+    public function openProsesModal($laporanId)
+    {
+        $this->laporanId = $laporanId;
+        $this->daftarTeknisi = \App\Models\User::where('role_id', 5)->get(); // Asumsi role_id 5 = teknisi
+        $this->showProsesModal = true;
+    }
+
+    public function closeProsesModal()
+    {
+        $this->reset([
+            'selectedLaporanId',
+            'teknisiId',
+            'statusPerbaikan',
+            'catatanTeknisi'
+        ]);
+        $this->showProsesModal = false;
+    }
+
+    public function prosesLaporan()
+    {
+        $this->validate([
+            'teknisiId' => 'required|exists:users,id',
+            'statusPerbaikan' => 'required|in:menunggu,diproses,selesai,ditolak'
+        ]);
+
+        try {
+            $updated = \App\Models\LaporanKerusakan::where('id', $this->laporanId)->update([
+                'teknisi_id' => $this->teknisiId,
+                'status_perbaikan' => $this->statusPerbaikan, 
+                'catatan_teknisi' => $this->catatanTeknisi, // Gunakan kolom yang ada
+                'updated_at' => now()
+            ]);
+    
+            if ($updated) {
+                session()->flash('message', 'Laporan berhasil diproses');
+                $this->closeProsesModal();
+                $this->emit('refreshComponent'); // Trigger refresh jika perlu
+            } else {
+                session()->flash('error', 'Gagal memproses laporan');
+            }
+        } catch (\Exception $e) {
+            session()->flash('error', 'Error: '.$e->getMessage());
+        }
+    }
+
+    // Method untuk modal detail
+    public function openDetailModal($laporanId)
+    {
+        $this->laporanDetail = LaporanKerusakan::with([
+            'gedung', 
+            'ruangan', 
+            'fasilitas', 
+            'teknisi',
+            'subKriteria'
+        ])->find($laporanId);
+
+        $this->hasilSpkDetail = HasilTopsis::where('alternatif_id', $laporanId)->first();
+
+        if ($this->hasilSpkDetail) {
+            $this->rankingDetail = HasilTopsis::where('nilai', '>', $this->hasilSpkDetail->nilai)
+                ->count() + 1;
+        }
+
+        $this->showDetailModal = true;
+    }
+
+    public function closeDetailModal()
+    {
+        $this->reset(['laporanDetail', 'hasilSpkDetail', 'rankingDetail']);
+        $this->showDetailModal = false;
+    }
+
     public function render()
     {
         return view('livewire.perhitungan-spk', [
             'laporan' => $this->laporan,
             'normalized' => $this->normalized,
             'weighted' => $this->weighted,
-            'aPlus' => $this->aPlus,
+            'aPlus' => $this->aPlus, 
             'aMin' => $this->aMin,
             'results' => $this->results,
             'finalRanking' => $this->finalRanking,
