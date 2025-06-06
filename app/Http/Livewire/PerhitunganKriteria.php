@@ -50,8 +50,8 @@ class PerhitunganKriteria extends Component
     }
 
     public function updatePerbandingan($kriteria1_id, $kriteria2_id)
-    {
-        $this->validate([
+    {   
+    $this->validate([
             "perbandingan.{$kriteria1_id}.{$kriteria2_id}" => 'required|numeric|min:0.111111111|max:9',
         ]);
 
@@ -69,6 +69,7 @@ class PerhitunganKriteria extends Component
         $perbandingan->save();
 
         session()->flash('success', 'Perbandingan kriteria berhasil diperbarui');
+        $this->dispatchBrowserEvent('bobotUpdated');    
     }
 
     public function calculate()
