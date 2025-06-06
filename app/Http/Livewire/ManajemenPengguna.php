@@ -122,7 +122,7 @@ class ManajemenPengguna extends Component
             'password' => 'required|min:6|same:password_confirmation',
         ]);
 
-         $role = match (strlen($this->identifier)) {
+        $role = match (strlen($this->identifier)) {
             10 => 'mahasiswa',
             18 => 'dosen',
             16 => 'tendik',
@@ -136,7 +136,6 @@ class ManajemenPengguna extends Component
             return;
         }
 
-        // Ambil role_id dari tabel roles
         $roleId = Role::where('name', $role)->value('id');
         if (!$roleId) {
             session()->flash('error', 'Role tidak ditemukan di database.');
@@ -147,11 +146,12 @@ class ManajemenPengguna extends Component
         $user->update([
             'name' => $this->name,
             'identifier' => $this->identifier,
+            'password' => bcrypt($this->password), // Pastikan password di-hash
             'role_id' => $roleId,
+            'remember_token' => \Str::random(60), // Generate token baru
         ]);
 
         $this->resetFields();
-        // Emit the close event
         $this->emit('close-modal');
         session()->flash('message', 'Pengguna berhasil diubah.');
     }
