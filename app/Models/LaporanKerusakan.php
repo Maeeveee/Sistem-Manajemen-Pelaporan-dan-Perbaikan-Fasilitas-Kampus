@@ -24,6 +24,9 @@ class LaporanKerusakan extends Model
         'dampak_terhadap_aktivitas_akademik',
         'tingkat_resiko_keselamatan',
         'deskripsi',
+        'status_admin',
+        'status_sarpras',
+        'status_teknisi',
         'foto',
         'status'
     ];
@@ -65,7 +68,7 @@ class LaporanKerusakan extends Model
     {
         return $this->belongsTo(SubKriteria::class, 'dampak_terhadap_aktivitas_akademik');
     }
- 
+
     public function resikoKeselamatan()
     {
         return $this->belongsTo(SubKriteria::class, 'tingkat_resiko_keselamatan');

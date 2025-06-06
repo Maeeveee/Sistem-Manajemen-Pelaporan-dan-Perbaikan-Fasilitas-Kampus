@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PerhitunganKriteria as ControllersPerhitunganKriteria;
+use App\Http\Controllers\ReportController;
 use App\Http\Livewire\Components\Forms\FormKerusakanFasilitas;
 use App\Http\Livewire\ManajemenFasilitas;
 use App\Http\Livewire\ManajemenGedung;
@@ -66,7 +67,6 @@ Route::get('/history-laporan', HistoryLaporan::class)->name('history.laporan');
 Route::get('/detail-history-laporan/{id}', DetailHistoryLaporan::class)->name('detail.history.laporan');
 
 Route::get('/teknisi', DashboardTeknisi::class)->name('dashboard-teknisi');
-
 
 Route::get('/admin', DashboardAdmin::class)->name('dashboard-admin');
 Route::get('/admin/laporan/detail/{id}', LihatDetailAdmin::class)->name('lihat-detail-admin');
