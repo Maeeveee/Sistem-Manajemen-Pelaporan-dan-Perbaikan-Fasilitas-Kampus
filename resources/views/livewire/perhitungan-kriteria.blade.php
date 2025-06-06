@@ -205,3 +205,17 @@
         </div>
     @endif
 </div>
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    window.addEventListener('bobotUpdated', function () {
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: 'Bobot kriteria berhasil diupdate.',
+            timer: 2000,
+            showConfirmButton: false
+        });
+    });
+</script>
+@endpush
