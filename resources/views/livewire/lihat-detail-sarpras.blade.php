@@ -70,7 +70,7 @@
 
                     <div class="mb-3">
                         <label for="frekuensiPenggunaanFasilitas" class="form-label fw-bold">Frekuensi Penggunaan Fasilitas></label>
-                        <select id="frekuensiPenggunaanFasilitas" name="frekuensi_penggunaan_fasilitas" class="form-select shadow-sm">
+                        <select id="frekuensiPenggunaanFasilitas" name="frekuensi_penggunaan_fasilitas" class="form-select shadow-sm"
                             {{ $laporan->frekuensi_penggunaan_fasilitas ? 'disabled' : '' }}>
                             <option value="25" {{ $laporan->frekuensi_penggunaan_fasilitas == 25 ? 'selected' : '' }}>">
                                 Jarang (≤1x/minggu)
