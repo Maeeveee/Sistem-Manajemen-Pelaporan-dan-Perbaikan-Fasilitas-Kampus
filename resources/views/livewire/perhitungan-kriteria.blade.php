@@ -21,85 +21,10 @@
                     <i class="bi bi-calculator"></i> Hitung Bobot AHP
                 </button>
             @endif
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalPerbandingan">
-                <i class="bi bi-plus"></i> Tambah Perbandingan
-            </button>
             <button wire:click="resetPerhitungan" type="button" class="btn btn-danger"
                 onclick="confirm('Anda yakin ingin mereset semua perhitungan?') || event.stopImmediatePropagation()">
                 <i class="bi bi-trash"></i> Reset Perhitungan
             </button>
-        </div>
-    </div>
-
-    <div class="modal fade" id="modalPerbandingan" wire:ignore.self tabindex="-1"
-        aria-labelledby="modalPerbandinganLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="modalPerbandinganLabel">Tambah Perbandingan Kriteria</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form wire:submit.prevent="store">
-                        <div class="mb-3">
-                            <label for="kriteria_pertama" class="form-label">Kriteria Pertama</label>
-                            <select class="form-select" id="kriteria_pertama" wire:model="kriteria_pertama" required>
-                                <option value="">Pilih Kriteria</option>
-                                @foreach ($kriterias as $kriteria)
-                                    <option value="{{ $kriteria->id }}">{{ $kriteria->nama_kriteria }}</option>
-                                @endforeach
-                            </select>
-                            @error('kriteria_pertama')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label for="kriteria_kedua" class="form-label">Kriteria Kedua</label>
-                            <select class="form-select" id="kriteria_kedua" wire:model="kriteria_kedua" required>
-                                <option value="">Pilih Kriteria</option>
-                                @foreach ($kriterias as $kriteria)
-                                    <option value="{{ $kriteria->id }}">{{ $kriteria->nama_kriteria }}</option>
-                                @endforeach
-                            </select>
-                            @error('kriteria_kedua')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label for="nilai" class="form-label">Nilai Perbandingan</label>
-                            <select class="form-select" id="nilai" wire:model="nilai" required>
-                                <option value="">Pilih Nilai</option>
-                                @for ($i = 1; $i <= 9; $i++)
-                                    <option value="{{ $i }}">{{ $i }} -
-                                        {{ match ($i) {
-                                            1 => 'Sama pentingnya',
-                                            2 => 'Antara sama dan sedikit lebih penting',
-                                            3 => 'Sedikit lebih penting',
-                                            4 => 'Antara sedikit lebih dan lebih penting',
-                                            5 => 'Lebih penting',
-                                            6 => 'Antara lebih dan sangat lebih penting',
-                                            7 => 'Sangat lebih penting',
-                                            8 => 'Antara sangat lebih dan mutlak lebih penting',
-                                            9 => 'Mutlak lebih penting',
-                                        } }}
-                                    </option>
-                                @endfor
-                            </select>
-                            <small class="text-muted">Skala 1-9 (1 = sama penting, 9 = mutlak lebih penting)</small>
-                            @error('nilai')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="bi bi-save"></i> Simpan Perbandingan
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -137,16 +62,29 @@
                                                                 ($item->kriteria_pertama_id == $kriteria2->id &&
                                                                     $item->kriteria_kedua_id == $kriteria1->id);
                                                         });
+                                                        $nilai = null;
+                                                        $is_reverse = false;
+                                                        if ($perbandingan) {
+                                                            if ($perbandingan->kriteria_pertama_id == $kriteria1->id) {
+                                                                $nilai = $perbandingan->nilai_perbandingan;
+                                                            } else {
+                                                                $nilai = 1 / $perbandingan->nilai_perbandingan;
+                                                                $is_reverse = true;
+                                                            }
+                                                        }
                                                     @endphp
                                                     <td>
-                                                        @if ($perbandingan)
-                                                            @if ($perbandingan->kriteria_pertama_id == $kriteria1->id)
-                                                                {{ number_format($perbandingan->nilai_perbandingan, 2) }}
-                                                            @else
-                                                                {{ number_format(1 / $perbandingan->nilai_perbandingan, 2) }}
-                                                            @endif
+                                                        @if ($kriteria1->id < $kriteria2->id)
+                                                            <input type="text"
+                                                                wire:model.debounce.500ms="perbandingan.{{ $kriteria1->id }}.{{ $kriteria2->id }}"
+                                                                wire:change="updatePerbandingan({{ $kriteria1->id }}, {{ $kriteria2->id }})"
+                                                                class="form-control form-control-sm"
+                                                                placeholder="{{ $nilai ? number_format($nilai, 2) : '' }}">
+                                                            @error("perbandingan.{$kriteria1->id}.{$kriteria2->id}")
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                            @enderror
                                                         @else
-                                                            -
+                                                            {{ $nilai ? number_format($nilai, 2) : '-' }}
                                                         @endif
                                                     </td>
                                                 @endif
@@ -242,36 +180,28 @@
                                             class="badge bg-{{ $konsistensi->is_consistent ? 'success' : 'danger' }}">
                                             {{ $konsistensi->is_consistent ? 'KONSISTEN' : 'TIDAK KONSISTEN' }}
                                         </span>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
-                        @php
-                            $totalBobot = $bobots->sum('bobot_ahp');
-                            $isTotalValid = abs($totalBobot - 1.0) <= 0.0001;
-                        @endphp
-
-
-
                         <button wire:click="updateBobotKriteria"
                             class="btn btn-{{ $konsistensi->is_consistent && $isTotalValid ? 'primary' : 'primary' }}"
                             @if (!$konsistensi->is_consistent || !$isTotalValid) disabled @endif>
                             <i class="fas fa-save"></i> Update Bobot Kriteria
                         </button>
-
-
                         @if (!$konsistensi->is_consistent)
                             <div class="alert alert-warning mt-3 mb-0">
                                 <i class="fas fa-exclamation-triangle me-2"></i>
                                 Tidak dapat update bobot karena Consistency Ratio tidak konsisten (CR > 0.1)
                             </div>
                         @endif
-                    @else
-                        <div class="alert alert-info">
-                            Belum ada hasil perhitungan konsistensi.
-                        </div>
+                    </div>
+                @else
+                    <div class="alert alert-info">
+                        Belum ada hasil perhitungan konsistensi.
+                    </div>
                 @endif
             </div>
         </div>
-</div>
-@endif
+    @endif
 </div>
