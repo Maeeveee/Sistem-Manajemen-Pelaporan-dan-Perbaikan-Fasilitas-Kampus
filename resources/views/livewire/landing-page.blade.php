@@ -214,6 +214,26 @@
             </div>
         </div>
     </div>
+
+<!-- Footer -->
+<footer class="bg-dark text-white py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 text-center mb-4">
+                <img src="{{ asset('assets/img/brand/logo_sarpras2.png') }}" alt="Logo" style="width: 60px;" class="mb-3">
+                <h5 class="mb-3">SIM Sarpras Polinema</h5>
+                <p class="px-3">Sistem Informasi Manajemen Pelaporan dan Perbaikan Fasilitas Kampus Politeknik Negeri Malang.</p>
+            </div>
+        </div>
+        <hr class="my-4 mx-auto" style="width: 80%;">
+        <div class="text-center">
+            <p class="mb-0">&copy; 2025 SIM Sarpras Polinema. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </div>
 </div>
 
