@@ -33,7 +33,8 @@
                 'landing-page',
                 'lihat-detail-admin',
                 'detail-history-laporan',
-                'input_laporan-sarpras'
+                'input_laporan-sarpras',
+                'notifications',
 
             ]))
             {{ $slot }}
