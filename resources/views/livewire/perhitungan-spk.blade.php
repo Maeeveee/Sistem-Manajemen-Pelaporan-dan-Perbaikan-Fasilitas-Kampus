@@ -84,7 +84,6 @@
                             <thead class="thead-dark">
                                 <tr>
                                     <th>No</th>
-                                    <th>Nama Pelapor</th>
                                     <th>Gedung</th>
                                     <th>Ruangan</th>
                                     <th>Lantai</th>
@@ -107,7 +106,6 @@
                                     @foreach ($laporan as $index => $item)
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
-                                        <td>{{ $item['nama_pelapor'] }}</td>
                                         <td>{{ $item['gedung'] }}</td>
                                         <td>{{ $item['ruangan'] }}</td>
                                         <td>Lantai {{ $item['lantai'] }}</td>
@@ -343,6 +341,14 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @if (!empty($sortedResults))
     <script>
+
+        document.addEventListener('livewire:load', function() {
+                window.livewire.on('showDetailModal', (laporanId) => {
+                    var modal = new bootstrap.Modal(document.getElementById('detailModal'));
+                    modal.show();
+                });
+            });
+
         document.addEventListener('livewire:load', function() {
             const ctx = document.getElementById('priorityChart').getContext('2d');
             new Chart(ctx, {

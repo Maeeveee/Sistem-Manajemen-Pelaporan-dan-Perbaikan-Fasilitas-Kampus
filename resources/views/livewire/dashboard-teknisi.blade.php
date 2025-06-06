@@ -12,6 +12,7 @@
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
     <div class="d-block mb-4 mb-md-0">
         <h2 class="h4">Laporan Perbaikan Fasilitas</h2>
+        <p class="mb-0">Daftar perbaikan yang ditugaskan kepada Anda</p>
     </div>
 </div>
 <div class="table-settings mb-4">
@@ -65,46 +66,38 @@
   <table class="table table-hover align-items-center">
     <thead>
       <tr>
-        <th>No</th>
-        <th>Nama Pelapor</th>
-        <th>Gedung</th>
-        <th>Ruangan</th>
-        <th>Status</th>
+        <th>Prioritas</th>
+        <th>Lokasi</th>
+        <th>Fasilitas</th>
+        <th>Skor SPK</th>
+        <th>Tanggal Lapor</th>
         <th>Aksi</th>
       </tr>
     </thead>
     <tbody>
-      @php
-        $laporan = [
-            ['nama_pelapor' => 'Nadif', 'gedung' => 'Teknik Mesin', 'ruangan' => 'LER P3', 'status' => 'Sedang Dikerjakan'],
-            ['nama_pelapor' => 'Kamila', 'gedung' => 'Teknik Sipil', 'ruangan' => 'LAB 1', 'status' => 'Pending'],
-            ['nama_pelapor' => 'Rizky', 'gedung' => 'Informatika', 'ruangan' => 'Lab Komputer 2', 'status' => 'Selesai'],
-        ];
-      @endphp
-      @foreach ($laporan as $index => $item)
+      @foreach($laporanDiproses as $laporan)
         <tr>
-          <td>{{ $index + 1 }}</td>
-          <td>{{ $item['nama_pelapor'] }}</td>
-          <td>{{ $item['gedung'] }}</td>
-          <td>{{ $item['ruangan'] }}</td>
-            @php
-              $status = $item['status'];
-              $statusClass = match($status) {
-                  'Sedang Dikerjakan' => 'bg-warning text-white', // kuning
-                  'Pending' => 'bg-gray-400 text-white',           // merah
-                  'Selesai' => 'bg-success text-white',          // hijau
-                  default => 'bg-secondary text-white',
-              };
-            @endphp
-            <td class="status-cell">
-              <span  class="badge {{ $statusClass }} py-1 px-2 rounded-pill status-cell fw-bold font-small">
-                {{ $status }}
-              </span>
+            <td>
+                <span class="badge bg-{{ $laporan->hasilTopsis->nilai > 0.7 ? 'danger' : ($laporan->hasilTopsis->nilai > 0.5 ? 'warning' : 'success') }}">
+                    {{ $loop->iteration }}
+                </span>
             </td>
-
-          <td>
-            <a href="#" class="btn btn-sm btn-info">Lihat Detail</a>
-          </td>
+            <td>
+                {{ $laporan->gedung->nama_gedung }}, 
+                Lantai {{ $laporan->lantai }}, 
+                {{ $laporan->ruangan->nama_ruangan }}
+            </td>
+            <td>{{ $laporan->fasilitas->nama_fasilitas }}</td>
+            <td>{{ number_format($laporan->hasilTopsis->nilai, 3) }}</td>
+            <td>{{ $laporan->created_at->format('d/m/Y') }}</td>
+            <td>
+                <button wire:click="selectLaporan({{ $laporan->id }})" 
+                        class="btn btn-sm btn-info"
+                        data-bs-toggle="modal" 
+                        data-bs-target="#detailModal">
+                    <i class="fas fa-edit"></i> Update
+                </button>
+            </td>
         </tr>
       @endforeach
     </tbody>
@@ -115,31 +108,105 @@
   {{-- <script src="https://cdn.jsdelivr.net/npm/@themesberg/volt-bootstrap-5-dashboard@latest/dist/js/volt.js"></script> --}}
 </body>
 
+<!-- Modal Update Status -->
+<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true" wire:ignore.self>
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+          <div class="modal-header bg-primary text-white">
+              <h5 class="modal-title" id="detailModalLabel">Update Status Perbaikan</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              @if($selectedLaporan)
+              <div class="row">
+                  <div class="col-md-6">
+                      <div class="card mb-3">
+                          <div class="card-header bg-light">
+                              <h6 class="mb-0">Detail Laporan</h6>
+                          </div>
+                          <div class="card-body">
+                              <table class="table table-sm">
+                                  <tr>
+                                      <th width="40%">Lokasi</th>
+                                      <td>
+                                          {{ $selectedLaporan->gedung->nama_gedung }}, 
+                                          Lantai {{ $selectedLaporan->lantai }}, 
+                                          {{ $selectedLaporan->ruangan->nama_ruangan }}
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <th>Fasilitas</th>
+                                      <td>{{ $selectedLaporan->fasilitas->nama_fasilitas }}</td>
+                                  </tr>
+                                  <tr>
+                                      <th>Skor Prioritas</th>
+                                      <td>
+                                          <span class="badge bg-{{ $selectedLaporan->hasilTopsis->nilai > 0.7 ? 'danger' : ($selectedLaporan->hasilTopsis->nilai > 0.5 ? 'warning' : 'success') }}">
+                                              {{ number_format($selectedLaporan->hasilTopsis->nilai, 3) }}
+                                          </span>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <th>Deskripsi Kerusakan</th>
+                                      <td>{{ $selectedLaporan->deskripsi }}</td>
+                                  </tr>
+                              </table>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="card">
+                          <div class="card-header bg-light">
+                              <h6 class="mb-0">Update Status</h6>
+                          </div>
+                          <div class="card-body">
+                              <form wire:submit.prevent="updateStatus">
+                                  <div class="mb-3">
+                                      <label class="form-label">Status Perbaikan</label>
+                                      <select class="form-select" wire:model="statusSelected">
+                                          <option value="diproses">Sedang Diproses</option>
+                                          <option value="selesai">Selesai</option>
+                                          <option value="ditunda">Ditunda</option>
+                                      </select>
+                                  </div>
+                                  
+                                  <div class="mb-3">
+                                      <label class="form-label">Catatan Teknisi</label>
+                                      <textarea class="form-control" 
+                                                wire:model="catatanTeknisi"
+                                                rows="4"
+                                                placeholder="Tambahkan catatan tentang perbaikan..."></textarea>
+                                  </div>
+                                  
+                                  <div class="d-flex justify-content-end">
+                                      <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Tutup</button>
+                                      <button type="submit" class="btn btn-primary">
+                                          <span wire:loading.remove>Simpan Perubahan</span>
+                                          <span wire:loading>
+                                              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                              Menyimpan...
+                                          </span>
+                                      </button>
+                                  </div>
+                              </form>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              @endif
+          </div>
+      </div>
+  </div>
+</div>
+
+@push('scripts')
 <script>
-  const statusFilter = document.getElementById('statusFilter');
-  const searchInput = document.querySelector('.form-control[placeholder="Cari"]');
-  const rows = document.querySelectorAll('tbody tr');
-
-  function filterTable() {
-    const keyword = searchInput.value.toLowerCase();
-    const selectedStatus = statusFilter.value;
-    
-    rows.forEach(row => {
-      const rowText = row.textContent.toLowerCase();
-      const statusCell = row.querySelector('.status-cell');
-      const statusText = statusCell ? statusCell.textContent.trim() : '';
-      
-      const matchesStatus = selectedStatus === 'all' || statusText === selectedStatus;
-      const matchesSearch = rowText.includes(keyword);
-
-      row.style.display = matchesStatus && matchesSearch ? '' : 'none';
-    });
-  }
-
-  // Jalankan filter saat halaman dimuat
-  document.addEventListener('DOMContentLoaded', filterTable);
-
-  // Event listeners
-  searchInput.addEventListener('input', filterTable);
-  statusFilter.addEventListener('change', filterTable);
+  document.addEventListener('livewire:load', function() {
+      // Refresh data ketika modal ditutup
+      $('#detailModal').on('hidden.bs.modal', function () {
+          Livewire.emit('loadData');
+      });
+  });
 </script>
+@endpush
+</div>
