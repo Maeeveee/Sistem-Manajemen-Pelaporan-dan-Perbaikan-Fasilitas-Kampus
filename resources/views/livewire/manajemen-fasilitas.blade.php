@@ -50,7 +50,6 @@
                     <th class="border-0">No</th>
                     <th class="border-0">Kode Fasilitas</th>
                     <th class="border-0">Nama Fasilitas</th>
-                    <th class="border-0">Jumlah</th>
                     <th class="border-0">Ruangan</th>
                     <th class="border-0">Lantai</th>
                     <th class="border-0">Gedung</th>
@@ -63,7 +62,6 @@
                         <td>{{ $fasilitas->firstItem() + $index }}</td>
                         <td>{{ $item->kode_fasilitas }}</td>
                         <td>{{ $item->nama_fasilitas }}</td>
-                        <td>{{ $item->jumlah }}</td>
                         <td>{{ $item->ruangan->nama_ruangan }}</td>
                         <td>Lantai {{ $item->ruangan->lantai }}</td>
                         <td>{{ $item->ruangan->gedung->nama_gedung }}</td>
@@ -126,12 +124,6 @@
                             <input type="text" class="form-control @error('nama_fasilitas') is-invalid @enderror" 
                                    wire:model.defer="nama_fasilitas" required>
                             @error('nama_fasilitas') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Jumlah</label>
-                            <input type="number" min="1" class="form-control @error('jumlah') is-invalid @enderror" 
-                                   wire:model.defer="jumlah" required>
-                            @error('jumlah') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Gedung</label>
