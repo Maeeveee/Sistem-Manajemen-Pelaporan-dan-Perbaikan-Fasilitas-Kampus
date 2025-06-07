@@ -75,16 +75,51 @@
                                                     @endphp
                                                     <td>
                                                         @if ($kriteria1->id < $kriteria2->id)
-                                                            <input type="text"
-                                                                wire:model.debounce.500ms="perbandingan.{{ $kriteria1->id }}.{{ $kriteria2->id }}"
+                                                            <select
+                                                                wire:model="perbandingan.{{ $kriteria1->id }}.{{ $kriteria2->id }}"
                                                                 wire:change="updatePerbandingan({{ $kriteria1->id }}, {{ $kriteria2->id }})"
-                                                                class="form-control form-control-sm"
-                                                                placeholder="{{ $nilai ? number_format($nilai, 2) : '' }}">
+                                                                class="form-select form-select-sm">
+                                                                <option value="">
+                                                                    {{ $nilai !== null ? (is_numeric($nilai) && floor($nilai) != $nilai ? '1/' . round(1 / $nilai) : $nilai) : 'Pilih Nilai' }}
+                                                                </option>
+                                                                @foreach ([1, 2, 3, 4, 5, 6, 7, 8, 9] as $i)
+                                                                    <option value="{{ $i }}">
+                                                                        {{ $i }} -
+                                                                        {{ match ($i) {
+                                                                            1 => 'Sama pentingnya',
+                                                                            2 => 'Antara sama dan sedikit lebih penting',
+                                                                            3 => 'Sedikit lebih penting',
+                                                                            4 => 'Antara sedikit lebih dan lebih penting',
+                                                                            5 => 'Lebih penting',
+                                                                            6 => 'Antara lebih dan sangat lebih penting',
+                                                                            7 => 'Sangat lebih penting',
+                                                                            8 => 'Antara sangat lebih dan mutlak lebih penting',
+                                                                            9 => 'Mutlak lebih penting',
+                                                                        } }}
+                                                                    </option>
+                                                                    @if ($i != 1)
+                                                                        <option value="{{ 1 / $i }}">
+                                                                            1/{{ $i }} -
+                                                                            {{ match ($i) {
+                                                                                2 => 'Antara sama dan sedikit kurang penting',
+                                                                                3 => 'Sedikit kurang penting',
+                                                                                4 => 'Antara sedikit kurang dan kurang penting',
+                                                                                5 => 'Kurang penting',
+                                                                                6 => 'Antara kurang dan sangat kurang penting',
+                                                                                7 => 'Sangat kurang penting',
+                                                                                8 => 'Antara sangat kurang dan mutlak kurang penting',
+                                                                                9 => 'Mutlak kurang penting',
+                                                                                default => 'Sama pentingnya',
+                                                                            } }}
+                                                                        </option>
+                                                                    @endif
+                                                                @endforeach
+                                                            </select>
                                                             @error("perbandingan.{$kriteria1->id}.{$kriteria2->id}")
                                                                 <span class="text-danger">{{ $message }}</span>
                                                             @enderror
                                                         @else
-                                                            {{ $nilai ? number_format($nilai, 2) : '-' }}
+                                                            {{ $nilai ?? '-' }}
                                                         @endif
                                                     </td>
                                                 @endif
@@ -206,16 +241,16 @@
     @endif
 </div>
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    window.addEventListener('bobotUpdated', function () {
-        Swal.fire({
-            icon: 'success',
-            title: 'Berhasil!',
-            text: 'Bobot kriteria berhasil diupdate.',
-            timer: 2000,
-            showConfirmButton: false
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        window.addEventListener('bobotUpdated', function() {
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: 'Bobot kriteria berhasil diupdate.',
+                timer: 2000,
+                showConfirmButton: false
+            });
         });
-    });
-</script>
+    </script>
 @endpush
