@@ -7,7 +7,7 @@
     @include('layouts.breadcrumb', ['breadcrumbs' => $breadcrumbs])
 @endsection
 <title>Dashboard</title>
-<div class="row">
+<div class="row mt-4">
     <div class="col-12 mb-4">
         <div class="card border-0 shadow">
             <div class="card-header d-sm-flex flex-row align-items-center flex-0">
