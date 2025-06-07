@@ -10,14 +10,6 @@ class Notifications extends Component
 {
     public $notifications = [];
 
-    public function mount()
-    {
-        $user = Auth::user();
-        $role = $user->role_id;
-
-        $this->notifications = $this->generateNotifications($user, $role);
-    }
-
     private function generateNotifications($user, $role)
     {
         $notifications = [];
@@ -95,6 +87,9 @@ class Notifications extends Component
 
     public function render()
     {
+        $user = Auth::user();
+        $role = $user->role_id;
+        $this->notifications = $this->generateNotifications($user, $role);
         return view('livewire.notifications');
     }
 }
