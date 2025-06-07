@@ -72,15 +72,15 @@
                     </div>
                 </div>
             </div>
-            <div class="card-body p-2">
-                <div class="card border-0 shadow mb-4">
-                    <div class="card-header">
-                        <h2 class="fs-5 fw-bold mb-0">Jumlah Laporan per Bulan</h2>
-                    </div>
-                    <div class="card-body">
-                        <canvas id="laporanChart" height="100"></canvas>
-                    </div>
-                </div>
+        </div>
+    </div>
+    <div class="card-body p-2">
+        <div class="card border-0 shadow mb-4">
+            <div class="card-header">
+                <h2 class="fs-5 fw-bold mb-0">Chart Laporan</h2>
+            </div>
+            <div class="card-body">
+                <canvas id="laporanChart" height="100"></canvas>
             </div>
         </div>
     </div>
@@ -99,7 +99,6 @@
                     label: 'Jumlah Laporan',
                     data: data,
                     backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
                     borderWidth: 1
                 }]
             },
