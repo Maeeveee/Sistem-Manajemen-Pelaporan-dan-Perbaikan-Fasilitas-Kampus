@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\SubKriteria;
+use App\Models\Alternatif;
+use App\Models\HasilTopsis;
 
 class LaporanKerusakan extends Model
 {
@@ -85,8 +87,18 @@ class LaporanKerusakan extends Model
     {
         return $this->belongsTo(User::class, 'teknisi_id');
     }
+    public function laporanKerusakan()
+    {
+        return $this->belongsTo(LaporanKerusakan::class, 'alternatif_id');
+    }
     public function subKriteria()
     {
         return $this->belongsTo(SubKriteria::class, 'frekuensi_penggunaan_fasilitas'); // Sesuaikan dengan kolom foreign key yang benar
+    }
+    public function hasilTopsis()
+    {
+        return $this->hasOneThrough(
+            HasilTopsis::class, Alternatif::class, 'objek_id', 'alternatif_id','id', 'id' 
+        );
     }
 }
