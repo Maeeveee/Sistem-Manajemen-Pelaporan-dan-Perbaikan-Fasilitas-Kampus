@@ -17,7 +17,8 @@
                 'history.laporan',
                 'perhitungan-spk',
                 'perhitungan-kriteria',
-                'manajemen.subkriteria'
+                'manajemen.subkriteria',
+                'manajemen-periode',
                 ]))
             @include('layouts.nav')
             @include('layouts.sidenav')

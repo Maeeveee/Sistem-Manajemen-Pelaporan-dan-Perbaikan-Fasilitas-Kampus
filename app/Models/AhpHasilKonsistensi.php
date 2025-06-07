@@ -18,7 +18,8 @@ class AhpHasilKonsistensi extends Model
         'consistency_index',
         'random_index',
         'consistency_ratio',
-        'is_consistent'
+        'is_consistent',
+        'periode_id'
     ];
 
     // Cast attribute is_consistent sebagai boolean
@@ -36,5 +37,10 @@ class AhpHasilKonsistensi extends Model
     public function getStatusTextAttribute()
     {
         return $this->is_consistent ? 'Konsisten' : 'Tidak Konsisten';
+    }
+
+    public function scopeByPeriode($query, $periode_id)
+    {
+        return $query->where('periode_id', $periode_id);
     }
 }

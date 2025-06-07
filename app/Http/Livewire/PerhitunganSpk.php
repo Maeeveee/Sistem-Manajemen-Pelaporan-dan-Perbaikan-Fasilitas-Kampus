@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use App\Models\LaporanKerusakan;
 use App\Models\HasilTopsis;
+use App\Models\Periode;
+
 class PerhitunganSpk extends Component
 {
     public $laporan = [];
@@ -19,6 +21,8 @@ class PerhitunganSpk extends Component
     public $finalRanking = [];
     public $sortedResults = [];
     public $bobot = [];
+    public $periodeId;
+    public $daftarPeriode;
 
     // Properti untuk modal
     public $showProsesModal = false;
@@ -45,21 +49,33 @@ class PerhitunganSpk extends Component
 
     public function mount()
     {
-        $this->bobot = DB::table('kriterias')
-            ->select('nama_kriteria', 'bobot')
+        // Ambil daftar periode
+        $this->daftarPeriode = Periode::all();
+        // Set periode default (misalnya periode terbaru)
+        $this->periodeId = $this->daftarPeriode->first()->id ?? null;
+
+        // Ambil bobot kriteria untuk periode tertentu
+        $this->bobot = DB::table('ahp_bobot_kriteria')
+            ->where('periode_id', $this->periodeId)
+            ->select('kriteria_id', 'bobot_ahp')
             ->get()
             ->mapWithKeys(function ($item) {
-                $key = $this->criteriaMap[$item->nama_kriteria] ?? null;
-                return $key ? [$key => $item->bobot / 100] : [];
+                $key = DB::table('kriterias')->where('id', $item->kriteria_id)->value('nama_kriteria');
+                $key = $this->criteriaMap[$key] ?? null;
+                return $key ? [$key => $item->bobot_ahp] : [];
             })
             ->toArray();
 
-            $this->daftarTeknisi = User::where('role_id', 5)->get(); // Role teknisi
+        $this->daftarTeknisi = User::where('role_id', 5)->get();
         $this->calculateTopsis();
     }
         
     public function calculateTopsis()
     {
+        $this->validate([
+            'periodeId' => 'required|exists:periodes,id',
+        ]);
+
         try {
             $this->cleanupTables();
             
@@ -148,8 +164,26 @@ class PerhitunganSpk extends Component
             ->whereNotNull('tingkat_resiko_keselamatan')
             ->whereNotNull('tingkat_kerusakan')
             ->whereIn('laporan_kerusakan.sub_kriteria_id', [34, 35, 36])
+            ->where('laporan_kerusakan.periode_id', $this->periodeId)
             ->orderBy('laporan_kerusakan.created_at', 'asc')
             ->get();
+    }
+
+    public function updatedPeriodeId()
+    {
+        // Perbarui bobot saat periode berubah
+        $this->bobot = DB::table('ahp_bobot_kriteria')
+            ->where('periode_id', $this->periodeId)
+            ->select('kriteria_id', 'bobot_ahp')
+            ->get()
+            ->mapWithKeys(function ($item) {
+                $key = DB::table('kriterias')->where('id', $item->kriteria_id)->value('nama_kriteria');
+                $key = $this->criteriaMap[$key] ?? null;
+                return $key ? [$key => $item->bobot_ahp] : [];
+            })
+            ->toArray();
+
+        $this->calculateTopsis(); // Hitung ulang TOPSIS saat periode berubah
     }
 
     private function processGroupedReports($rawLaporan)
@@ -413,6 +447,7 @@ class PerhitunganSpk extends Component
             DB::table('hasil_topsis')->insert([
                 'nilai' => $v,
                 'alternatif_id' => $this->laporan[$index]['alternatif_id'],
+                'periode_id' => $this->periodeId,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

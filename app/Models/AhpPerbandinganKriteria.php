@@ -16,7 +16,8 @@ class AhpPerbandinganKriteria extends Model
     protected $fillable = [
         'kriteria_pertama_id',
         'kriteria_kedua_id',
-        'nilai_perbandingan'
+        'nilai_perbandingan',
+        'periode_id'
     ];
 
     // Relasi dengan model Kriterias untuk kriteria pertama
@@ -41,5 +42,10 @@ class AhpPerbandinganKriteria extends Model
             $q->where('kriteria_pertama_id', $kriteria2)
               ->where('kriteria_kedua_id', $kriteria1);
         });
+    }
+
+    public function scopeByPeriode($query, $periode_id)
+    {
+        return $query->where('periode_id', $periode_id);
     }
 }
