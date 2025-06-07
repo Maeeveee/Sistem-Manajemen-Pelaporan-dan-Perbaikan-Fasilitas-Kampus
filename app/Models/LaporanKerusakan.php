@@ -32,7 +32,8 @@ class LaporanKerusakan extends Model
         'status_perbaikan',
         'catatan_teknisi',
         'tingkat_prioritas',
-        'teknisi_id'
+        'teknisi_id',
+        'periode_id',
     ];
 
     protected $casts = [
@@ -88,5 +89,10 @@ class LaporanKerusakan extends Model
     public function subKriteria()
     {
         return $this->belongsTo(SubKriteria::class, 'frekuensi_penggunaan_fasilitas'); // Sesuaikan dengan kolom foreign key yang benar
+    }
+
+    public function periode()
+    {
+        return $this->belongsTo(Periode::class, 'periode_id');
     }
 }

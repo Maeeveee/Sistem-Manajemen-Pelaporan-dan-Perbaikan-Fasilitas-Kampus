@@ -14,13 +14,19 @@ class AhpBobotKriteria extends Model
     protected $fillable = [
         'kriteria_id',
         'bobot_ahp',
-        'eigen_value'
+        'eigen_value',
+        'periode_id'
     ];
 
     // Relasi dengan model Kriterias
     public function kriterias()
     {
         return $this->belongsTo(Kriteria::class, 'kriteria_id');
+    }
+
+    public function periode()
+    {
+        return $this->belongsTo(Periode::class, 'periode_id');
     }
 
     // Accessor untuk bobot dalam persentase
@@ -33,5 +39,11 @@ class AhpBobotKriteria extends Model
     public function scopeOrderByBobot($query, $direction = 'desc')
     {
         return $query->orderBy('bobot_ahp', $direction);
+    }
+    
+    // Scope untuk mendapatkan data berdasarkan periode
+    public function scopeByPeriode($query, $periode_id)
+    {
+        return $query->where('periode_id', $periode_id);
     }
 }

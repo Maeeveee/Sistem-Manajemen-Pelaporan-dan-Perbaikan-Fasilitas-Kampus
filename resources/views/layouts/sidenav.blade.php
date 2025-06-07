@@ -312,6 +312,11 @@
                         </span>
                         <div class="multi-level collapse" role="list" id="submenu-admin" aria-expanded="false">
                             <ul class="flex-column nav">
+                                <li class="nav-item {{ Route::is('manajemen-periode') ? 'active' : '' }}">
+                                    <a href="{{ route('manajemen-periode') }}" class="nav-link">
+                                        <span class="sidebar-text">Manajemen Periode</span>
+                                    </a>
+                                </li>
                                 <li class="nav-item {{ Request::segment(1) == 'admin' ? 'active' : '' }}">
                                     <a href="/admin" class="nav-link">
                                         <span class="sidebar-text">Laporan Perbaikan</span>

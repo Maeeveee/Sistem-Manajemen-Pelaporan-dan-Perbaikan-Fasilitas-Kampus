@@ -9,6 +9,7 @@ use App\Models\Fasilitas;
 use App\Models\Gedung;
 use App\Models\Ruangan;
 use App\Models\LaporanKerusakan;
+use App\Models\Periode;
 
 class FormKerusakanFasilitas extends Component
 {
@@ -87,6 +88,15 @@ class FormKerusakanFasilitas extends Component
         $this->validate();
 
         try {
+
+            $periodes = Periode::where('tanggal_mulai', '<=', now())
+                ->where('tanggal_selesai', '>=', now())
+                ->first();
+            if (!$periodes) {
+                session()->flash('error', 'Tidak ada periode aktif. Silakan hubungi admin.');
+                return;
+            }
+
             $path = $this->foto->store('laporan-kerusakan', 'public');
 
             LaporanKerusakan::create([
@@ -99,6 +109,7 @@ class FormKerusakanFasilitas extends Component
                 'deskripsi'         => $this->deskripsi,
                 'foto'              => $path,
                 'status'            => 'dilaporkan',
+                'periode_id'        => $periodes->id,
             ]);
 
             $this->resetForm();
