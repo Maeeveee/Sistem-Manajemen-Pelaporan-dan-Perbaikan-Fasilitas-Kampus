@@ -26,7 +26,7 @@ class Dashboard extends Component
             ->toArray();
 
         $this->laporanSelesai = LaporanKerusakan::where('status', 'selesai')->count();
-        $this->laporanDitolak = LaporanKerusakan::where('status', 'ditolak')->count();
-        $this->laporanDiproses = LaporanKerusakan::where('status', 'diproses')->count();
+        $this->laporanDitolak = LaporanKerusakan::where('status_admin', 'reject')->count();
+        $this->laporanDiproses = LaporanKerusakan::where('status', '!=', 'selesai')->where('status_admin', '!=', 'reject')->count();
     }
 }
