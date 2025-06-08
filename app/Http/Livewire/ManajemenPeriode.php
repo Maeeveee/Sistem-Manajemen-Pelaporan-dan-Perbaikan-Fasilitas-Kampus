@@ -35,10 +35,6 @@ class ManajemenPeriode extends Component
 
     public function store()
     {
-        if (Auth::user()->role_id !== 6) {
-            session()->flash('error', 'Akses ditolak. Hanya admin yang dapat membuat periode.');
-            return;
-        }
 
         $this->validate();
 
