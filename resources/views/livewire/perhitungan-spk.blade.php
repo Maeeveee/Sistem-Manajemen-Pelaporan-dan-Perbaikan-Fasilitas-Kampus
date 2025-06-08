@@ -484,7 +484,7 @@
                             <div class="card-body">
                                 <p>{{ $laporanDetail->deskripsi }}</p>
                                 @if($laporanDetail->foto)
-                                    <img src="{{ asset('storage/' . $laporanDetail->foto) }}" 
+                                    <img src="{{ asset('storage\app\public\laporan-kerusakan' . $laporanDetail->foto) }}" 
                                         class="img-fluid rounded" alt="Foto Kerusakan">
                                 @endif
                             </div>
