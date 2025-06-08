@@ -9,12 +9,14 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    // User.php
     protected $fillable = [
         'identifier',
         'name',
         'password',
-        'role_id',  // Pastikan menggunakan role_id
-    ];
+        'role_id',
+        'profile_photo_path',  // Add these
+    ];  
 
     protected $hidden = [
         'password',

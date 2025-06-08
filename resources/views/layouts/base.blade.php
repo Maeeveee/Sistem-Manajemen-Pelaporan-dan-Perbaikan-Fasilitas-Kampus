@@ -83,6 +83,9 @@
 
     <!-- Volt JS -->
     <script src="/assets/js/volt.js"></script>
+
+    @livewireStyles
+    @livewireScripts
 </head>
 
 <body class="bg-white">
