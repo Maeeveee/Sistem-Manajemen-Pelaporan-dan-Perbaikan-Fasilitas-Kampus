@@ -28,9 +28,6 @@
                 </select>
             @error('periodeId') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
-        <div class="mb-4">
-            <button wire:click="calculateTopsis" class="btn btn-primary">Hitung TOPSIS</button>
-        </div>
     </form>
 
     <div class="row mb-4">
