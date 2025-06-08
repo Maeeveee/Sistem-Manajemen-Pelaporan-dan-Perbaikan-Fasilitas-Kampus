@@ -19,6 +19,7 @@
                 'perhitungan-kriteria',
                 'manajemen.subkriteria',
                 'manajemen-periode',
+                'verifikasi-perbaikan',
                 ]))
             @include('layouts.nav')
             @include('layouts.sidenav')
