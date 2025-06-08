@@ -8,7 +8,7 @@
       @endphp
       @include('layouts.breadcrumb', ['breadcrumbs' => $breadcrumbs])
   @endsection
-  <title>Dashboard -Teknisi</title>
+  <title>Dashboard - Sarpras</title>
   <body>
 
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
