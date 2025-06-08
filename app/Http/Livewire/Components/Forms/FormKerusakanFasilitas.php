@@ -90,7 +90,7 @@ class FormKerusakanFasilitas extends Component
         try {
 
             $periodes = Periode::where('tanggal_mulai', '<=', now())
-                ->where('tanggal_selesai', '>=', now())
+                ->whereRaw('DATE_ADD(tanggal_selesai, INTERVAL 1 DAY) >= ?', [now()])
                 ->first();
             if (!$periodes) {
                 session()->flash('error', 'Tidak ada periode aktif. Silakan hubungi admin.');
