@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Livewire\WithPagination;
+use Illuminate\Support\Str;
 
 class ManajemenPengguna extends Component
 {
@@ -146,9 +147,9 @@ class ManajemenPengguna extends Component
         $user->update([
             'name' => $this->name,
             'identifier' => $this->identifier,
-            'password' => bcrypt($this->password), // Pastikan password di-hash
+            'password' => bcrypt($this->password),
             'role_id' => $roleId,
-            'remember_token' => \Str::random(60), // Generate token baru
+            'remember_token' => Str::random(60),
         ]);
 
         $this->resetFields();

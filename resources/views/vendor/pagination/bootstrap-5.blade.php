@@ -9,15 +9,14 @@
                     </li>
                 @else
                     <li class="page-item">
-                        <a class="page-link" href="{{ $paginator->previousPageUrl() }}"
-                            rel="prev">@lang('pagination.previous')</a>
+                        <button class="page-link" wire:click="previousPage" rel="prev">@lang('pagination.previous')</button>
                     </li>
                 @endif
 
                 {{-- Next Page Link --}}
                 @if ($paginator->hasMorePages())
                     <li class="page-item">
-                        <a class="page-link" href="{{ $paginator->nextPageUrl() }}" rel="next">@lang('pagination.next')</a>
+                        <button class="page-link" wire:click="nextPage" rel="next">@lang('pagination.next')</button>
                     </li>
                 @else
                     <li class="page-item disabled" aria-disabled="true">
@@ -49,8 +48,8 @@
                         </li>
                     @else
                         <li class="page-item">
-                            <a class="page-link bg-white border-0 text-primary"
-                                href="{{ $paginator->previousPageUrl() }}" aria-label="Previous">&laquo;</a>
+                            <button class="page-link bg-white border-0 text-primary"
+                                wire:click="previousPage" aria-label="Previous">&laquo;</button>
                         </li>
                     @endif
 
@@ -72,8 +71,8 @@
                                     </li>
                                 @else
                                     <li class="page-item">
-                                        <a class="page-link bg-white border-0 text-primary"
-                                            href="{{ $url }}">{{ $page }}</a>
+                                        <button class="page-link bg-white border-0 text-primary"
+                                            wire:click="gotoPage({{ $page }})">{{ $page }}</button>
                                     </li>
                                 @endif
                             @endforeach
@@ -83,8 +82,8 @@
                     {{-- Next Page Link --}}
                     @if ($paginator->hasMorePages())
                         <li class="page-item">
-                            <a class="page-link bg-white border-0 text-primary" href="{{ $paginator->nextPageUrl() }}"
-                                aria-label="Next">&raquo;</a>
+                            <button class="page-link bg-white border-0 text-primary"
+                                wire:click="nextPage" aria-label="Next">&raquo;</button>
                         </li>
                     @else
                         <li class="page-item disabled">
@@ -93,7 +92,6 @@
                     @endif
                 </ul>
             </div>
-
         </div>
     </nav>
 @endif
