@@ -15,6 +15,16 @@
             <h2 class="h4">Perhitungan Bobot Kriteria dengan AHP</h2>
             <p class="mb-0">Sistem Pendukung Keputusan untuk Perhitungan Bobot Kriteria</p>
         </div>
+        <div class="mb-6">
+            <label for="periode" class="block text-sm font-medium text-gray-700">Pilih Periode</label>
+            <select wire:model="selectedPeriodeId" id="periode" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                <option value="">Pilih Periode</option>
+                @foreach ($periodes as $periode)
+                    <option value="{{ $periode->id }}">{{ $periode->nama_periode }} ({{ $periode->tanggal_mulai }} - {{ $periode->tanggal_selesai }})</option>
+                @endforeach
+            </select>
+            @error('selectedPeriodeId') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+        </div>
         <div>
             @if ($kriterias->count() >= 2)
                 <button wire:click="calculate" type="button" class="btn btn-primary">

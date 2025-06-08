@@ -7,13 +7,17 @@ use App\Models\Kriteria;
 use App\Models\AhpPerbandinganKriteria;
 use App\Models\AhpHasilKonsistensi;
 use App\Models\AhpBobotKriteria;
+use App\Models\Periode;
 
 class PerhitunganKriteria extends Component
 {
     public $perbandingan = [];
+    public $selectedPeriodeId;
+    public $periodes;
 
     protected $rules = [
         'perbandingan.*.*' => 'nullable|numeric|min:0.111111111|max:9',
+        'selectedPeriodeId' => 'required|exists:periodes,id',
     ];
 
     protected $messages = [
@@ -21,61 +25,93 @@ class PerhitunganKriteria extends Component
         'perbandingan.*.*.numeric' => 'Nilai harus berupa angka',
         'perbandingan.*.*.min' => 'Nilai minimal adalah 1/9 (0.111)',
         'perbandingan.*.*.max' => 'Nilai maksimal adalah 9',
+        'selectedPeriodeId.required' => 'Pilih periode terlebih dahulu',
+        'selectedPeriodeId.exists' => 'Periode yang dipilih tidak valid',
     ];
 
     public function mount()
     {
-        $perbandingans = AhpPerbandinganKriteria::all();
-        $this->perbandingan = [];
+        $this->periodes = Periode::orderBy('created_at', 'desc')->get();
+        $this->selectedPeriodeId = $this->periodes->first()->id ?? null;
+        $this->loadPerbandingan();
+    }
 
-        foreach ($perbandingans as $perbandingan) {
-            $k1 = min($perbandingan->kriteria_pertama_id, $perbandingan->kriteria_kedua_id);
-            $k2 = max($perbandingan->kriteria_pertama_id, $perbandingan->kriteria_kedua_id);
-            if ($perbandingan->kriteria_pertama_id == $k1) {
-                $this->perbandingan[$k1][$k2] = $perbandingan->nilai_perbandingan;
-            } else {
-                $this->perbandingan[$k1][$k2] = 1 / $perbandingan->nilai_perbandingan;
+    public function loadPerbandingan()
+    {
+        if ($this->selectedPeriodeId) {
+            $perbandingans = AhpPerbandinganKriteria::where('periode_id', $this->selectedPeriodeId)->get();
+            $this->perbandingan = [];
+
+            foreach ($perbandingans as $perbandingan) {
+                $k1 = min($perbandingan->kriteria_pertama_id, $perbandingan->kriteria_kedua_id);
+                $k2 = max($perbandingan->kriteria_pertama_id, $perbandingan->kriteria_kedua_id);
+                if ($perbandingan->kriteria_pertama_id == $k1) {
+                    $this->perbandingan[$k1][$k2] = $perbandingan->nilai_perbandingan;
+                } else {
+                    $this->perbandingan[$k1][$k2] = 1 / $perbandingan->nilai_perbandingan;
+                }
             }
+        } else {
+            $this->perbandingan = [];
         }
+    }
+
+    public function updatedSelectedPeriodeId()
+    {
+        $this->loadPerbandingan();
     }
 
     public function render()
     {
         $kriterias = Kriteria::all();
-        $perbandingans = AhpPerbandinganKriteria::all();
-        $bobots = AhpBobotKriteria::with('kriterias')->get();
-        $konsistensi = AhpHasilKonsistensi::latest()->first();
+        $perbandingans = $this->selectedPeriodeId 
+            ? AhpPerbandinganKriteria::where('periode_id', $this->selectedPeriodeId)->get()
+            : collect([]);
+        $bobots = $this->selectedPeriodeId 
+            ? AhpBobotKriteria::with('kriterias')->where('periode_id', $this->selectedPeriodeId)->get()
+            : collect([]);
+        $konsistensi = $this->selectedPeriodeId 
+            ? AhpHasilKonsistensi::where('periode_id', $this->selectedPeriodeId)->latest()->first()
+            : null;
 
         return view('livewire.perhitungan-kriteria', compact('kriterias', 'perbandingans', 'bobots', 'konsistensi'));
     }
 
     public function updatePerbandingan($kriteria1_id, $kriteria2_id)
-    {   
-    $this->validate([
+    {
+        $this->validate([
             "perbandingan.{$kriteria1_id}.{$kriteria2_id}" => 'required|numeric|min:0.111111111|max:9',
+            'selectedPeriodeId' => 'required|exists:periodes,id',
         ]);
 
         $nilai = $this->perbandingan[$kriteria1_id][$kriteria2_id] ?? null;
 
-        $perbandingan = AhpPerbandinganKriteria::betweenKriteria($kriteria1_id, $kriteria2_id)->first();
+        $perbandingan = AhpPerbandinganKriteria::where('periode_id', $this->selectedPeriodeId)
+            ->betweenKriteria($kriteria1_id, $kriteria2_id)
+            ->first();
 
         if (!$perbandingan) {
             $perbandingan = new AhpPerbandinganKriteria();
             $perbandingan->kriteria_pertama_id = $kriteria1_id;
             $perbandingan->kriteria_kedua_id = $kriteria2_id;
+            $perbandingan->periode_id = $this->selectedPeriodeId;
         }
 
         $perbandingan->nilai_perbandingan = $nilai >= 1 ? $nilai : 1 / $nilai;
         $perbandingan->save();
 
         session()->flash('success', 'Perbandingan kriteria berhasil diperbarui');
-        $this->dispatchBrowserEvent('bobotUpdated');    
+        $this->dispatchBrowserEvent('bobotUpdated');
     }
 
     public function calculate()
     {
+        $this->validate([
+            'selectedPeriodeId' => 'required|exists:periodes,id',
+        ]);
+
         $kriterias = Kriteria::all();
-        $perbandingans = AhpPerbandinganKriteria::all();
+        $perbandingans = AhpPerbandinganKriteria::where('periode_id', $this->selectedPeriodeId)->get();
 
         if ($kriterias->count() < 2) {
             session()->flash('error', 'Minimal harus ada 2 kriteria untuk melakukan perhitungan');
@@ -89,11 +125,8 @@ class PerhitunganKriteria extends Component
         }
 
         $matrix = $this->buildPairwiseMatrix($kriterias, $perbandingans);
-
         $eigenvector = $this->calculateEigenvector($matrix);
-
         $consistency = $this->calculateConsistency($matrix, $eigenvector);
-
         $this->saveResults($kriterias, $eigenvector, $consistency);
 
         session()->flash('success', 'Perhitungan AHP berhasil dilakukan');
@@ -101,45 +134,49 @@ class PerhitunganKriteria extends Component
 
     public function updateBobotKriteria()
     {
-        $konsistensi = AhpHasilKonsistensi::latest()->first();
-        $bobotKriteria = AhpBobotKriteria::all();
-        
+        $konsistensi = AhpHasilKonsistensi::where('periode_id', $this->selectedPeriodeId)->latest()->first();
+        $bobotKriteria = AhpBobotKriteria::where('periode_id', $this->selectedPeriodeId)->get();
+
         if (!$konsistensi || $bobotKriteria->isEmpty()) {
             session()->flash('error', 'Harap lakukan perhitungan AHP terlebih dahulu');
             return;
         }
-        
+
         if (!$konsistensi->is_consistent) {
             session()->flash('error', 'Konsistensi Ratio tidak konsisten (CR > 0.1). Bobot tidak dapat diupdate.');
             return;
         }
-        
-        $totalBobot = AhpBobotKriteria::sum('bobot_ahp');
+
+        $totalBobot = $bobotKriteria->sum('bobot_ahp'); // Fixed: Use $bobotKriteria instead of querying again
         if (abs($totalBobot - 1.0) > 0.0001) {
-            session()->flash('error', 'Total bobot tidak sama dengan 100% ('.round($totalBobot*100, 2).'%). Bobot tidak dapat diupdate.');
+            session()->flash('error', 'Total bobot tidak sama dengan 100% (' . round($totalBobot * 100, 2) . '%). Bobot tidak dapat diupdate.');
             return;
         }
-        
+
         try {
             foreach ($bobotKriteria as $bobot) {
                 Kriteria::where('id', $bobot->kriteria_id)
                     ->update(['bobot' => round($bobot->bobot_ahp * 100, 2)]);
             }
-            
+
             session()->flash('success', 'Bobot kriteria berhasil diupdate berdasarkan perhitungan AHP');
         } catch (\Exception $e) {
-            session()->flash('error', 'Terjadi kesalahan saat mengupdate bobot: '.$e->getMessage());
+            session()->flash('error', 'Terjadi kesalahan saat mengupdate bobot: ' . $e->getMessage());
         }
     }
 
     public function resetPerhitungan()
     {
-        AhpPerbandinganKriteria::truncate();
-        AhpHasilKonsistensi::truncate();
-        AhpBobotKriteria::truncate();
+        if ($this->selectedPeriodeId) {
+            AhpPerbandinganKriteria::where('periode_id', $this->selectedPeriodeId)->delete();
+            AhpHasilKonsistensi::where('periode_id', $this->selectedPeriodeId)->delete();
+            AhpBobotKriteria::where('periode_id', $this->selectedPeriodeId)->delete();
 
-        $this->perbandingan = [];
-        session()->flash('success', 'Semua data perhitungan AHP telah direset');
+            $this->perbandingan = [];
+            session()->flash('success', 'Semua data perhitungan AHP untuk periode ini telah direset');
+        } else {
+            session()->flash('error', 'Pilih periode terlebih dahulu');
+        }
     }
 
     protected function buildPairwiseMatrix($kriterias, $perbandingans)
@@ -265,14 +302,15 @@ class PerhitunganKriteria extends Component
 
     protected function saveResults($kriterias, $eigenvector, $consistency)
     {
-        AhpBobotKriteria::truncate();
-        AhpHasilKonsistensi::truncate();
+        AhpBobotKriteria::where('periode_id', $this->selectedPeriodeId)->delete();
+        AhpHasilKonsistensi::where('periode_id', $this->selectedPeriodeId)->delete();
 
         foreach ($kriterias as $index => $kriteria) {
             AhpBobotKriteria::create([
                 'kriteria_id' => $kriteria->id,
                 'bobot_ahp' => round($eigenvector[$index], 4),
-                'eigen_value' => round($eigenvector[$index], 4)
+                'eigen_value' => round($eigenvector[$index], 4),
+                'periode_id' => $this->selectedPeriodeId,
             ]);
         }
 
@@ -284,7 +322,8 @@ class PerhitunganKriteria extends Component
             'consistency_index' => $consistency['consistency_index'],
             'random_index' => $consistency['random_index'],
             'consistency_ratio' => $consistency['consistency_ratio'],
-            'is_consistent' => $consistency['is_consistent']
+            'is_consistent' => $consistency['is_consistent'],
+            'periode_id' => $this->selectedPeriodeId,
         ]);
     }
 
@@ -304,7 +343,7 @@ class PerhitunganKriteria extends Component
     {
         $size = count($matrix);
         $tolerance = 0.0001;
-        
+
         for ($i = 0; $i < $size; $i++) {
             for ($j = 0; $j < $size; $j++) {
                 if ($i != $j) {

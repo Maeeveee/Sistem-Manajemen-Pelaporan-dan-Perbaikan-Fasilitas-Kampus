@@ -25,6 +25,7 @@ use App\Http\Livewire\LihatDetailSarpras;
 use App\Http\Livewire\PerhitunganSpk;
 use App\Http\Livewire\PerhitunganKriteria;
 use App\Http\Livewire\ManajemenSubkriteria;
+use App\Http\Livewire\ManajemenPeriode;
 
 /*
 |--------------------------------------------------------------------------
@@ -82,3 +83,5 @@ Route::get('/sarpras-spk', PerhitunganSpk::class)->name('perhitungan-spk');
 Route::get('/perhitungan-spk', PerhitunganSpk::class)->name('perhitungan-spk');
 
 Route::get('/perhitungan-kriteria', PerhitunganKriteria::class)->name('perhitungan-kriteria');
+
+Route::get('/manajemen-periode', ManajemenPeriode::class)->name('manajemen-periode');

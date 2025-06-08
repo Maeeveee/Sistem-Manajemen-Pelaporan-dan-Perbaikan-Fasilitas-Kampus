@@ -17,6 +17,22 @@
         </div>
     </div>
 
+    <form wire:submit.prevent="calculateTopsis">
+        <div class="mb-4">
+            <label for="periodeId" class="block text-gray-700 text-sm font-bold mb-2">Pilih Periode</label>
+                <select wire:model="periodeId" class="form-control">
+                    <option value="">-- Pilih Periode --</option>
+                    @foreach($daftarPeriode as $periode)
+                        <option value="{{ $periode->id }}">{{ $periode->nama_periode }} ({{ $periode->tanggal_mulai }} - {{ $periode->tanggal_selesai }})</option>
+                    @endforeach
+                </select>
+            @error('periodeId') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+        </div>
+        <div class="mb-4">
+            <button wire:click="calculateTopsis" class="btn btn-primary">Hitung TOPSIS</button>
+        </div>
+    </form>
+
     <div class="row mb-4">
         <div class="col-12">
             <div class="card">

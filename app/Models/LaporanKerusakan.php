@@ -34,7 +34,8 @@ class LaporanKerusakan extends Model
         'status_perbaikan',
         'catatan_teknisi',
         'tingkat_prioritas',
-        'teknisi_id'
+        'teknisi_id',
+        'periode_id',
     ];
 
     protected $casts = [
@@ -100,5 +101,9 @@ class LaporanKerusakan extends Model
         return $this->hasOneThrough(
             HasilTopsis::class, Alternatif::class, 'objek_id', 'alternatif_id','id', 'id' 
         );
+    }
+    public function periode()
+    {
+        return $this->belongsTo(Periode::class, 'periode_id');
     }
 }
