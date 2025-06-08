@@ -4,16 +4,19 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\LaporanKerusakan;
-use App\Models\HasilTopsis;
-
+use Illuminate\Support\Facades\Auth;
 
 class DashboardTeknisi extends Component
 {
     public $laporanDiproses = [];
     public $laporanSelesai = [];
-    public $selectedLaporan;
-    public $statusSelected;
-    public $catatanTeknisi;
+    public $showModal = false;
+    public $selectedLaporan = null;
+    public $statusSelected = 'diproses';
+    public $catatanTeknisi = '';
+    public $search = '';
+    public $statusFilter = 'all';
+    public $perPage = 10;
 
     protected $rules = [
         'statusSelected' => 'required|in:diproses,selesai,ditunda',
@@ -27,16 +30,15 @@ class DashboardTeknisi extends Component
 
     public function loadData()
     {
-        $user = auth()->user();
+        $user = Auth::user();
         
         $this->laporanDiproses = LaporanKerusakan::with(['gedung', 'ruangan', 'fasilitas', 'hasilTopsis'])
             ->where('teknisi_id', $user->id)
             ->where('status_perbaikan', 'diproses')
-            ->orderByDesc(
-                HasilTopsis::select('nilai')
-                    ->whereColumn('hasil_topsis.alternatif_id', 'laporan_kerusakan.id')
-            )
-            ->get();
+            ->get()
+            ->sortByDesc(function ($laporan) {
+                return $laporan->hasilTopsis->nilai ?? 0;
+            });
 
         $this->laporanSelesai = LaporanKerusakan::with(['gedung', 'ruangan', 'fasilitas'])
             ->where('teknisi_id', $user->id)
@@ -50,9 +52,13 @@ class DashboardTeknisi extends Component
     {
         $this->selectedLaporan = LaporanKerusakan::with(['gedung', 'ruangan', 'fasilitas', 'hasilTopsis'])
             ->find($laporanId);
-            
-        $this->statusSelected = $this->selectedLaporan->status_perbaikan;
-        $this->catatanTeknisi = $this->selectedLaporan->catatan_teknisi;
+        
+        if ($this->selectedLaporan) {
+            $this->statusSelected = $this->selectedLaporan->status_perbaikan;
+            $this->catatanTeknisi = $this->selectedLaporan->catatan_teknisi ?? '';
+            $this->showModal = true;
+            $this->dispatchBrowserEvent('showModal');
+        }
     }
 
     public function updateStatus()
@@ -61,16 +67,44 @@ class DashboardTeknisi extends Component
 
         $this->selectedLaporan->update([
             'status_perbaikan' => $this->statusSelected,
-            'catatan_teknisi' => $this->catatanTeknisi,
-            'updated_at' => now()
+            'catatan_teknisi' => $this->catatanTeknisi
         ]);
-
-        session()->flash('message', 'Status perbaikan berhasil diperbarui');
-        $this->loadData();
-        $this->reset(['selectedLaporan', 'statusSelected', 'catatanTeknisi']);
+        
+        $this->dispatchBrowserEvent('hideModal');
+        $this->emitSelf('refreshData');   
     }
+
+    public function getStatusColor($status)
+    {
+        return match($status) {
+            'diproses' => 'primary',
+            'selesai' => 'success',
+            'ditunda' => 'warning',
+            'menunggu' => 'secondary',
+            default => 'info'
+        };
+    }
+
+    public function getStatusText($status)
+    {
+        return match($status) {
+            'diproses' => 'Sedang Diproses',
+            'selesai' => 'Selesai',
+            'ditunda' => 'Ditunda',
+            'menunggu' => 'Menunggu',
+            default => $status
+        };
+    }
+    public function closeModal()
+{
+    $this->reset(['showModal', 'selectedLaporan', 'statusSelected', 'catatanTeknisi']);
+    $this->dispatchBrowserEvent('hideModal');
+}
     public function render()
     {
-        return view('livewire.dashboard-teknisi');
+        return view('livewire.dashboard-teknisi', [
+            'laporanDiproses' => $this->laporanDiproses,
+            'laporanSelesai' => $this->laporanSelesai,
+        ]);
     }
 }
