@@ -28,6 +28,9 @@
                 </select>
             @error('periodeId') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
+        <div class="mb-4">
+            <button wire:click="calculateTopsis" class="btn btn-primary">Hitung TOPSIS</button>
+        </div>
     </form>
 
     <div class="row mb-4">
@@ -388,10 +391,7 @@
                         <label for="statusPerbaikan">Status Perbaikan</label>
                         <select class="form-control" id="statusPerbaikan" wire:model="statusPerbaikan" required>
                             <option value="">-- Pilih Status --</option>
-                            <option value="menunggu">Menunggu</option>
                             <option value="diproses">Ditugaskan</option>
-                            <option value="selesai">Selesai</option>
-                            <option value="ditolak">Ditolak</option>
                         </select>
                         @error('statusPerbaikan') <small class="text-danger">{{ $message }}</small> @enderror
                     </div>
@@ -481,8 +481,10 @@
                             <div class="card-body">
                                 <p>{{ $laporanDetail->deskripsi }}</p>
                                 @if($laporanDetail->foto)
-                                    <img src="{{ asset('storage\app\public\laporan-kerusakan' . $laporanDetail->foto) }}" 
-                                        class="img-fluid rounded" alt="Foto Kerusakan">
+                                    <img src="{{ asset('storage/' . $laporanDetail->foto) }}" 
+                                         class="img-fluid rounded" alt="Foto Kerusakan">
+                                @else
+                                    <div class="alert alert-info">Tidak ada foto yang diupload</div>
                                 @endif
                             </div>
                         </div>
@@ -518,22 +520,21 @@
                                             </span>
                                         </td>
                                     </tr>
-                                    
                                     <tr>
                                         <th>Frekuensi Penggunaan</th>
-                                        <td>{{ $laporanDetail->frekuensi_penggunaan_fasilitas }}</td>
+                                        <td>{{ $laporanDetail->frekuensiSubKriteria->nama_subkriteria ?? '-' }}</td>
                                     </tr>
                                     <tr>
                                         <th>Dampak Akademik</th>
-                                        <td>{{ $laporanDetail->dampak_terhadap_aktivitas_akademik }}</td>
+                                        <td>{{ $laporanDetail->dampakSubKriteria->nama_subkriteria ?? '-' }}</td>
                                     </tr>
                                     <tr>
                                         <th>Tingkat Resiko</th>
-                                        <td>{{ $laporanDetail->tingkat_resiko_keselamatan }}</td>
+                                        <td>{{ $laporanDetail->resikoSubKriteria->nama_subkriteria ?? '-' }}</td>
                                     </tr>
                                     <tr>
                                         <th>Tingkat Kerusakan</th>
-                                        <td>{{ $laporanDetail->tingkat_kerusakan }}</td>
+                                        <td>{{ $laporanDetail->kerusakanSubKriteria->nama_subkriteria ?? '-' }}</td>
                                     </tr>
                                     <tr>
                                         <th>Estimasi Waktu</th>

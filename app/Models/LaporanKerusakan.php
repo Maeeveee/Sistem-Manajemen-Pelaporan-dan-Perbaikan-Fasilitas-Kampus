@@ -36,6 +36,7 @@ class LaporanKerusakan extends Model
         'tingkat_prioritas',
         'teknisi_id',
         'periode_id',
+        'foto_perbaikan'
     ];
 
     protected $casts = [
@@ -101,6 +102,31 @@ class LaporanKerusakan extends Model
         return $this->hasOneThrough(
             HasilTopsis::class, Alternatif::class, 'objek_id', 'alternatif_id','id', 'id' 
         );
+    }
+    public function frekuensiSubKriteria()
+    {
+        return $this->belongsTo(SubKriteria::class, 'frekuensi_penggunaan_fasilitas');
+    }
+
+    public function dampakSubKriteria()
+    {
+        return $this->belongsTo(SubKriteria::class, 'dampak_terhadap_aktivitas_akademik');
+    }
+
+    public function resikoSubKriteria()
+    {
+        return $this->belongsTo(SubKriteria::class, 'tingkat_resiko_keselamatan');
+    }
+
+    public function kerusakanSubKriteria()
+    {
+        return $this->belongsTo(SubKriteria::class, 'tingkat_kerusakan');
+    }
+    public function getFotoPerbaikanUrlAttribute()
+    {
+        return $this->foto_perbaikan 
+            ? asset('storage/laporan-perbaikan/'.$this->foto_perbaikan)
+            : null;
     }
     public function periode()
     {
