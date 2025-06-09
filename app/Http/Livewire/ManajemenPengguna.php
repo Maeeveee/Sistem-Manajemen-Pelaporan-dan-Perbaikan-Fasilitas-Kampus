@@ -108,6 +108,7 @@ class ManajemenPengguna extends Component
             'identifier' => $this->identifier,
             'password' => bcrypt($this->password),
             'role_id' => $roleId,
+            'profile_photo_path' => 'default/default_photo_profile.jpg',
         ]);
         $this->resetFields();
         // Emit the close event
