@@ -16,6 +16,7 @@ class DashboardTeknisi extends Component
     public $catatanTeknisi = '';
     public $search = '';
     public $statusFilter = 'all';
+    public $fotoPerbaikan;
     public $perPage = 10;
 
     protected $rules = [
@@ -69,6 +70,11 @@ class DashboardTeknisi extends Component
             'status_perbaikan' => $this->statusSelected,
             'catatan_teknisi' => $this->catatanTeknisi
         ]);
+        if ($this->fotoPerbaikan) {
+            $filename = 'perbaikan_'.$this->selectedLaporan->id.'_'.time().'.'.$this->fotoPerbaikan->extension();
+            $path = $this->fotoPerbaikan->storeAs('public/laporan-perbaikan', $filename);
+            $data['foto_perbaikan'] = $filename;
+        }    
         
         $this->dispatchBrowserEvent('hideModal');
         $this->emitSelf('refreshData');   
@@ -95,11 +101,12 @@ class DashboardTeknisi extends Component
             default => $status
         };
     }
+    
     public function closeModal()
-{
-    $this->reset(['showModal', 'selectedLaporan', 'statusSelected', 'catatanTeknisi']);
-    $this->dispatchBrowserEvent('hideModal');
-}
+    {
+        $this->reset(['showModal', 'selectedLaporan', 'statusSelected', 'catatanTeknisi']);
+        $this->dispatchBrowserEvent('hideModal');
+    }
     public function render()
     {
         return view('livewire.dashboard-teknisi', [
