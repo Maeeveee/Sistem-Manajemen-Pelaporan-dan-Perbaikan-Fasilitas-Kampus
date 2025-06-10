@@ -80,6 +80,8 @@ class Notifications extends Component
             return "Laporan Anda sedang dikerjakan oleh teknisi.";
         } elseif ($report->status_teknisi === 'selesai') {
             return "Laporan Anda telah selesai diperbaiki.";
+        } elseif ($report->status_admin === 'reject') {
+            return "Laporan Anda telah ditolak oleh admin.";
         } else {
             return "Status laporan Anda tidak diketahui.";
         }
