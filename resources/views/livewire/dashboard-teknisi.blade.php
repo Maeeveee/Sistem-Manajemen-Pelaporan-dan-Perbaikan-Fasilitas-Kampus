@@ -193,6 +193,30 @@
                                             @error('catatanTeknisi') <span class="text-danger small">{{ $message }}</span> @enderror
                                         </div>
                                         
+                                        <div class="mb-3">
+                                            <label class="form-label">Upload Foto Setelah Perbaikan</label>
+                                            <input type="file" 
+                                                   class="form-control @error('fotoPerbaikan') is-invalid @enderror" 
+                                                   wire:model="fotoPerbaikan"
+                                                   accept="image/*">
+                                            @error('fotoPerbaikan') <span class="text-danger small">{{ $message }}</span> @enderror
+                                            <div class="form-text">Format: JPG/PNG (Maks. 2MB)</div>
+                                            
+                                            @if($fotoPerbaikan)
+                                                <div class="mt-2">
+                                                    <small class="text-success">
+                                                        ✓ Foto dipilih: {{ $fotoPerbaikan->getClientOriginalName() }}
+                                                    </small>
+                                                    <div class="mt-2">
+                                                        <img src="{{ $fotoPerbaikan->temporaryUrl() }}" 
+                                                             class="img-thumbnail" 
+                                                             style="max-height: 120px;"
+                                                             alt="Preview Foto Perbaikan">
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
+                                        
                                         <div class="d-flex justify-content-end">
                                             <button type="button" class="btn btn-secondary me-2" wire:click="closeModal">Tutup</button>
                                             <button type="submit" class="btn btn-primary" wire:loading.attr="disabled">
