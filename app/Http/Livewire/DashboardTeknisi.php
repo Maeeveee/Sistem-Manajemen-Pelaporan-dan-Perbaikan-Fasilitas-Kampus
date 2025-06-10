@@ -48,7 +48,7 @@ class DashboardTeknisi extends Component
 
         $this->laporanSelesai = LaporanKerusakan::with(['gedung', 'ruangan', 'fasilitas'])
             ->where('teknisi_id', $user->id)
-            ->whereIn('status_perbaikan', ['selesai', 'ditunda'])
+            ->whereIn('status_perbaikan', ['selesai', 'menunggu'])
             ->latest()
             ->take(5)
             ->get();
@@ -79,9 +79,16 @@ class DashboardTeknisi extends Component
         try {
             DB::beginTransaction();
 
+            // Mapping status_perbaikan ke status_teknisi
+            $statusMapping = [
+                'diproses' => 'diproses',
+                'selesai' => 'selesai',
+                'menunggu' => 'menunggu' 
+            ];
             // Data yang akan diupdate
             $updateData = [
                 'status_perbaikan' => $this->statusSelected,
+                'status_teknisi' => $statusMapping[$this->statusSelected] ?? 'menunggu',
                 'catatan_teknisi' => $this->catatanTeknisi,
                 'teknisi_id' => auth()->id() // Pastikan teknisi_id terisi
             ];
@@ -153,7 +160,7 @@ class DashboardTeknisi extends Component
     
     public function closeModal()
     {
-        $this->reset(['showModal', 'selectedLaporan', 'statusSelected', 'catatanTeknisi']);
+        $this->reset(['showModal', 'selectedLaporan', 'statusSelected', 'catatanTeknisi', 'fotoPerbaikan']);
         $this->dispatchBrowserEvent('hideModal');
     }
     public function render()
