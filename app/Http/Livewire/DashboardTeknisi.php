@@ -3,11 +3,16 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use App\Models\LaporanKerusakan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardTeknisi extends Component
 {
+    use WithFileUploads;
     public $laporanDiproses = [];
     public $laporanSelesai = [];
     public $showModal = false;
@@ -43,7 +48,7 @@ class DashboardTeknisi extends Component
 
         $this->laporanSelesai = LaporanKerusakan::with(['gedung', 'ruangan', 'fasilitas'])
             ->where('teknisi_id', $user->id)
-            ->whereIn('status_perbaikan', ['selesai', 'ditunda'])
+            ->whereIn('status_perbaikan', ['selesai', 'menunggu'])
             ->latest()
             ->take(5)
             ->get();
@@ -64,20 +69,71 @@ class DashboardTeknisi extends Component
 
     public function updateStatus()
     {
-        $this->validate();
-
-        $this->selectedLaporan->update([
-            'status_perbaikan' => $this->statusSelected,
-            'catatan_teknisi' => $this->catatanTeknisi
+        // Validasi input
+        $this->validate([
+            'statusSelected' => 'required|in:diproses,selesai,ditunda',
+            'catatanTeknisi' => 'nullable|string|max:500',
+            'fotoPerbaikan' => 'nullable|image|max:2048' // 2MB max
         ]);
-        if ($this->fotoPerbaikan) {
-            $filename = 'perbaikan_'.$this->selectedLaporan->id.'_'.time().'.'.$this->fotoPerbaikan->extension();
-            $path = $this->fotoPerbaikan->storeAs('public/laporan-perbaikan', $filename);
-            $data['foto_perbaikan'] = $filename;
-        }    
-        
-        $this->dispatchBrowserEvent('hideModal');
-        $this->emitSelf('refreshData');   
+
+        try {
+            DB::beginTransaction();
+
+            // Mapping status_perbaikan ke status_teknisi
+            $statusMapping = [
+                'diproses' => 'diproses',
+                'selesai' => 'selesai',
+                'menunggu' => 'menunggu' 
+            ];
+            // Data yang akan diupdate
+            $updateData = [
+                'status_perbaikan' => $this->statusSelected,
+                'status_teknisi' => $statusMapping[$this->statusSelected] ?? 'menunggu',
+                'catatan_teknisi' => $this->catatanTeknisi,
+                'teknisi_id' => auth()->id() // Pastikan teknisi_id terisi
+            ];
+
+            // Handle file upload
+            if ($this->fotoPerbaikan) {
+                // Hapus foto lama jika ada
+                if ($this->selectedLaporan->foto_perbaikan) {
+                    Storage::delete('public/laporan-perbaikan/'.$this->selectedLaporan->foto_perbaikan);
+                }
+                
+                $filename = 'perbaikan_'.$this->selectedLaporan->id.'_'.time().'.'.$this->fotoPerbaikan->extension();
+                $path = $this->fotoPerbaikan->storeAs('public/laporan-perbaikan', $filename);
+                $updateData['foto_perbaikan'] = $filename;
+            }
+
+            // Update data
+            $updated = $this->selectedLaporan->update($updateData);
+
+            if (!$updated) {
+                throw new \Exception('Gagal menyimpan perubahan ke database');
+            }
+
+            DB::commit();
+
+            // Refresh data dan tampilkan notifikasi
+            $this->loadData();
+            $this->closeModal();
+            $this->dispatchBrowserEvent('notify', [
+                'type' => 'success',
+                'message' => 'Status perbaikan berhasil diperbarui!'
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error updating laporan: '.$e->getMessage(), [
+                'laporan_id' => $this->selectedLaporan->id ?? null,
+                'user_id' => auth()->id()
+            ]);
+            
+            $this->dispatchBrowserEvent('notify', [
+                'type' => 'error',
+                'message' => 'Gagal memperbarui status: '.$e->getMessage()
+            ]);
+        }
     }
 
     public function getStatusColor($status)
@@ -104,7 +160,7 @@ class DashboardTeknisi extends Component
     
     public function closeModal()
     {
-        $this->reset(['showModal', 'selectedLaporan', 'statusSelected', 'catatanTeknisi']);
+        $this->reset(['showModal', 'selectedLaporan', 'statusSelected', 'catatanTeknisi', 'fotoPerbaikan']);
         $this->dispatchBrowserEvent('hideModal');
     }
     public function render()
