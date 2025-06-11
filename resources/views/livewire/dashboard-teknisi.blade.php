@@ -160,6 +160,19 @@
                                             </td>
                                         </tr>
                                         <tr>
+                                            <th>Foto Kerusakan</th>
+                                            <td>
+                                                @if($selectedLaporan->foto)
+                                                    <img src="{{ asset('storage/' . $selectedLaporan->foto) }}" 
+                                                         class="img-thumbnail" 
+                                                         style="max-height: 120px;"
+                                                         alt="Foto Kerusakan">
+                                                @else
+                                                    <span class="text-muted">Tidak ada foto</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        <tr>
                                             <th>Deskripsi Kerusakan</th>
                                             <td>{{ $selectedLaporan->deskripsi ?? 'Tidak ada deskripsi' }}</td>
                                         </tr>

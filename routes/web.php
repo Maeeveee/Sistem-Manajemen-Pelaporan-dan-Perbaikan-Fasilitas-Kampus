@@ -88,3 +88,5 @@ Route::get('/perhitungan-kriteria', PerhitunganKriteria::class)->name('perhitung
 Route::get('/manajemen-periode', ManajemenPeriode::class)->name('manajemen-periode');
 
 Route::get('/verifikasi-perbaikan', VerifikasiPerbaikan::class)->name('verifikasi-perbaikan');
+Route::post('/laporan/{id}/kirim', [VerifikasiPerbaikan::class, 'kirim'])->name('laporan.kirim');
+
