@@ -26,6 +26,7 @@ use App\Http\Livewire\PerhitunganSpk;
 use App\Http\Livewire\PerhitunganKriteria;
 use App\Http\Livewire\ManajemenSubkriteria;
 use App\Http\Livewire\ManajemenPeriode;
+use App\Http\Livewire\RiwayatPerbaikan;
 use App\Http\Livewire\VerifikasiPerbaikan;
 
 /*
@@ -69,6 +70,8 @@ Route::get('/history-laporan', HistoryLaporan::class)->name('history.laporan');
 Route::get('/detail-history-laporan/{id}', DetailHistoryLaporan::class)->name('detail.history.laporan');
 
 Route::get('/teknisi', DashboardTeknisi::class)->name('dashboard-teknisi');
+Route::get('/teknisi/riwayat-perbaikan', RiwayatPerbaikan::class)->name('riwayat-perbaikan');
+
 
 Route::get('/admin', DashboardAdmin::class)->name('dashboard-admin');
 Route::get('/admin/laporan/detail/{id}', LihatDetailAdmin::class)->name('lihat-detail-admin');
