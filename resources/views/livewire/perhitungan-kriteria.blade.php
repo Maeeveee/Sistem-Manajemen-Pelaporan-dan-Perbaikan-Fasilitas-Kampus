@@ -111,22 +111,6 @@
                                                                                 9 => 'Mutlak lebih penting',
                                                                             } }}
                                                                         </option>
-                                                                        @if ($i != 1)
-                                                                            <option value="{{ 1 / $i }}">
-                                                                                1/{{ $i }} -
-                                                                                {{ match ($i) {
-                                                                                    2 => 'Antara sama dan sedikit kurang penting',
-                                                                                    3 => 'Sedikit kurang penting',
-                                                                                    4 => 'Antara sedikit kurang dan kurang penting',
-                                                                                    5 => 'Kurang penting',
-                                                                                    6 => 'Antara kurang dan sangat kurang penting',
-                                                                                    7 => 'Sangat kurang penting',
-                                                                                    8 => 'Antara sangat kurang dan mutlak kurang penting',
-                                                                                    9 => 'Mutlak kurang penting',
-                                                                                    default => 'Sama pentingnya',
-                                                                                } }}
-                                                                            </option>
-                                                                        @endif
                                                                     @endforeach
                                                                 </select>
                                                                 @error("perbandingan.{$kriteria1->id}.{$kriteria2->id}")
