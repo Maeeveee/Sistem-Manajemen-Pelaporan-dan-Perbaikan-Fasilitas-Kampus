@@ -63,7 +63,8 @@
                     <th>Gedung</th>
                     <th>Ruangan</th>
                     <th>Fasilitas</th>
-                    <th>Status</th>
+                    <th>Status Laporan</th>
+                    <th>Status Admin</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -83,6 +84,13 @@
                         <td>{{ $laporan->gedung->nama_gedung ?? '-' }}</td>
                         <td>{{ $laporan->ruangan->nama_ruangan ?? '-' }}</td>
                         <td>{{ $laporan->fasilitas->nama_fasilitas ?? '-' }}</td>
+                        <td>
+                            @if($laporan->status_admin === 'reject')
+                                ditolak
+                            @else
+                                {{ $laporan->status ?? '-' }}
+                            @endif
+                        </td>
                         <td>
                             <span class="badge {{ $statusClass }} py-1 px-2 rounded-pill">
                                 {{ ucfirst($laporan->status_admin ?? 'Pending') }}
@@ -159,11 +167,20 @@
 
                             
                             <div class="mb-3">
-                                <label class="form-label">Foto</label><br>
+                                <label class="form-label">Foto Kerusakan</label><br>
                                 @if($selectedLaporan->foto)
                                 <img src="{{ asset('storage/' . $selectedLaporan->foto) }}" alt="Foto Kerusakan" class="img-thumbnail" style="max-width: 300px;">
                                 @else
                                 <p class="text-muted">Tidak ada foto</p>
+                                @endif
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Foto Perbaikan</label><br>
+                                @if($selectedLaporan->foto_perbaikan)
+                                    <img src="{{ asset('storage/laporan-perbaikan/' . $selectedLaporan->foto_perbaikan) }}" alt="Gambar Perbaikan" class="img-fluid rounded" style="max-height: 300px; object-fit: contain;">
+                                @else
+                                    <p class="text-muted">Belum diperbaiki</p>
                                 @endif
                             </div>
                             
