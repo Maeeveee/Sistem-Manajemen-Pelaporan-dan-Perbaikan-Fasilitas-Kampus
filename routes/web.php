@@ -28,6 +28,7 @@ use App\Http\Livewire\ManajemenSubkriteria;
 use App\Http\Livewire\ManajemenPeriode;
 use App\Http\Livewire\RiwayatPerbaikan;
 use App\Http\Livewire\VerifikasiPerbaikan;
+use App\Http\Livewire\FeedbackRating;
 
 /*
 |--------------------------------------------------------------------------
@@ -93,3 +94,4 @@ Route::get('/manajemen-periode', ManajemenPeriode::class)->name('manajemen-perio
 Route::get('/verifikasi-perbaikan', VerifikasiPerbaikan::class)->name('verifikasi-perbaikan');
 Route::post('/laporan/{id}/kirim', [VerifikasiPerbaikan::class, 'kirim'])->name('laporan.kirim');
 
+Route::get('/feedback-rating', FeedbackRating::class)->name('feedback-rating');
