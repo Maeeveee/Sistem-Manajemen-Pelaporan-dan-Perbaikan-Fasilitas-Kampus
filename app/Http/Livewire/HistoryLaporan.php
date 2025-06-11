@@ -47,6 +47,47 @@ class HistoryLaporan extends Component
         
         $this->laporans = $query->get();
     }
+
+    // Tambahkan property untuk rating
+    public $rating = null;
+    public $ratingLaporanId = null;
+    public $feedback = null;
+
+    // Tampilkan form rating jika status sudah beres dan rating belum diisi
+    public function showRatingForm($laporanId)
+    {
+        $laporan = LaporanKerusakan::findOrFail($laporanId);
+        if ($laporan->status === 'selesai' && is_null($laporan->rating)) {
+            $this->ratingLaporanId = $laporanId;
+            $this->rating = null;
+        }
+    }
+
+    // Simpan rating ke database
+    public function submitRating()
+{
+    $this->validate([
+        'rating' => 'required|integer|min:1|max:5',
+        'feedback' => 'nullable|string|max:1000',
+    ]);
+
+    $laporan = LaporanKerusakan::findOrFail($this->selectedLaporan->id);
+
+    // Hanya bisa rating jika status selesai dan rating belum ada
+    if ($laporan->status === 'selesai' && is_null($laporan->rating)) {
+        $laporan->rating = $this->rating;
+        $laporan->feedback = $this->feedback;
+        $laporan->save();
+
+        // Reset property dan reload data
+        $this->selectedLaporan = $laporan; // agar tampilan langsung update
+        $this->rating = null;
+        $this->feedback = null;
+        $this->showModal = false;
+        $this->loadLaporans();
+        session()->flash('message', 'Rating dan komentar berhasil disimpan.');
+    }
+}
     
     public function updatedSearch()
     {
