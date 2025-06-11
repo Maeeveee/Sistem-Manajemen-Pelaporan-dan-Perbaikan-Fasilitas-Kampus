@@ -236,8 +236,14 @@
                                         <span class="sidebar-text">Laporan Pengguna</span>
                                     </a>
                                 </li>
+                                <li class="nav-item {{ Request::segment(1) == 'riwayat-perbaikan' ? 'active' : '' }}">
+                                    <a href="{{ route('riwayat-perbaikan') }}" class="nav-link">
+                                        <span class="sidebar-text">Riwayat Perbaikan</span>
+                                    </a>
+                                </li>
                             </ul>
                         </div>
+                        
                     </li>
                 {{-- @endif --}}
 

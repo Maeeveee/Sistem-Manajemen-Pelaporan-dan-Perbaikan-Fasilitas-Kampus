@@ -51,16 +51,52 @@
                 @endif
             </div>
         @else
-            <table class="table table-hover align-items-center">
-                <thead>
+        <table class="table table-hover align-items-center">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Tanggal</th>
+                    <th>Gedung</th>
+                    <th>Ruangan</th>
+                    <th>Fasilitas</th>
+                    <th>Status Laporan</th>
+                    <th>Status Admin</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($laporans as $index => $laporan)
+                    @php
+                        $statusClass = match($laporan->status_admin) {
+                            'verifikasi' => 'bg-success text-white',
+                            'pending' => 'bg-gray-400 text-white',
+                            'reject' => 'bg-danger text-white',
+                            default      => 'bg-gray-400 text-white',
+                        };
+                    @endphp
                     <tr>
-                        <th>No</th>
-                        <th>Tanggal</th>
-                        <th>Gedung</th>
-                        <th>Ruangan</th>
-                        <th>Fasilitas</th>
-                        <th>Status</th>
-                        <th>Aksi</th>
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ $laporan->created_at->format('d M Y') }}</td>
+                        <td>{{ $laporan->gedung->nama_gedung ?? '-' }}</td>
+                        <td>{{ $laporan->ruangan->nama_ruangan ?? '-' }}</td>
+                        <td>{{ $laporan->fasilitas->nama_fasilitas ?? '-' }}</td>
+                        <td>
+                            @if($laporan->status_admin === 'reject')
+                                ditolak
+                            @else
+                                {{ $laporan->status ?? '-' }}
+                            @endif
+                        </td>
+                        <td>
+                            <span class="badge {{ $statusClass }} py-1 px-2 rounded-pill">
+                                {{ ucfirst($laporan->status_admin ?? 'Pending') }}
+                            </span>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-primary" wire:click="showDetail({{ $laporan->id }})">
+                                Detail
+                            </button>
+                        </td>
                     </tr>
                 </thead>
                 <tbody>
@@ -172,6 +208,7 @@
                                     @endif
                                 </div>
 
+
                                 <div class="mb-3">
                                     <label class="form-label">Komentar Admin</label>
                                     <textarea class="form-control bg-white" rows="3" readonly>{{ $selectedLaporan->komentar_admin ?? '-' }}</textarea>
@@ -215,6 +252,7 @@
                                     </div>
                                 @endif
                             </div>
+
                         </div>
                     </div>
                     <div class="modal-footer">
