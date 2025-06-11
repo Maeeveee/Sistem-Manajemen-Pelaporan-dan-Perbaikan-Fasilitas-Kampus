@@ -21,6 +21,7 @@
                 'manajemen-periode',
                 'verifikasi-perbaikan',
                 'riwayat-perbaikan',
+                'feedback-rating',
                 ]))
             @include('layouts.nav')
             @include('layouts.sidenav')
