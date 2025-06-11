@@ -98,37 +98,9 @@
                             </button>
                         </td>
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach ($laporans as $index => $laporan)
-                        @php
-                            $statusClass = match ($laporan->status_admin) {
-                                'verifikasi' => 'bg-success text-white',
-                                'pending' => 'bg-gray-400 text-white',
-                                'reject' => 'bg-danger text-white',
-                                default => 'bg-gray-400 text-white',
-                            };
-                        @endphp
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ $laporan->created_at->format('d M Y') }}</td>
-                            <td>{{ $laporan->gedung->nama_gedung ?? '-' }}</td>
-                            <td>{{ $laporan->ruangan->nama_ruangan ?? '-' }}</td>
-                            <td>{{ $laporan->fasilitas->nama_fasilitas ?? '-' }}</td>
-                            <td>
-                                <span class="badge {{ $statusClass }} py-1 px-2 rounded-pill">
-                                    {{ ucfirst($laporan->status_admin ?? 'Pending') }}
-                                </span>
-                            </td>
-                            <td>
-                                <button class="btn btn-sm btn-primary" wire:click="showDetail({{ $laporan->id }})">
-                                    Detail
-                                </button>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                @endforeach
+            </tbody>
+        </table>
         @endif
     </div>
 
