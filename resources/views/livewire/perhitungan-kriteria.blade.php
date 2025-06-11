@@ -17,7 +17,8 @@
         </div>
         <div>
             <div class="d-flex align-items-center gap-2">
-                <select class="form-select form-select-sm fmxw-200 d-none d-md-inline py-2" wire:model="selectedPeriodeId" style="height:auto; padding-top:0.25rem; padding-bottom:0.25rem;">
+                <select class="form-select form-select-sm fmxw-200 d-none d-md-inline py-2" wire:model="selectedPeriodeId"
+                    style="height:auto; padding-top:0.25rem; padding-bottom:0.25rem;">
                     <option value="">Semua Periode</option>
                     @foreach ($periodes as $periode)
                         <option value="{{ $periode->id }}">
@@ -29,11 +30,13 @@
                     <span class="text-danger text-sm">{{ $message }}</span>
                 @enderror
                 @if ($kriterias->count() >= 2)
-                    <button wire:click="calculate" type="button" class="btn btn-primary btn-sm px-3 py-2" style="white-space:nowrap;">
+                    <button wire:click="calculate" type="button" class="btn btn-primary btn-sm px-3 py-2"
+                        style="white-space:nowrap;">
                         <i class="bi bi-calculator"></i> Hitung Bobot AHP
                     </button>
                 @endif
-                <button wire:click="resetPerhitungan" type="button" class="btn btn-danger btn-sm px-3 py-2 ms-1" style="white-space:nowrap;"
+                <button wire:click="resetPerhitungan" type="button" class="btn btn-danger btn-sm px-3 py-2 ms-1"
+                    style="white-space:nowrap;"
                     onclick="confirm('Anda yakin ingin mereset semua perhitungan?') || event.stopImmediatePropagation()">
                     <i class="bi bi-trash"></i> Reset Perhitungan
                 </button>
@@ -76,63 +79,68 @@
                                                                     $item->kriteria_kedua_id == $kriteria1->id);
                                                         });
                                                         $nilai = null;
-                                                        $is_reverse = false;
                                                         if ($perbandingan) {
                                                             if ($perbandingan->kriteria_pertama_id == $kriteria1->id) {
                                                                 $nilai = $perbandingan->nilai_perbandingan;
                                                             } else {
                                                                 $nilai = 1 / $perbandingan->nilai_perbandingan;
-                                                                $is_reverse = true;
                                                             }
                                                         }
                                                     @endphp
                                                     <td>
                                                         @if ($kriteria1->id < $kriteria2->id)
-                                                            <select
-                                                                wire:model="perbandingan.{{ $kriteria1->id }}.{{ $kriteria2->id }}"
-                                                                wire:change="updatePerbandingan({{ $kriteria1->id }}, {{ $kriteria2->id }})"
-                                                                class="form-select form-select-sm">
-                                                                <option value="">
-                                                                    {{ $nilai !== null ? (is_numeric($nilai) && floor($nilai) != $nilai ? '1/' . round(1 / $nilai) : $nilai) : 'Pilih Nilai' }}
-                                                                </option>
-                                                                @foreach ([1, 2, 3, 4, 5, 6, 7, 8, 9] as $i)
-                                                                    <option value="{{ $i }}">
-                                                                        {{ $i }} -
-                                                                        {{ match ($i) {
-                                                                            1 => 'Sama pentingnya',
-                                                                            2 => 'Antara sama dan sedikit lebih penting',
-                                                                            3 => 'Sedikit lebih penting',
-                                                                            4 => 'Antara sedikit lebih dan lebih penting',
-                                                                            5 => 'Lebih penting',
-                                                                            6 => 'Antara lebih dan sangat lebih penting',
-                                                                            7 => 'Sangat lebih penting',
-                                                                            8 => 'Antara sangat lebih dan mutlak lebih penting',
-                                                                            9 => 'Mutlak lebih penting',
-                                                                        } }}
+                                                            @if ($this->isPeriodeAktif())
+                                                                <select
+                                                                    wire:model="perbandingan.{{ $kriteria1->id }}.{{ $kriteria2->id }}"
+                                                                    wire:change="updatePerbandingan({{ $kriteria1->id }}, {{ $kriteria2->id }})"
+                                                                    class="form-select form-select-sm">
+                                                                    <option value="">
+                                                                        {{ $nilai !== null ? (is_numeric($nilai) && floor($nilai) != $nilai ? '1/' . round(1 / $nilai) : $nilai) : 'Pilih Nilai' }}
                                                                     </option>
-                                                                    @if ($i != 1)
-                                                                        <option value="{{ 1 / $i }}">
-                                                                            1/{{ $i }} -
+                                                                    @foreach ([2, 3, 4, 5, 6, 7, 8, 9] as $i)
+                                                                        <option value="{{ $i }}">
+                                                                            {{ $i }} -
                                                                             {{ match ($i) {
-                                                                                2 => 'Antara sama dan sedikit kurang penting',
-                                                                                3 => 'Sedikit kurang penting',
-                                                                                4 => 'Antara sedikit kurang dan kurang penting',
-                                                                                5 => 'Kurang penting',
-                                                                                6 => 'Antara kurang dan sangat kurang penting',
-                                                                                7 => 'Sangat kurang penting',
-                                                                                8 => 'Antara sangat kurang dan mutlak kurang penting',
-                                                                                9 => 'Mutlak kurang penting',
-                                                                                default => 'Sama pentingnya',
+                                                                                2 => 'Antara sama dan sedikit lebih penting',
+                                                                                3 => 'Sedikit lebih penting',
+                                                                                4 => 'Antara sedikit lebih dan lebih penting',
+                                                                                5 => 'Lebih penting',
+                                                                                6 => 'Antara lebih dan sangat lebih penting',
+                                                                                7 => 'Sangat lebih penting',
+                                                                                8 => 'Antara sangat lebih dan mutlak lebih penting',
+                                                                                9 => 'Mutlak lebih penting',
                                                                             } }}
                                                                         </option>
-                                                                    @endif
-                                                                @endforeach
-                                                            </select>
-                                                            @error("perbandingan.{$kriteria1->id}.{$kriteria2->id}")
-                                                                <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
+                                                                        @if ($i != 1)
+                                                                            <option value="{{ 1 / $i }}">
+                                                                                1/{{ $i }} -
+                                                                                {{ match ($i) {
+                                                                                    2 => 'Antara sama dan sedikit kurang penting',
+                                                                                    3 => 'Sedikit kurang penting',
+                                                                                    4 => 'Antara sedikit kurang dan kurang penting',
+                                                                                    5 => 'Kurang penting',
+                                                                                    6 => 'Antara kurang dan sangat kurang penting',
+                                                                                    7 => 'Sangat kurang penting',
+                                                                                    8 => 'Antara sangat kurang dan mutlak kurang penting',
+                                                                                    9 => 'Mutlak kurang penting',
+                                                                                    default => 'Sama pentingnya',
+                                                                                } }}
+                                                                            </option>
+                                                                        @endif
+                                                                    @endforeach
+                                                                </select>
+                                                                @error("perbandingan.{$kriteria1->id}.{$kriteria2->id}")
+                                                                    <span class="text-danger">{{ $message }}</span>
+                                                                @enderror
+                                                            @else
+                                                                <span class="text-muted">
+                                                                    {{ $nilai !== null ? (is_numeric($nilai) && floor($nilai) != $nilai ? '1/' . round(1 / $nilai) : $nilai) : '-' }}
+                                                                </span>
+                                                            @endif
                                                         @else
-                                                            {{ $nilai ?? '-' }}
+                                                            <span class="text-muted">
+                                                                {{ $nilai !== null ? (is_numeric($nilai) && floor($nilai) != $nilai ? '1/' . round(1 / $nilai) : $nilai) : '-' }}
+                                                            </span>
                                                         @endif
                                                     </td>
                                                 @endif

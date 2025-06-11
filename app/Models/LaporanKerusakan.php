@@ -36,7 +36,9 @@ class LaporanKerusakan extends Model
         'tingkat_prioritas',
         'teknisi_id',
         'periode_id',
-        'foto_perbaikan'
+        'foto_perbaikan',
+        'rating',
+        'feedback',
     ];
 
     protected $casts = [

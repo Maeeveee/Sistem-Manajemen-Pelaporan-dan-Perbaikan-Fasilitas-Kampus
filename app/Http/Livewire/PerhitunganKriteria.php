@@ -38,22 +38,42 @@ class PerhitunganKriteria extends Component
 
     public function loadPerbandingan()
     {
+        $kriterias = Kriteria::all();
+        $this->perbandingan = [];
+
+        $perbandingans = [];
         if ($this->selectedPeriodeId) {
             $perbandingans = AhpPerbandinganKriteria::where('periode_id', $this->selectedPeriodeId)->get();
-            $this->perbandingan = [];
+        }
 
-            foreach ($perbandingans as $perbandingan) {
-                $k1 = min($perbandingan->kriteria_pertama_id, $perbandingan->kriteria_kedua_id);
-                $k2 = max($perbandingan->kriteria_pertama_id, $perbandingan->kriteria_kedua_id);
-                if ($perbandingan->kriteria_pertama_id == $k1) {
-                    $this->perbandingan[$k1][$k2] = $perbandingan->nilai_perbandingan;
-                } else {
-                    $this->perbandingan[$k1][$k2] = 1 / $perbandingan->nilai_perbandingan;
+        foreach ($kriterias as $k1) {
+            foreach ($kriterias as $k2) {
+                if ($k1->id < $k2->id) {
+                    $perbandingan = $perbandingans
+                        ? $perbandingans->first(function ($item) use ($k1, $k2) {
+                            return ($item->kriteria_pertama_id == $k1->id && $item->kriteria_kedua_id == $k2->id)
+                                || ($item->kriteria_pertama_id == $k2->id && $item->kriteria_kedua_id == $k1->id);
+                        })
+                        : null;
+
+                    if ($perbandingan) {
+                        $this->perbandingan[$k1->id][$k2->id] = $perbandingan->kriteria_pertama_id == $k1->id
+                            ? $perbandingan->nilai_perbandingan
+                            : 1 / $perbandingan->nilai_perbandingan;
+                    } else {
+                        $this->perbandingan[$k1->id][$k2->id] = null;
+                    }
                 }
             }
-        } else {
-            $this->perbandingan = [];
         }
+    }
+
+    public function isPeriodeAktif()
+    {
+        if (!$this->selectedPeriodeId) return false;
+
+        $periodeAktif = $this->periodes->first();
+        return $this->selectedPeriodeId == $periodeAktif->id;
     }
 
     public function updatedSelectedPeriodeId()
@@ -64,13 +84,13 @@ class PerhitunganKriteria extends Component
     public function render()
     {
         $kriterias = Kriteria::all();
-        $perbandingans = $this->selectedPeriodeId 
+        $perbandingans = $this->selectedPeriodeId
             ? AhpPerbandinganKriteria::where('periode_id', $this->selectedPeriodeId)->get()
             : collect([]);
-        $bobots = $this->selectedPeriodeId 
+        $bobots = $this->selectedPeriodeId
             ? AhpBobotKriteria::with('kriterias')->where('periode_id', $this->selectedPeriodeId)->get()
             : collect([]);
-        $konsistensi = $this->selectedPeriodeId 
+        $konsistensi = $this->selectedPeriodeId
             ? AhpHasilKonsistensi::where('periode_id', $this->selectedPeriodeId)->latest()->first()
             : null;
 
@@ -245,7 +265,7 @@ class PerhitunganKriteria extends Component
     protected function calculateConsistency($matrix, $eigenvector)
     {
         $size = count($matrix);
-        
+
         $ri = [
             1 => 0,
             2 => 0,
@@ -296,7 +316,9 @@ class PerhitunganKriteria extends Component
             'random_index' => $randomIndex,
             'consistency_ratio' => round($cr, 4),
             'is_consistent' => $cr <= 0.1,
-            'weighted_sum_vector' => array_map(function($val) { return round($val, 4); }, $weightedSum)
+            'weighted_sum_vector' => array_map(function ($val) {
+                return round($val, 4);
+            }, $weightedSum)
         ];
     }
 
