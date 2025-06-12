@@ -2,7 +2,6 @@
   @section('breadcrumbs')
       @php
           $breadcrumbs = [
-              'Sarana Prasarana' => '',
               'Laporan Kerusakan' => route('dashboard-sarpras'),
           ];
       @endphp

@@ -3,7 +3,6 @@
     @section('breadcrumbs')
         @php
             $breadcrumbs = [
-                'Sarana Prasarana' => '',
                 'Evaluasi Laporan Kerusakan (AHP)' => route('perhitungan-kriteria'),
             ];
         @endphp
