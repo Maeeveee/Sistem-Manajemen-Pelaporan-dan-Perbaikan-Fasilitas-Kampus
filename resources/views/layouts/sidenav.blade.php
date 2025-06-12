@@ -199,16 +199,16 @@
 
 
                 {{-- Teknisi --}}
-                @if (auth()->user()->level_id == 5)
+                @if (auth()->user()->role_id == 5)
                     <li class="nav-item">
                         <div class="multi-level" role="list" id="submenu-teknisi" aria-expanded="false">
                             <ul class="flex-column nav">
-                                <li class="nav-item {{ Request::segment(1) == 'teknisi' ? 'active' : '' }}">
+                                <li class="nav-item {{ Route::is('teknisi') ? 'active' : '' }}">
                                     <a href="/teknisi" class="nav-link">
                                         <span class="sidebar-text">Laporan Pengguna</span>
                                     </a>
                                 </li>
-                                <li class="nav-item {{ Request::segment(1) == 'riwayat-perbaikan' ? 'active' : '' }}">
+                                <li class="nav-item {{ Route::is('riwayat-perbaikan') ? 'active' : '' }}">
                                     <a href="{{ route('riwayat-perbaikan') }}" class="nav-link">
                                         <span class="sidebar-text">Riwayat Perbaikan</span>
                                     </a>
