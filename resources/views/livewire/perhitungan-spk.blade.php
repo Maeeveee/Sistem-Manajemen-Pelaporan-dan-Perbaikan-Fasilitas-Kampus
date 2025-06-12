@@ -28,9 +28,6 @@
                 </select>
             @error('periodeId') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
-        <div class="mb-4">
-            <button wire:click="calculateTopsis" class="btn btn-primary">Hitung TOPSIS</button>
-        </div>
     </form>
 
     <div class="row mb-4">
@@ -54,7 +51,7 @@
                             <tbody>
                                 @if (empty($sortedResults))
                                     <tr>
-                                        <td colspan="8" class="text-center">Data akan muncul setelah klik tombol Hitung TOPSIS</td>
+                                        <td colspan="8" class="text-center">Data akan muncul setelah memilih periode</td>
                                     </tr>
                                 @else
                                     @foreach ($sortedResults as $item)
@@ -120,7 +117,7 @@
                             <tbody>
                                 @if (empty($laporan))
                                     <tr>
-                                        <td colspan="12" class="text-center">Data akan muncul setelah klik tombol Hitung TOPSIS</td>
+                                        <td colspan="12" class="text-center">Data akan muncul setelah memilih periode</td>
                                     </tr>
                                 @else
                                     @foreach ($laporan as $index => $item)
@@ -191,7 +188,7 @@
                             <tbody>
                                 @if (empty($normalized))
                                     <tr>
-                                        <td colspan="7" class="text-center">Data akan muncul setelah klik tombol Hitung TOPSIS</td>
+                                        <td colspan="7" class="text-center">Data akan muncul setelah memilih periode</td>
                                     </tr>
                                 @else
                                     @foreach ($normalized as $index => $item)
@@ -235,7 +232,7 @@
                             <tbody>
                                 @if (empty($weighted))
                                     <tr>
-                                        <td colspan="7" class="text-center">Data akan muncul setelah klik tombol Hitung TOPSIS</td>
+                                        <td colspan="7" class="text-center">Data akan muncul setelah memilih periode</td>
                                     </tr>
                                 @else
                                     @foreach ($weighted as $index => $item)
@@ -306,7 +303,7 @@
                                 </tr>
                             @else
                                 <tr>
-                                    <td colspan="3">Data akan muncul setelah klik tombol Hitung TOPSIS</td>
+                                    <td colspan="3">Data akan muncul setelah memilih periode</td>
                                 </tr>
                             @endif
                         </tbody>
@@ -336,7 +333,7 @@
                             <tbody>
                                 @if (empty($results))
                                     <tr>
-                                        <td colspan="5" class="text-center">Data akan muncul setelah klik tombol Hitung TOPSIS</td>
+                                        <td colspan="5" class="text-center">Data akan muncul setelah memilih periode</td>
                                     </tr>
                                 @else
                                     @foreach ($results as $index => $item)
