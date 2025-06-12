@@ -229,12 +229,21 @@
                             @if (!$konsistensi->is_consistent || !$isTotalValid) disabled @endif>
                             <i class="fas fa-save"></i> Update Bobot Kriteria
                         </button>
-                        @if (!$konsistensi->is_consistent)
-                            <div class="alert alert-warning mt-3 mb-0">
-                                <i class="fas fa-exclamation-triangle me-2"></i>
-                                Tidak dapat update bobot karena Consistency Ratio tidak konsisten (CR > 0.1)
-                            </div>
-                        @endif
+                            @if (session('warning'))
+                                <div class="alert alert-warning mt-4">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    <strong>Consistency Ratio (CR) tidak konsisten (CR > 0.1).</strong><br>
+                                    Saran perbaikan matriks perbandingan kriteria:
+                                    <ul class="mb-0 mt-2">
+                                        @foreach (explode("\n", session('warning')) as $saran)
+                                            @if (trim($saran) !== '')
+                                                <li>{{ $saran }}</li>
+                                            @endif
+                                        @endforeach
+                                    </ul>
+                                    <small class="text-muted">Silakan sesuaikan nilai perbandingan pada baris/kolom yang disarankan agar matriks menjadi lebih konsisten.</small>
+                                </div>
+                            @endif
                     </div>
                 @else
                     <div class="alert alert-info">

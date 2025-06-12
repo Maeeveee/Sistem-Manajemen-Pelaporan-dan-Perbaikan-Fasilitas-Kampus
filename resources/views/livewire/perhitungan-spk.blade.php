@@ -46,7 +46,7 @@
                                     <th>Lokasi</th>
                                     <th>Fasilitas</th>
                                     <th>Nilai Preferensi</th>
-                                    <th>Status</th>
+                                    {{-- <th>Status</th> --}}
                                     <th>Jumlah Laporan</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -63,7 +63,7 @@
                                         <td>{{ $item['lokasi'] }}</td>
                                         <td>{{ $item['fasilitas'] }}</td>
                                         <td>{{ number_format($item['nilai'], 3) }}</td>
-                                        <td>
+                                        {{-- <td>
                                             @if($item['rank'] == 1)
                                                 <span class="badge bg-danger">Prioritas Tinggi</span>
                                             @elseif($item['rank'] <= 3)
@@ -71,7 +71,7 @@
                                             @else
                                                 <span class="badge bg-success">Prioritas Rendah</span>
                                             @endif
-                                        </td>
+                                        </td> --}}
                                         <td>{{ $item['total_laporan'] }}</td>
                                         <td>
                                             <button wire:click="openProsesModal({{ $laporan[$item['original_index']]['id'] }})" Add commentMore actions
