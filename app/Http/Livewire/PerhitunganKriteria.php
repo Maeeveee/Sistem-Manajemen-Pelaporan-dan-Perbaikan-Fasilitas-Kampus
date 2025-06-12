@@ -149,6 +149,11 @@ class PerhitunganKriteria extends Component
         $consistency = $this->calculateConsistency($matrix, $eigenvector);
         $this->saveResults($kriterias, $eigenvector, $consistency);
 
+        if (!$consistency['is_consistent']) {
+            $suggestions = $this->suggestMatrixAdjustments($matrix, $eigenvector, $consistency, $kriterias);
+            session()->flash('warning', 'Consistency Ratio (CR) tidak konsisten (CR > 0.1). ' . $suggestions);
+        }
+
         session()->flash('success', 'Perhitungan AHP berhasil dilakukan');
     }
 
@@ -167,8 +172,10 @@ class PerhitunganKriteria extends Component
             return;
         }
 
-        $totalBobot = $bobotKriteria->sum('bobot_ahp'); // Fixed: Use $bobotKriteria instead of querying again
-        if (abs($totalBobot - 1.0) > 0.0001) {
+        $totalBobot = $bobotKriteria->sum('bobot_ahp');
+        if (abs($totalBobot - 1.0) > 0.0001
+        
+        ) {
             session()->flash('error', 'Total bobot tidak sama dengan 100% (' . round($totalBobot * 100, 2) . '%). Bobot tidak dapat diupdate.');
             return;
         }
@@ -377,5 +384,58 @@ class PerhitunganKriteria extends Component
             }
         }
         return true;
+    }
+
+    public function suggestMatrixAdjustments($matrix, $eigenvector, $consistency, $kriterias)
+    {
+        if ($consistency['is_consistent']) {
+            return "Matriks sudah konsisten (CR ≤ 0.1). Tidak perlu penyesuaian.";
+        }
+
+        $size = count($matrix);
+        $deviations = [];
+        $suggestions = [];
+
+        // Calculate deviations for each element
+        for ($i = 0; $i < $size; $i++) {
+            for ($j = 0; $j < $size; $j++) {
+                if ($i < $j) {
+                    $expected_ratio = $eigenvector[$i] / $eigenvector[$j];
+                    $actual_ratio = $matrix[$i][$j];
+                    $deviation = abs($actual_ratio - $expected_ratio) / $expected_ratio;
+                    $deviations[] = [
+                        'i' => $i,
+                        'j' => $j,
+                        'deviation' => $deviation,
+                        'current' => $actual_ratio,
+                        'suggested' => round($expected_ratio, 2)
+                    ];
+                }
+            }
+        }
+
+        // Sort deviations in descending order and take top 2
+        usort($deviations, function ($a, $b) {
+            return $b['deviation'] <=> $a['deviation'];
+        });
+        $top_deviations = array_slice($deviations, 0, 2);
+
+        // Generate suggestions
+        foreach ($top_deviations as $dev) {
+            $k1 = $kriterias->get($dev['i']);
+            $k2 = $kriterias->get($dev['j']);
+            $current = $dev['current'];
+            $suggested = $dev['suggested'];
+            $suggestion_text = sprintf(
+                "Perbandingan antara '%s' dan '%s': Nilai saat ini %s. Disarankan mengubah ke sekitar %s untuk meningkatkan konsistensi.",
+                $k1->nama_kriteria,
+                $k2->nama_kriteria,
+                $current >= 1 ? number_format($current, 2) : '1/' . number_format(1 / $current, 2),
+                $suggested >= 1 ? number_format($suggested, 2) : '1/' . number_format(1 / $suggested, 2)
+            );
+            $suggestions[] = $suggestion_text;
+        }
+
+        return implode("\n", $suggestions);
     }
 }

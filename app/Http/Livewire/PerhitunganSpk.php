@@ -205,12 +205,12 @@ class PerhitunganSpk extends Component
 
                 $nilai_laporan = $totalLaporan >= 5 ? 3.00 : ($totalLaporan >= 2 ? 2.00 : 1.00);
 
-                $avgValues = [
-                    'frekuensi' => $filteredReports->avg('frekuensi') ?? 1.00,
-                    'dampak' => $filteredReports->avg('dampak') ?? 1.00,
-                    'resiko' => $filteredReports->avg('resiko') ?? 1.00,
-                    'kerusakan' => $filteredReports->avg('kerusakan') ?? 1.00,
-                    'estimasi' => $filteredReports->avg('estimasi') ?? 1.00,
+                $sumValues = [
+                    'frekuensi' => $filteredReports->sum('frekuensi') ?? 1.00,
+                    'dampak' => $filteredReports->sum('dampak') ?? 1.00,
+                    'resiko' => $filteredReports->sum('resiko') ?? 1.00,
+                    'kerusakan' => $filteredReports->sum('kerusakan') ?? 1.00,
+                    'estimasi' => $filteredReports->sum('estimasi') ?? 1.00,
                 ];
 
                 $allReporters = $filteredReports->pluck('nama_pelapor')->unique()->take(3)->toArray();
@@ -242,11 +242,11 @@ class PerhitunganSpk extends Component
                     'gedung_id' => $representativeReport->gedung_id,
                     'ruangan_id' => $representativeReport->ruangan_id,
                     'fasilitas_id' => $representativeReport->fasilitas_id,
-                    'frekuensi' => $avgValues['frekuensi'],
-                    'dampak' => $avgValues['dampak'],
-                    'resiko' => $avgValues['resiko'],
-                    'kerusakan' => $avgValues['kerusakan'],
-                    'estimasi' => $avgValues['estimasi'],
+                    'frekuensi' => $sumValues['frekuensi'],
+                    'dampak' => $sumValues['dampak'],
+                    'resiko' => $sumValues['resiko'],
+                    'kerusakan' => $sumValues['kerusakan'],
+                    'estimasi' => $sumValues['estimasi'],
                     'banyaknya_laporan' => $nilai_laporan,
                     'total_laporan_asli' => $totalLaporan,
                     'created_at' => $representativeReport->created_at,

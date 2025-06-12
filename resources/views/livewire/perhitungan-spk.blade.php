@@ -46,7 +46,7 @@
                                     <th>Lokasi</th>
                                     <th>Fasilitas</th>
                                     <th>Nilai Preferensi</th>
-                                    <th>Status</th>
+                                    {{-- <th>Status</th> --}}
                                     <th>Jumlah Laporan</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -63,7 +63,7 @@
                                         <td>{{ $item['lokasi'] }}</td>
                                         <td>{{ $item['fasilitas'] }}</td>
                                         <td>{{ number_format($item['nilai'], 3) }}</td>
-                                        <td>
+                                        {{-- <td>
                                             @if($item['rank'] == 1)
                                                 <span class="badge bg-danger">Prioritas Tinggi</span>
                                             @elseif($item['rank'] <= 3)
@@ -71,7 +71,7 @@
                                             @else
                                                 <span class="badge bg-success">Prioritas Rendah</span>
                                             @endif
-                                        </td>
+                                        </td> --}}
                                         <td>{{ $item['total_laporan'] }}</td>
                                         <td>
                                             <button wire:click="openProsesModal({{ $laporan[$item['original_index']]['id'] }})" Add commentMore actions
@@ -100,7 +100,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Matriks Keputusan Awal</h5>
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover">
+                        <table class="table table-bordered table-hover align-middle text-center">
                             <thead class="thead-dark">
                                 <tr>
                                     <th>No</th>
@@ -120,7 +120,7 @@
                             <tbody>
                                 @if (empty($laporan))
                                     <tr>
-                                        <td colspan="13" class="text-center">Data akan muncul setelah klik tombol Hitung TOPSIS</td>
+                                        <td colspan="12" class="text-center">Data akan muncul setelah klik tombol Hitung TOPSIS</td>
                                     </tr>
                                 @else
                                     @foreach ($laporan as $index => $item)
@@ -143,24 +143,24 @@
                             </tbody>
                             <tfoot>
                                 <tr class="table-info">
-                                    <td colspan="6" class="text-center"><strong>Bobot Kriteria (W)</strong></td>
+                                    <td colspan="5" class="text-center align-middle"><strong>Bobot Kriteria (W)</strong></td>
                                     <td>{{ number_format($bobot['frekuensi'] ?? 0, 4) }}</td>
                                     <td>{{ number_format($bobot['dampak'] ?? 0, 4) }}</td>
                                     <td>{{ number_format($bobot['resiko'] ?? 0, 4) }}</td>
                                     <td>{{ number_format($bobot['kerusakan'] ?? 0, 4) }}</td>
                                     <td>{{ number_format($bobot['estimasi'] ?? 0, 4) }}</td>
                                     <td>{{ number_format($bobot['laporan'] ?? 0, 4) }}</td>
-                                    <td>-</td>
+                                    <td></td>
                                 </tr>
                                 <tr class="table-info">
-                                    <td colspan="6" class="text-center"><strong>Atribut Kriteria</strong></td>
+                                    <td colspan="5" class="text-center align-middle"><strong>Atribut Kriteria</strong></td>
                                     <td>Benefit</td>
                                     <td>Benefit</td>
                                     <td>Cost</td>
                                     <td>Benefit</td>
                                     <td>Cost</td>
                                     <td>Benefit</td>
-                                    <td>-</td>
+                                    <td></td>
                                 </tr>
                             </tfoot>
                         </table>
@@ -223,6 +223,7 @@
                         <table class="table table-bordered table-hover">
                             <thead class="thead-dark">
                                 <tr>
+                                    <th>Alternatif</th>
                                     <th>Frekuensi Penggunaan (C1)</th>
                                     <th>Dampak Akademik (C2)</th>
                                     <th>Tingkat Resiko (C3)</th>
