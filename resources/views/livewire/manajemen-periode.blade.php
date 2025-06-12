@@ -1,3 +1,11 @@
+@section('breadcrumbs')
+    @php
+        $breadcrumbs = [
+            'Manajemen Periode' => route('manajemen-periode'),
+        ];
+    @endphp
+    @include('layouts.breadcrumb', ['breadcrumbs' => $breadcrumbs])
+@endsection
 <div>
     <!-- Notifikasi Sukses -->
     @if (session()->has('success'))

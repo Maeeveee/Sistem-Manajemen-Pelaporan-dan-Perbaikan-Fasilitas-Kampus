@@ -1,7 +1,6 @@
 @section('breadcrumbs')
     @php
         $breadcrumbs = [
-            'Kelola Pengguna' => '',
             'Manajemen Pengguna' => route('users'),
         ];
     @endphp
