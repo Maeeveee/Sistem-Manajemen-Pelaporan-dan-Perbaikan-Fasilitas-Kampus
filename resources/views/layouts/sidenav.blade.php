@@ -47,13 +47,13 @@
                 </a>
             </li>
 
-            {{-- @isset(auth()->user()->role_id)
+            @isset(auth()->user()->role_id)
                 @php
                     $bolehSemua = [1, 2, 3, 4, 5, 6];
                     $users = [1, 2, 3];
-                @endphp --}}
+                @endphp
                 {{-- Dashboard --}}
-                {{-- @if (in_array(auth()->user()->role_id, $bolehSemua)) --}}
+                @if (in_array(auth()->user()->role_id, $bolehSemua))
                     <li class="nav-item {{ Request::segment(1) == 'dashboard' ? 'active' : '' }}">
                         <a href="/dashboard" class="nav-link">
                             <span class="sidebar-icon">
@@ -66,47 +66,27 @@
                             <span class="sidebar-text">Dashboard</span>
                         </a>
                     </li>
-                {{-- @endif --}}
+                @endif
 
 
                 {{-- Kelola Pengguna --}}
-                {{-- @if (auth()->user()->role_id == 6) --}}
+                @if (in_array(auth()->user()->role_id, $bolehSemua))
                     <li class="nav-item">
-                        <span class="nav-link collapsed d-flex justify-content-between align-items-center"
-                            data-bs-toggle="collapse" data-bs-target="#submenu-Pengguna" aria-expanded="false">
-                            <span>
-                                <span class="sidebar-icon"><i class="fas fa-users me-2"></i></span>
-                                <span class="sidebar-text">Kelola Pengguna</span>
-                            </span>
-                            <span class="link-arrow">
-                                <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                        clip-rule="evenodd"></path>
-                                </svg>
-                            </span>
-                        </span>
-                        <div class="multi-level collapse" role="list" id="submenu-Pengguna" aria-expanded="true">
+                        <div class="multi-level" role="list" id="submenu-Pengguna" aria-expanded="true">
                             <ul class="flex-column nav">
                                 <li class="nav-item {{ Request::segment(1) == 'profile' ? 'active' : '' }}">
                                     <a href="/profile" class="nav-link">
                                         <span class="sidebar-text">Profile</span>
                                     </a>
                                 </li>
-                                <li class="nav-item {{ Request::segment(1) == 'users' ? 'active' : '' }}">
-                                    <a href="/users" class="nav-link">
-                                        <span class="sidebar-text">Manajemen Pengguna</span>
-                                    </a>
-                                </li>
                             </ul>
                         </div>
                     </li>
-                {{-- @endif --}}
+                @endif
 
 
                 {{-- Laporan Kerusakan --}}
-                {{-- @if (in_array(auth()->user()->role_id, $users)) --}}
+                @if (in_array(auth()->user()->role_id, $users))
                     <li class="nav-item {{ Request::routeIs('kerusakan.fasilitas') ? 'active' : '' }}">
                         <a href="{{ route('kerusakan.fasilitas') }}" class="nav-link">
                             <span class="sidebar-icon">
@@ -136,11 +116,11 @@
                             <span class="sidebar-text">History Laporan</span>
                         </a>
                     </li>
-                {{-- @endif --}}
+                @endif
 
 
                 {{-- Manajemen Gedung --}}
-                {{-- @if (auth()->user()->role_id == 6) --}}
+                @if (auth()->user()->role_id == 6)
                     <li class="nav-item {{ Request::routeIs('manajemen.gedung') ? 'active' : '' }}">
                         <a href="{{ route('manajemen.gedung') }}" class="nav-link">
                             <span class="sidebar-icon">
@@ -171,65 +151,57 @@
                             <span class="sidebar-text">Manajemen Fasilitas</span>
                         </a>
                     </li>
-                {{-- @endif --}}
+
+                    <li class="nav-item {{ Request::segment(1) == 'users' ? 'active' : '' }}">
+                        <a href="/users" class="nav-link">
+                            <span class="sidebar-icon"><i class="fas fa-users me-2"></i></span>
+                            <span class="sidebar-text">Manajemen Pengguna</span>
+                        </a>
+                    </li>
+                @endif
 
 
 
                 {{-- Manajemen Kriteria --}}
-                {{-- @if (auth()->user()->role_id == 4) --}}
-                <li class="nav-item {{ Request::routeIs('manajemen.kriteria.fasilitas') ? 'active' : '' }}">
-                    <a href="{{ route('manajemen.kriteria.fasilitas') }}" class="nav-link">
-                        <span class="sidebar-icon">
-                            <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path d="M10 2L2 7v11h16V7L10 2zm0 1.5L16 8v8H4V8l6-4.5z" />
-                                <rect x="6" y="10" width="2" height="4" />
-                                <rect x="12" y="10" width="2" height="4" />
-                                <rect x="9" y="10" width="2" height="4" />
-                            </svg>
-                        </span>
-                        <span class="sidebar-text">Manajemen Kriteria</span>
-                    </a>
-                </li>
+                @if (auth()->user()->role_id == 4)
+                    <li class="nav-item {{ Request::routeIs('manajemen.kriteria.fasilitas') ? 'active' : '' }}">
+                        <a href="{{ route('manajemen.kriteria.fasilitas') }}" class="nav-link">
+                            <span class="sidebar-icon">
+                                <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M10 2L2 7v11h16V7L10 2zm0 1.5L16 8v8H4V8l6-4.5z" />
+                                    <rect x="6" y="10" width="2" height="4" />
+                                    <rect x="12" y="10" width="2" height="4" />
+                                    <rect x="9" y="10" width="2" height="4" />
+                                </svg>
+                            </span>
+                            <span class="sidebar-text">Manajemen Kriteria</span>
+                        </a>
+                    </li>
 
 
-                {{-- Manajemen SubKriteria --}}
-                <li class="nav-item {{ Request::routeIs('manajemen.subkriteria') ? 'active' : '' }}">
-                    <a href="{{ route('manajemen.subkriteria') }}" class="nav-link">
-                        <span class="sidebar-icon">
-                            <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path d="M10 2L2 7v11h16V7L10 2zm0 1.5L16 8v8H4V8l6-4.5z" />
-                                <rect x="6" y="10" width="2" height="4" />
-                                <rect x="12" y="10" width="2" height="4" />
-                                <rect x="9" y="10" width="2" height="4" />
-                            </svg>
-                        </span>
-                        <span class="sidebar-text">Manajemen SubKriteria</span>
-                    </a>
-                </li>
-                {{-- @endif --}}
+                    {{-- Manajemen SubKriteria --}}
+                    <li class="nav-item {{ Request::routeIs('manajemen.subkriteria') ? 'active' : '' }}">
+                        <a href="{{ route('manajemen.subkriteria') }}" class="nav-link">
+                            <span class="sidebar-icon">
+                                <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M10 2L2 7v11h16V7L10 2zm0 1.5L16 8v8H4V8l6-4.5z" />
+                                    <rect x="6" y="10" width="2" height="4" />
+                                    <rect x="12" y="10" width="2" height="4" />
+                                    <rect x="9" y="10" width="2" height="4" />
+                                </svg>
+                            </span>
+                            <span class="sidebar-text">Manajemen SubKriteria</span>
+                        </a>
+                    </li>
+                @endif
 
 
                 {{-- Teknisi --}}
-                {{-- @if (auth()->user()->level_id == 5) --}}
+                @if (auth()->user()->level_id == 5)
                     <li class="nav-item">
-                        <span class="nav-link collapsed d-flex justify-content-between align-items-center"
-                            data-bs-toggle="collapse" data-bs-target="#submenu-teknisi" aria-expanded="false">
-                            <span>
-                                <span class="sidebar-icon"><i class="fas fa-users me-2"></i></span>
-                                <span class="sidebar-text">Teknisi</span>
-                            </span>
-                            <span class="link-arrow">
-                                <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                        clip-rule="evenodd"></path>
-                                </svg>
-                            </span>
-                        </span>
-                        <div class="multi-level collapse" role="list" id="submenu-teknisi" aria-expanded="false">
+                        <div class="multi-level" role="list" id="submenu-teknisi" aria-expanded="false">
                             <ul class="flex-column nav">
                                 <li class="nav-item {{ Request::segment(1) == 'teknisi' ? 'active' : '' }}">
                                     <a href="/teknisi" class="nav-link">
@@ -243,30 +215,15 @@
                                 </li>
                             </ul>
                         </div>
-                        
+
                     </li>
-                {{-- @endif --}}
+                @endif
 
 
                 {{-- Sarana Prasarana --}}
-                {{-- @if (auth()->user()->role_id == 4) --}}
+                @if (auth()->user()->role_id == 4)
                     <li class="nav-item">
-                        <span class="nav-link collapsed d-flex justify-content-between align-items-center"
-                            data-bs-toggle="collapse" data-bs-target="#submenu-sarpras" aria-expanded="false">
-                            <span>
-                                <span class="sidebar-icon"><i class="fas fa-users me-2"></i></span>
-                                <span class="sidebar-text">Sarana Prasarana</span>
-                            </span>
-                            <span class="link-arrow">
-                                <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                        clip-rule="evenodd"></path>
-                                </svg>
-                            </span>
-                        </span>
-                        <div class="multi-level collapse" role="list" id="submenu-sarpras" aria-expanded="true">
+                        <div class="multi-level" role="list" id="submenu-sarpras" aria-expanded="true">
                             <ul class="flex-column nav">
                                 <li class="nav-item {{ Request::segment(1) == 'sarpras' ? 'active' : '' }}">
                                     <a href="/sarpras" class="nav-link">
@@ -275,7 +232,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="multi-level collapse" role="list" id="submenu-sarpras" aria-expanded="true">
+                        <div class="multi-level" role="list" id="submenu-sarpras" aria-expanded="true">
                             <ul class="flex-column nav">
                                 <li class="nav-item {{ Route::is('verifikasi-perbaikan') ? 'active' : '' }}">
                                     <a href="/verifikasi-perbaikan" class="nav-link">
@@ -284,7 +241,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="multi-level collapse" role="list" id="submenu-sarpras" aria-expanded="true">
+                        <div class="multi-level" role="list" id="submenu-sarpras" aria-expanded="true">
                             <ul class="flex-column nav">
                                 <li class="nav-item {{ Route::is('feedback-rating') ? 'active' : '' }}">
                                     <a href="/feedback-rating" class="nav-link">
@@ -293,7 +250,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="multi-level collapse" role="list" id="submenu-sarpras" aria-expanded="true">
+                        <div class="multi-level" role="list" id="submenu-sarpras" aria-expanded="true">
                             <ul class="flex-column nav">
                                 <li class="nav-item {{ Route::is('perhitungan-kriteria') ? 'active' : '' }}">
                                     <a href="{{ route('perhitungan-kriteria') }}" class="nav-link">
@@ -311,30 +268,15 @@
                                 </li>
                             </ul>
                         </div>
-                        
+
                     </li>
-                {{-- @endif --}}
+                @endif
 
 
                 {{-- Admin --}}
-                {{-- @if (auth()->user()->role_id == 6) --}}
+                @if (auth()->user()->role_id == 6)
                     <li class="nav-item">
-                        <span class="nav-link collapsed d-flex justify-content-between align-items-center"
-                            data-bs-toggle="collapse" data-bs-target="#submenu-admin" aria-expanded="false">
-                            <span>
-                                <span class="sidebar-icon"><i class="fas fa-users me-2"></i></span>
-                                <span class="sidebar-text">Admin</span>
-                            </span>
-                            <span class="link-arrow">
-                                <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                        clip-rule="evenodd"></path>
-                                </svg>
-                            </span>
-                        </span>
-                        <div class="multi-level collapse" role="list" id="submenu-admin" aria-expanded="false">
+                        <div class="multi-level" role="list" id="submenu-admin" aria-expanded="false">
                             <ul class="flex-column nav">
                                 <li class="nav-item {{ Route::is('manajemen-periode') ? 'active' : '' }}">
                                     <a href="{{ route('manajemen-periode') }}" class="nav-link">
@@ -349,9 +291,9 @@
                             </ul>
                         </div>
                     </li>
-                {{-- @endif --}}
+                @endif
             </ul>
-        {{-- @endisset --}}
+        @endisset
 
     </div>
 </nav>
