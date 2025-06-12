@@ -243,15 +243,6 @@
                         </div>
                         <div class="multi-level" role="list" id="submenu-sarpras" aria-expanded="true">
                             <ul class="flex-column nav">
-                                <li class="nav-item {{ Route::is('feedback-rating') ? 'active' : '' }}">
-                                    <a href="/feedback-rating" class="nav-link">
-                                        <span class="sidebar-text">Feedback & Rating</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="multi-level" role="list" id="submenu-sarpras" aria-expanded="true">
-                            <ul class="flex-column nav">
                                 <li class="nav-item {{ Route::is('perhitungan-kriteria') ? 'active' : '' }}">
                                     <a href="{{ route('perhitungan-kriteria') }}" class="nav-link">
                                         <span class="sidebar-text">Perhitungan Kriteria</span>
@@ -259,7 +250,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="multi-level collapse" role="list" id="submenu-sarpras" aria-expanded="true">
+                        <div class="multi-level" role="list" id="submenu-sarpras" aria-expanded="true">
                             <ul class="flex-column nav">
                                 <li class="nav-item {{ Route::is('perhitungan-spk') ? 'active' : '' }}">
                                     <a href="{{ route('perhitungan-spk') }}" class="nav-link">
@@ -268,7 +259,15 @@
                                 </li>
                             </ul>
                         </div>
-
+                        <div class="multi-level" role="list" id="submenu-sarpras" aria-expanded="true">
+                            <ul class="flex-column nav">
+                                <li class="nav-item {{ Route::is('feedback-rating') ? 'active' : '' }}">
+                                    <a href="/feedback-rating" class="nav-link">
+                                        <span class="sidebar-text">Feedback & Rating</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
                 @endif
 
