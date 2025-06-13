@@ -39,15 +39,9 @@
           </span>
           <input type="text" class="form-control" placeholder="Cari">
         </div>
-        <select class="form-select fmxw-200 d-none d-md-inline me-2" wire:model.live="periode_id">
-          {{-- <option value="">Semua Periode</option>
-          @foreach ($periodes as $periode)
-              <option value="{{ $periode->id }}">{{ $periode->nama_periode }}</option>
-          @endforeach --}}
-        </select>
-        <select class="form-select fmxw-200 d-none d-md-inline" id="statusFilter" aria-label="Filter status">
+        <select class="form-select fmxw-200 d-none d-md-inline" id="statusFilter" aria-label="Filter status" wire:model="statusFilter">
           <option value="all" selected>Semua</option>
-          <option value="terkirim">Terkirim</option>
+          <option value="selesai">Selesai</option>
           <option value="pending">Pending</option>
         </select>
       </div>
@@ -93,7 +87,7 @@
           <td>{{ $item->fasilitas->nama_fasilitas }}</td>
           <td>
             @if ($item->status === 'selesai')
-              <span class="badge bg-success">Terkirim</span>
+              <span class="badge bg-success">Selesai</span>
             @else
               <span class="badge bg-warning text-dark">Belum Terkirim</span>
             @endif
