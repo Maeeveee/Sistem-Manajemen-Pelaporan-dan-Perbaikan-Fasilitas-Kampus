@@ -37,7 +37,7 @@ class PerhitunganSpk extends Component
     public $laporanDetail;
     public $hasilSpkDetail;
     public $rankingDetail;
-    
+
     private $criteriaMap = [
         'Frekuensi Penggunaan Fasilitas' => 'frekuensi',
         'Dampak Terhadap Aktivitas Akademik' => 'dampak',
@@ -69,7 +69,7 @@ class PerhitunganSpk extends Component
         $this->daftarTeknisi = User::where('role_id', 5)->get();
         $this->calculateTopsis();
     }
-        
+
     public function calculateTopsis()
     {
         $this->validate([
@@ -78,7 +78,7 @@ class PerhitunganSpk extends Component
 
         try {
             $this->cleanupTables();
-            
+
             $this->resetArrays();
 
             $rawLaporan = $this->fetchRawReports();
@@ -97,11 +97,16 @@ class PerhitunganSpk extends Component
     private function cleanupTables()
     {
         $tables = [
-            'penilaian', 'hasil_topsis', 'solusi_ideal_positif', 
-            'solusi_ideal_negatif', 'matriks_normalisasi_bobot_keputusan', 
-            'matriks_normalisasi_keputusan', 'matriks_keputusan', 'alternatif'
+            'penilaian',
+            'hasil_topsis',
+            'solusi_ideal_positif',
+            'solusi_ideal_negatif',
+            'matriks_normalisasi_bobot_keputusan',
+            'matriks_normalisasi_keputusan',
+            'matriks_keputusan',
+            'alternatif'
         ];
-        
+
         foreach ($tables as $table) {
             DB::table($table)->delete();
         }
@@ -199,7 +204,7 @@ class PerhitunganSpk extends Component
                     ->where('lantai', $item->lantai)
                     ->where('ruangan_id', $item->ruangan_id)
                     ->where('fasilitas', $item->fasilitas);
-                
+
                 $totalLaporan = $filteredReports->count();
                 $representativeReport = $filteredReports->first();
 
@@ -263,19 +268,18 @@ class PerhitunganSpk extends Component
     {
         try {
             $kriteriaIds = DB::table('kriterias')->pluck('id', 'nama_kriteria')->toArray();
-            
+
             $this->saveDecisionMatrix($kriteriaIds);
-            
+
             $this->normalizeMatrix($kriteriaIds);
-            
+
             $this->applyWeights($kriteriaIds);
-            
+
             $this->findIdealSolutions($kriteriaIds);
-            
+
             $this->calculateDistancesAndPreferences();
-            
+
             $this->rankAlternatives();
-            
         } catch (\Exception $e) {
             Log::error('Error in performTopsisCalculation: ' . $e->getMessage());
             session()->flash('error', 'Gagal melakukan perhitungan TOPSIS. Silakan coba lagi.');
@@ -285,7 +289,7 @@ class PerhitunganSpk extends Component
     private function saveDecisionMatrix($kriteriaIds)
     {
         $criteriaData = [];
-        
+
         foreach ($this->laporan as $item) {
             foreach ($this->criteriaMap as $criteriaName => $key) {
                 $value = $key === 'laporan' ? $item['banyaknya_laporan'] : $item[$key];
@@ -297,34 +301,34 @@ class PerhitunganSpk extends Component
                 ];
             }
         }
-        
+
         DB::table('matriks_keputusan')->insert($criteriaData);
     }
 
     private function normalizeMatrix($kriteriaIds)
     {
         $sumSquares = array_fill_keys(array_values($this->criteriaMap), 0);
-        
+
         foreach ($this->laporan as $item) {
             foreach ($this->criteriaMap as $criteriaName => $key) {
                 $value = $key === 'laporan' ? $item['banyaknya_laporan'] : $item[$key];
                 $sumSquares[$key] += pow($value, 2);
             }
         }
-        
+
         $sqrtSums = array_map('sqrt', $sumSquares);
-        
+
         $this->normalized = [];
         $normalizedData = [];
-        
+
         foreach ($this->laporan as $index => $item) {
             $normalizedItem = ['nama_pelapor' => $item['nama_pelapor']];
-            
+
             foreach ($this->criteriaMap as $criteriaName => $key) {
                 $value = $key === 'laporan' ? $item['banyaknya_laporan'] : $item[$key];
                 $normalizedValue = $sqrtSums[$key] > 0 ? $value / $sqrtSums[$key] : 0;
                 $normalizedItem[$key] = $normalizedValue;
-                
+
                 $normalizedData[] = [
                     'nilai' => $normalizedValue,
                     'alternatif_id' => $item['alternatif_id'],
@@ -333,10 +337,10 @@ class PerhitunganSpk extends Component
                     'updated_at' => now(),
                 ];
             }
-            
+
             $this->normalized[] = $normalizedItem;
         }
-        
+
         DB::table('matriks_normalisasi_keputusan')->insert($normalizedData);
     }
 
@@ -344,14 +348,14 @@ class PerhitunganSpk extends Component
     {
         $this->weighted = [];
         $weightedData = [];
-        
+
         foreach ($this->normalized as $index => $item) {
             $weightedItem = ['nama_pelapor' => $item['nama_pelapor']];
-            
+
             foreach ($this->criteriaMap as $criteriaName => $key) {
                 $weightedValue = $item[$key] * ($this->bobot[$key] ?? 0);
                 $weightedItem[$key] = $weightedValue;
-                
+
                 $weightedData[] = [
                     'nilai' => $weightedValue,
                     'alternatif_id' => $this->laporan[$index]['alternatif_id'],
@@ -360,33 +364,33 @@ class PerhitunganSpk extends Component
                     'updated_at' => now(),
                 ];
             }
-            
+
             $this->weighted[] = $weightedItem;
         }
-        
+
         DB::table('matriks_normalisasi_bobot_keputusan')->insert($weightedData);
     }
 
     private function findIdealSolutions($kriteriaIds)
     {
         if (empty($this->weighted)) return;
-        
+
         $benefitCriteria = ['frekuensi', 'dampak', 'kerusakan', 'laporan'];
         $costCriteria = ['resiko', 'estimasi'];
-        
+
         $this->aPlus = [];
         $this->aMin = [];
-        
+
         foreach ($this->criteriaMap as $criteriaName => $key) {
             $values = array_column($this->weighted, $key);
             $isBenefit = in_array($key, $benefitCriteria);
-            
+
             $idealValue = $isBenefit ? max($values) : min($values);
             $negativeIdealValue = $isBenefit ? min($values) : max($values);
-            
+
             $idealAltId = null;
             $negativeIdealAltId = null;
-            
+
             foreach ($this->weighted as $index => $item) {
                 if ($item[$key] == $idealValue) {
                     $idealAltId = $this->laporan[$index]['alternatif_id'];
@@ -395,10 +399,10 @@ class PerhitunganSpk extends Component
                     $negativeIdealAltId = $this->laporan[$index]['alternatif_id'];
                 }
             }
-            
+
             $this->aPlus[$key] = ['value' => $idealValue, 'alternatif_id' => $idealAltId];
             $this->aMin[$key] = ['value' => $negativeIdealValue, 'alternatif_id' => $negativeIdealAltId];
-            
+
             DB::table('solusi_ideal_positif')->insert([
                 'nilai' => $idealValue,
                 'kriteria_id' => $kriteriaIds[$criteriaName],
@@ -406,7 +410,7 @@ class PerhitunganSpk extends Component
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-            
+
             DB::table('solusi_ideal_negatif')->insert([
                 'nilai' => $negativeIdealValue,
                 'kriteria_id' => $kriteriaIds[$criteriaName],
@@ -420,30 +424,30 @@ class PerhitunganSpk extends Component
     private function calculateDistancesAndPreferences()
     {
         $this->results = [];
-        
+
         foreach ($this->weighted as $index => $item) {
             $dPlus = 0;
             $dMin = 0;
-            
+
             foreach ($this->criteriaMap as $key => $value) {
                 $dPlus += pow($item[$value] - $this->aPlus[$value]['value'], 2);
                 $dMin += pow($item[$value] - $this->aMin[$value]['value'], 2);
             }
-            
+
             $dPlus = sqrt($dPlus);
             $dMin = sqrt($dMin);
-            
+
             $denominator = $dPlus + $dMin;
             $v = ($denominator > 0) ? $dMin / $denominator : 0;
             $v = max(0, min(1, $v));
-            
+
             $this->results[] = [
                 'nama_pelapor' => $item['nama_pelapor'],
                 'dPlus' => $dPlus,
                 'dMin' => $dMin,
                 'v' => $v,
             ];
-            
+
             DB::table('hasil_topsis')->insert([
                 'nilai' => $v,
                 'alternatif_id' => $this->laporan[$index]['alternatif_id'],
@@ -458,13 +462,13 @@ class PerhitunganSpk extends Component
     {
         $ranking = array_column($this->results, 'v');
         arsort($ranking, SORT_NUMERIC);
-        
+
         $this->finalRanking = [];
         $rank = 1;
         foreach ($ranking as $key => $value) {
             $this->finalRanking[$key] = $rank++;
         }
-        
+
         $this->sortedResults = [];
         foreach ($this->finalRanking as $key => $rank) {
             $status = 'Prioritas Rendah';
@@ -473,7 +477,7 @@ class PerhitunganSpk extends Component
             } elseif ($rank <= 3) {
                 $status = 'Prioritas Menengah';
             }
-            
+
             $this->sortedResults[] = [
                 'rank' => $rank,
                 'nama' => $this->laporan[$key]['nama_pelapor'],
@@ -487,7 +491,7 @@ class PerhitunganSpk extends Component
                 'dMin' => round($this->results[$key]['dMin'], 4),
             ];
         }
-        
+
         usort($this->sortedResults, function ($a, $b) {
             return $a['rank'] <=> $b['rank'];
         });
@@ -521,11 +525,11 @@ class PerhitunganSpk extends Component
         try {
             $updated = \App\Models\LaporanKerusakan::where('id', $this->laporanId)->update([
                 'teknisi_id' => $this->teknisiId,
-                'status_perbaikan' => $this->statusPerbaikan, 
+                'status_perbaikan' => $this->statusPerbaikan,
                 'catatan_teknisi' => $this->catatanTeknisi, // Gunakan kolom yang ada
                 'updated_at' => now()
             ]);
-    
+
             if ($updated) {
                 session()->flash('message', 'Laporan berhasil diproses');
                 $this->closeProsesModal();
@@ -534,7 +538,7 @@ class PerhitunganSpk extends Component
                 session()->flash('error', 'Gagal memproses laporan');
             }
         } catch (\Exception $e) {
-            session()->flash('error', 'Error: '.$e->getMessage());
+            session()->flash('error', 'Error: ' . $e->getMessage());
         }
     }
 
@@ -542,9 +546,9 @@ class PerhitunganSpk extends Component
     public function openDetailModal($laporanId)
     {
         $this->laporanDetail = LaporanKerusakan::with([
-            'gedung', 
-            'ruangan', 
-            'fasilitas', 
+            'gedung',
+            'ruangan',
+            'fasilitas',
             'teknisi',
             'subKriteria'
         ])->find($laporanId);
@@ -571,12 +575,47 @@ class PerhitunganSpk extends Component
             'laporan' => $this->laporan,
             'normalized' => $this->normalized,
             'weighted' => $this->weighted,
-            'aPlus' => $this->aPlus, 
+            'aPlus' => $this->aPlus,
             'aMin' => $this->aMin,
             'results' => $this->results,
             'finalRanking' => $this->finalRanking,
             'sortedResults' => $this->sortedResults,
             'bobot' => $this->bobot,
         ]);
+    }
+
+    public function isLaporanSudahDiproses($laporanId)
+    {
+        $laporan = LaporanKerusakan::find($laporanId);
+
+        // Cek apakah laporan sudah ditugaskan ke teknisi
+        return $laporan && (
+            !is_null($laporan->teknisi_id) ||
+            $laporan->status_perbaikan !== 'menunggu'
+        );
+    }
+
+    public function getStatusLaporanBadge($laporanId)
+    {
+        $laporan = LaporanKerusakan::find($laporanId);
+
+        if (!$laporan) {
+            return '<span class="badge bg-secondary">Tidak Ditemukan</span>';
+        }
+
+        switch ($laporan->status_perbaikan) {
+            case 'menunggu':
+                return '<span class="badge bg-warning text-dark">Menunggu</span>';
+            case 'diproses':
+                return '<span class="badge bg-primary">Diproses</span>';
+            case 'selesai':
+                return '<span class="badge bg-success">Selesai</span>';
+        }
+    }
+
+    public function getNamaTeknisi($laporanId)
+    {
+        $laporan = LaporanKerusakan::with('teknisi')->find($laporanId);
+        return $laporan && $laporan->teknisi ? $laporan->teknisi->name : '-';
     }
 }
