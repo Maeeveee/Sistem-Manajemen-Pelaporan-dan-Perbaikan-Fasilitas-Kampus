@@ -20,16 +20,24 @@ class Login extends Component
 
     public function mount()
     {
-        // Jika sudah login, arahkan ke halaman dashboard
+        // Jika sudah login, arahkan ke dashboard sesuai role
         if (auth()->check()) {
-            return redirect()->intended('/dashboard');
+            $user = auth()->user();
+            switch ($user->role_id) {
+                case 6: 
+                    return redirect()->intended('dashboard');
+                case 5: 
+                    return redirect()->intended('teknisi');
+                case 4: 
+                    return redirect()->intended('feedback-rating');
+                case 1: 
+                    return redirect()->intended('pelaporan/kerusakan-fasilitas');
+                case 2: 
+                    return redirect()->intended('pelaporan/kerusakan-fasilitas');
+                case 3: 
+                    return redirect()->intended('pelaporan/kerusakan-fasilitas');
+            }
         }
-
-        // Reset nilai inputan
-        $this->fill([
-            'identifier' => '',
-            'password' => '',
-        ]);
     }
 
     public function login()
@@ -41,7 +49,22 @@ class Login extends Component
         if (auth()->attempt(['identifier' => $this->identifier, 'password' => $this->password], $this->remember_me)) {
             $user = User::where(['identifier' => $this->identifier])->first(); // Cek berdasarkan identifier (NIM/NIP)
             auth()->login($user, $this->remember_me);
-            return redirect()->intended('/dashboard'); // Arahkan ke dashboard
+
+            // Redirect sesuai role
+            switch ($user->role_id) {
+                case 6: 
+                    return redirect()->intended('dashboard');
+                case 5: 
+                    return redirect()->intended('teknisi');
+                case 4: 
+                    return redirect()->intended('feedback-rating');
+                case 1: 
+                    return redirect()->intended('pelaporan/kerusakan-fasilitas');
+                case 2: 
+                    return redirect()->intended('pelaporan/kerusakan-fasilitas');
+                case 3: 
+                    return redirect()->intended('pelaporan/kerusakan-fasilitas');
+            }
         } else {
             // Jika login gagal, tampilkan pesan error
             return $this->addError('identifier', trans('auth.failed'));
