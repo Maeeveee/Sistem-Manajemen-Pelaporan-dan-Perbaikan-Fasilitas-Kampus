@@ -38,7 +38,18 @@
         <ul class="nav flex-column pt-3 pt-md-0 ">
             {{-- Logo and Title --}}
             <li class="nav-item">
-                <a href="/dashboard" class="nav-link d-flex align-items-center">
+                <a href="@php
+                    $role = auth()->user()->role_id ?? null;
+                    if ($role == 6) {
+                        echo route('dashboard');
+                    } elseif ($role == 4) {
+                        echo route('feedback-rating');
+                    } elseif ($role == 5) {
+                        echo url('');
+                    } elseif ($role == 1 || $role == 2 || $role == 3) {
+                        echo url('pelaporan/kerusakan-fasilitas');
+                    } @endphp"
+                    class="nav-link d-flex align-items-center">
                     <span class="sidebar-icon me-3">
                         <img src="/assets/img/brand/logo_sarpras2.png" height="50" width="50" alt="Volt Logo">
                     </span>
@@ -52,7 +63,7 @@
                     $users = [1, 2, 3];
                 @endphp
                 {{-- Dashboard --}}
-                @if (in_array(auth()->user()->role_id, $bolehSemua))
+                @if (auth()->user()->role_id == 6)
                     <li class="nav-item {{ Request::segment(1) == 'dashboard' ? 'active' : '' }}">
                         <a href="/dashboard" class="nav-link">
                             <span class="sidebar-icon">
@@ -63,22 +74,6 @@
                                 </svg>
                             </span>
                             <span class="sidebar-text">Dashboard</span>
-                        </a>
-                    </li>
-                @endif
-                {{-- Profile --}}
-                @if (in_array(auth()->user()->role_id, $bolehSemua))
-                    <li class="nav-item {{ Request::segment(1) == 'profile' ? 'active' : '' }}">
-                        <a href="/profile" class="nav-link">
-                            <span class="sidebar-icon">
-                                <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
-                                        clip-rule="evenodd"></path>
-                                </svg>
-                            </span>
-                            <span class="sidebar-text">Profile</span>
                         </a>
                     </li>
                 @endif
@@ -175,6 +170,18 @@
                 @endif
                 {{-- Manajemen Kriteria --}}
                 @if (auth()->user()->role_id == 4)
+                    <li class="nav-item {{ Route::is('feedback-rating') ? 'active' : '' }}">
+                        <a href="/feedback-rating" class="nav-link">
+                            <span class="sidebar-icon">
+                                <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.921-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.176 0l-3.38 2.454c-.784.57-1.838-.197-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z" />
+                                </svg>
+                            </span>
+                            <span class="sidebar-text">Feedback & Rating</span>
+                        </a>
+                    </li>
                     <li class="nav-item {{ Request::routeIs('manajemen.kriteria.fasilitas') ? 'active' : '' }}">
                         <a href="{{ route('manajemen.kriteria.fasilitas') }}" class="nav-link">
                             <span class="sidebar-icon">
@@ -256,48 +263,52 @@
                             <span class="sidebar-text">Perhitungan SPK</span>
                         </a>
                     </li>
-                    <li class="nav-item {{ Route::is('feedback-rating') ? 'active' : '' }}">
-                        <a href="/feedback-rating" class="nav-link">
+                @endif
+                @if (auth()->user()->role_id == 5)
+                    <li class="nav-item {{ Route::is('teknisi') ? 'active' : '' }}">
+                        <a href="/teknisi" class="nav-link">
                             <span class="sidebar-icon">
                                 <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.921-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.176 0l-3.38 2.454c-.784.57-1.838-.197-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z" />
+                                    <path fill-rule="evenodd"
+                                        d="M18 13V6a2 2 0 00-2-2h-2V3a1 1 0 00-2 0v1H8V3a1 1 0 00-2 0v1H4a2 2 0 00-2 2v7h16zm0 2H2a1 1 0 000 2h16a1 1 0 000-2z"
+                                        clip-rule="evenodd" />
                                 </svg>
                             </span>
-                            <span class="sidebar-text">Feedback & Rating</span>
+                            <span class="sidebar-text">Laporan Pengguna</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ Route::is('riwayat-perbaikan') ? 'active' : '' }}">
+                        <a href="{{ route('riwayat-perbaikan') }}" class="nav-link">
+                            <span class="sidebar-icon">
+                                <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="14" height="14" x="3" y="3" rx="2" />
+                                    <rect width="2" height="2" x="7" y="7" rx="1" />
+                                    <rect width="2" height="2" x="11" y="7" rx="1" />
+                                    <rect width="2" height="2" x="7" y="11" rx="1" />
+                                    <rect width="2" height="2" x="11" y="11" rx="1" />
+                                </svg>
+                            </span>
+                            <span class="sidebar-text">Riwayat Perbaikan</span>
                         </a>
                     </li>
                 @endif
-                @if (auth()->user()->role_id == 5)
-                <li class="nav-item {{ Route::is('teknisi') ? 'active' : '' }}">
-                    <a href="/teknisi" class="nav-link">
-                        <span class="sidebar-icon">
-                            <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd"
-                                    d="M18 13V6a2 2 0 00-2-2h-2V3a1 1 0 00-2 0v1H8V3a1 1 0 00-2 0v1H4a2 2 0 00-2 2v7h16zm0 2H2a1 1 0 000 2h16a1 1 0 000-2z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </span>
-                        <span class="sidebar-text">Laporan Pengguna</span>
-                    </a>
-                </li>
-                <li class="nav-item {{ Route::is('riwayat-perbaikan') ? 'active' : '' }}">
-                    <a href="{{ route('riwayat-perbaikan') }}" class="nav-link">
-                        <span class="sidebar-icon">
-                            <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <rect width="14" height="14" x="3" y="3" rx="2" />
-                                <rect width="2" height="2" x="7" y="7" rx="1" />
-                                <rect width="2" height="2" x="11" y="7" rx="1" />
-                                <rect width="2" height="2" x="7" y="11" rx="1" />
-                                <rect width="2" height="2" x="11" y="11" rx="1" />
-                            </svg>
-                        </span>
-                        <span class="sidebar-text">Riwayat Perbaikan</span>
-                    </a>
-                </li>
+                {{-- Profile --}}
+                @if (in_array(auth()->user()->role_id, $bolehSemua))
+                    <li class="nav-item {{ Request::segment(1) == 'profile' ? 'active' : '' }}">
+                        <a href="/profile" class="nav-link">
+                            <span class="sidebar-icon">
+                                <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                            </span>
+                            <span class="sidebar-text">Profile</span>
+                        </a>
+                    </li>
                 @endif
             @endisset
         </ul>

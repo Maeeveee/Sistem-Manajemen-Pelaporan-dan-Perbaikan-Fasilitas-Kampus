@@ -188,8 +188,9 @@
                                 <small class="text-muted">{{ $feedback['tanggal'] }}</small>
                             </div>
                             <div class="mb-2">
-                                <span class="badge badge-info">{{ $feedback['gedung'] }} - {{ $feedback['ruangan'] }}</span>
-                                <span class="badge badge-secondary">{{ $feedback['fasilitas'] }}</span>
+                                <span class="text-muted">{{ $feedback['gedung'] }} | {{ $feedback['ruangan'] }}</span>
+                                <span class="text-muted"> | </span>
+                                <span class="text-muted">{{ $feedback['fasilitas'] }}</span>
                             </div>
                             <div class="mb-2">
                                 @for ($i = 1; $i <= 5; $i++)
