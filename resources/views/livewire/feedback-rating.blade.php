@@ -14,6 +14,12 @@
         </div>
     </div>
 
+    <div class="flex space-x-4 my-4">
+        <a href="https://instagram.com/Baernod" target="_blank" class="hover:opacity-75 transition">
+            <img src="{{ asset('storage/logo sarpras2.png') }}" alt="Instagram"  style="width: 3cm; height: 3cm;">
+        </a>
+    </div>
+
     <div class="row">
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
