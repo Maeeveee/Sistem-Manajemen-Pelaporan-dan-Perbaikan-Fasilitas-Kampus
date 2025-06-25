@@ -31,7 +31,7 @@ class Register extends Component
             16 => 'tendik',
             14 => 'sarpras',
             12 => 'teknisi',
-            8 => 'admin',
+            // 8 => 'admin'
             default => null,
         };
 

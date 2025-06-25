@@ -88,6 +88,7 @@ class ManajemenPengguna extends Component
             16 => 'tendik',
             14 => 'sarpras',
             12 => 'teknisi',
+            8 => 'admin',
             default => null,
         };
 
@@ -130,6 +131,7 @@ class ManajemenPengguna extends Component
             16 => 'tendik',
             14 => 'sarpras',
             12 => 'teknisi',
+            8 => 'admin',
             default => null,
         };
 

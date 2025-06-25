@@ -23,6 +23,8 @@ class HistoryLaporan extends Component
     {
         $query = LaporanKerusakan::with(['gedung', 'ruangan', 'fasilitas'])
             ->where('identifier', Auth::user()->identifier)
+            // Urutkan selesai paling atas, lalu berdasarkan tanggal terbaru
+            ->orderByRaw("CASE WHEN status = 'selesai' THEN 0 ELSE 1 END")
             ->orderBy('created_at', 'desc');
             
         if (!empty($this->search)) {

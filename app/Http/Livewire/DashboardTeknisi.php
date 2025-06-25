@@ -41,6 +41,7 @@ class DashboardTeknisi extends Component
         $this->laporanDiproses = LaporanKerusakan::with(['gedung', 'ruangan', 'fasilitas', 'hasilTopsis'])
             ->where('teknisi_id', $user->id)
             ->where('status_perbaikan', 'diproses')
+            ->orderBy('created_at', 'desc')
             ->get()
             ->sortByDesc(function ($laporan) {
                 return $laporan->hasilTopsis->nilai ?? 0;
