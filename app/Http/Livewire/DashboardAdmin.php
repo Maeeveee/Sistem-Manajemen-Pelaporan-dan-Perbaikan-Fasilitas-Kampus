@@ -46,11 +46,10 @@ class DashboardAdmin extends Component
                   ->orWhereHas('ruangan', function ($q) {
                       $q->where('nama_ruangan', 'like', '%' . $this->search . '%');
                   });
-        
             });
         }
 
-        $this->laporan = $query->get();
+        $this->laporan = $query->orderBy('created_at', 'desc')->get();
     }
     public function updated($propertyName)
     {

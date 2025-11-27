@@ -29,7 +29,7 @@ class DashboardSarpras extends Component
         if ($this->periode_id) {
             $query->where('periode_id', $this->periode_id);
         }
-        $this->laporan = $query->get();
+        $this->laporan = $query->orderBy('created_at', 'desc')->get();
     }
 
     public function show($id)

@@ -31,7 +31,7 @@ class RiwayatPerbaikan extends Component
                 $q->where('nama_fasilitas', 'like', '%' . $this->search . '%');
             })->orWhere('deskripsi', 'like', '%' . $this->search . '%');
         })
-        ->latest('updated_at')
+        ->latest('created_at')
         ->paginate(10);
 
         

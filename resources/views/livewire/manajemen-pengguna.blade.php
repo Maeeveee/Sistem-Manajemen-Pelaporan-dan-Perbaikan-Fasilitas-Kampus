@@ -59,6 +59,12 @@
         </div>
     @endif
 
+    @if (session()->has('error'))
+        <div class="alert alert-danger" role="alert">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <div class="card card-body shadow border-0 table-wrapper table-responsive">
         <table class="table table-hover">
             <thead class="thead-light">
@@ -185,6 +191,9 @@
                                     placeholder="Konfirmasi Kata Sandi" class="form-control" id="confirm_password"
                                     required>
                             </div>
+                            @error('password_confirmation')
+                                <div class="invalid-feedback d-block"> {{ $message }} </div>
+                            @enderror
                         </div>
 
 
